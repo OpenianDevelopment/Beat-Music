@@ -6,7 +6,7 @@ import { initErela } from "../Utils/registry";
 export default class DiscordClient extends Client {
     private _commands = new Collection<string, BaseCommand>();
     private _events = new Collection<string, BaseEvent>();
-    public queue = new Map();
+    public players = new Map();
     public manager: Manager = initErela(this);
 
     constructor(options: ClientOptions) {
