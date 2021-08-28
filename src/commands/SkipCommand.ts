@@ -12,7 +12,7 @@ export default class SkipCommand extends BaseCommand {
         const { player } = client.players.get(interaction.guildId);
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
-            .setDescription(`\`${player.queue.current.name}\` Skipped`);
+            .setDescription(`\`${player.queue.current.title}\` Skipped`);
         player.stop();
         await interaction.reply({ embeds: [embed] });
     }
