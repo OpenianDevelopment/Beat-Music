@@ -43,7 +43,7 @@ export function initErela(client: DiscordClient) {
         nodes: [
             {
                 host: "localhost",
-                port: 5000,
+                port: 8000,
                 password: "password",
             },
         ],
@@ -67,7 +67,7 @@ export function initErela(client: DiscordClient) {
                 player.textChannel as Snowflake
             ) as TextChannel;
             const embed = new MessageEmbed()
-                .setColor("#554b58")
+                .setColor("#FFBD4F")
                 .setDescription(`**Now playing:** ${track.title}`)
                 .setThumbnail(
                     track.thumbnail
@@ -82,11 +82,11 @@ export function initErela(client: DiscordClient) {
                 player.textChannel as Snowflake
             ) as TextChannel;
             const embed = new MessageEmbed()
-                .setColor("#554b58")
+                .setColor("#FFBD4F")
                 .setDescription("Queue has Ended. Leaving the channel");
             channel?.send({ embeds: [embed] });
             player.destroy();
-            client.queue.delete(player.guild);
+            client.players.delete(player.guild);
         })
         .on("trackStuck", (player, track) => {
             player.stop();
