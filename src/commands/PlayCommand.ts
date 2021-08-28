@@ -41,8 +41,6 @@ export default class PlayCommand extends BaseCommand {
             await interaction.reply({ embeds: [embed] });
             return;
         }
-        const SpotifyTrackPattern =
-            /^(?:https:\/\/open\.spotify\.com\/(?:user\/[A-Za-z0-9]+\/)?|spotify:)(track)[\/:]([A-Za-z0-9]+).*$/;
         const SpotifyPlaylistPattern =
             /^(?:https:\/\/open\.spotify\.com\/(?:user\/[A-Za-z0-9]+\/)?|spotify:)(playlist)[\/:]([A-Za-z0-9]+).*$/;
         const YTPlaylistPattern = /^.*(youtu.be\/|list=)([^#\&\?]*).*/gi;
@@ -56,13 +54,6 @@ export default class PlayCommand extends BaseCommand {
             player.connect();
         }
         const { player } = client.players.get(guild.id);
-        // if (SpotifyTrackPattern.test(songQuery)) {
-        //     await PlaySpotifyTrack(client, songQuery, interaction);
-        //     return;
-        // } else if (SpotifyPlaylistPattern.test(songQuery)) {
-        //     await GetSpotifyPlaylistTracks(client, songQuery, interaction);
-        //     return;
-        // }
 
         const result = await client.manager.search(songQuery, member.user);
         if (!result.tracks.length) {
@@ -72,12 +63,16 @@ export default class PlayCommand extends BaseCommand {
             await interaction.reply({ embeds: [embed] });
             return;
         }
-        if (YTPlaylistPattern.test(songQuery)) {
+        if (
+            YTPlaylistPattern.test(songQuery) ||
+            SpotifyPlaylistPattern.test(songQuery)
+        ) {
             player.queue.add(result.tracks);
             const embed = new MessageEmbed()
                 .setDescription(`Enqueuing \`${result.tracks.length}\` tracks.`)
                 .setColor("#FFBD4F");
             await interaction.reply({ embeds: [embed] });
+            player.play();
         } else {
             player.queue.add(result.tracks[0]);
             const embed = new MessageEmbed()
@@ -94,5 +89,6 @@ export default class PlayCommand extends BaseCommand {
         if (!player.playing && !player.paused && !player.queue.size) {
             player.play();
         }
+        console.log(player);
     }
 }

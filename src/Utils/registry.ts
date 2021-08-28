@@ -4,6 +4,8 @@ import { promises as fs } from "fs";
 import { Manager } from "erela.js";
 import { MessageEmbed, Snowflake, TextChannel } from "discord.js";
 import filter from "erela.js-filters";
+// @ts-ignore
+import Spotify from "erela.js-spotify";
 export async function registerCommands(
     client: DiscordClient,
     dir: string = ""
@@ -47,7 +49,13 @@ export function initErela(client: DiscordClient) {
                 password: "password",
             },
         ],
-        plugins: [new filter()],
+        plugins: [
+            new filter(),
+            new Spotify({
+                clientID: "8bf6329ab57745c59de9daecb3a372d9",
+                clientSecret: "799ebe01d9ff46689c4108da9f177b5d",
+            }),
+        ],
         send(id, payload) {
             const guild = client.guilds.cache.get(id as Snowflake);
             if (guild) guild.shard.send(payload);
