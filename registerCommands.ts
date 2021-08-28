@@ -106,15 +106,20 @@ const commands: ApplicationCommandData[] = [
         name: "help",
         description: "Get List of All Commands",
     },
+    {
+        name: "reset-filter",
+        description: "Reset all filters",
+    },
+    {
+        name: "help",
+        description: "list all commands",
+    },
 ];
 
 client.on("ready", () => {
     commands.forEach((command) => {
         client
-            .application!.commands.create({
-                name: "help",
-                description: "Get List of All Commands",
-            })
+            .application!.commands.create(command)
             .then(console.log)
             .catch(console.error);
     });
