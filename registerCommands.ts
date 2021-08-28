@@ -1,8 +1,9 @@
 import { ApplicationCommandData, Client } from "discord.js";
+require("dotenv").config();
 const client = new Client({
     intents: [],
 });
-client.login("ODgxMDUwMzEzODcwNjg0MTgw.YSnMCw.gaKxzDguU79QHATHjSS2dnrB3AI");
+client.login(process.env.TOKEN);
 
 const commands: ApplicationCommandData[] = [
     {
