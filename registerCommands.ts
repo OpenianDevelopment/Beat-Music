@@ -17,12 +17,103 @@ const commands: ApplicationCommandData[] = [
             },
         ],
     },
+    {
+        name: "pause",
+        description: "Pause the music",
+    },
+    {
+        name: "stop",
+        description: "Stop the queue and delete it",
+    },
+    {
+        name: "skip",
+        description: "Skip the current playing song",
+    },
+    {
+        name: "queue",
+        description: "Display the queue",
+    },
+    {
+        name: "remove",
+        description: "Remove a song from the queue",
+        options: [
+            {
+                name: "position",
+                description: "postion of the song which needs to be removed",
+                type: "INTEGER",
+                required: true,
+            },
+        ],
+    },
+    {
+        name: "shuffle",
+        description: "Shuffles the queue",
+    },
+    {
+        name: "loop",
+        description: "loop the queue",
+    },
+    {
+        name: "now-playing",
+        description: "Show the current playing song",
+    },
+    {
+        name: "resume",
+        description: "Resumes the paused song",
+    },
+    {
+        name: "leave",
+        description: "Leaves the channel",
+    },
+    {
+        name: "volume",
+        description: "change the volume of the palyer",
+        options: [
+            {
+                name: "number",
+                description: "how much volume you want",
+                type: "INTEGER",
+                required: true,
+            },
+        ],
+    },
+    {
+        name: "bass-boost",
+        description: "Boost the bass of the song",
+    },
+    {
+        name: "nightcore",
+        description: "Add nightcore filter to the song",
+    },
+    {
+        name: "pop",
+        description: "Add Pop filter to the song",
+    },
+    {
+        name: "soft",
+        description: "Add soft filter to the song",
+    },
+    {
+        name: "vaporwave",
+        description: "Add vaporwave filter the the song",
+    },
+    {
+        name: "treblebass",
+        description: "Add treblebass filter to the song",
+    },
+    {
+        name: "help",
+        description: "Get List of All Commands",
+    },
 ];
 
 client.on("ready", () => {
     commands.forEach((command) => {
         client
-            .application!.commands.create(command)
+            .application!.commands.create({
+                name: "help",
+                description: "Get List of All Commands",
+            })
             .then(console.log)
             .catch(console.error);
     });

@@ -4,7 +4,7 @@ import { CommandInteraction, GuildMember, MessageEmbed } from "discord.js";
 
 export default class PlayCommand extends BaseCommand {
     constructor() {
-        super("play", "Play a Song", "play <song name>", "play wonderwall");
+        super("play", "Play a Song");
     }
     async run(client: DiscordClient, interaction: CommandInteraction) {
         const member = interaction.member as GuildMember;
@@ -15,7 +15,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join a voice channel first");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.reply({ embeds: [embed], ephemeral: false });
             return;
         }
         if (
@@ -25,7 +25,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join the same channel as me");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.reply({ embeds: [embed], ephemeral: false });
             return;
         }
         const ClientPermissions = voiceChannel.permissionsFor(client.user!);
@@ -38,7 +38,7 @@ export default class PlayCommand extends BaseCommand {
                 .setDescription(
                     "❗ I don't have CONNECT and SPEAK permission in that voice channel"
                 );
-            await interaction.reply({ embeds: [embed] });
+            await interaction.reply({ embeds: [embed], ephemeral: false });
             return;
         }
         const SpotifyPlaylistPattern =
@@ -69,7 +69,9 @@ export default class PlayCommand extends BaseCommand {
         ) {
             player.queue.add(result.tracks);
             const embed = new MessageEmbed()
-                .setDescription(`Enqueuing \`${result.tracks.length}\` tracks.`)
+                .setDescription(
+                    `Enqueuing \`${result.tracks.length}\` tracks. [<@${interaction.user.id}>]`
+                )
                 .setColor("#FFBD4F");
             await interaction.reply({ embeds: [embed] });
             player.play();
@@ -77,7 +79,7 @@ export default class PlayCommand extends BaseCommand {
             player.queue.add(result.tracks[0]);
             const embed = new MessageEmbed()
                 .setDescription(
-                    `Enqueuing track \`${result.tracks[0].title}\`.`
+                    `Enqueuing track [${result.tracks[0].title}](${result.tracks[0].uri}) [<@${interaction.user.id}>].`
                 )
                 .setColor("#FFBD4F");
             await interaction.reply({ embeds: [embed] });
@@ -89,6 +91,5 @@ export default class PlayCommand extends BaseCommand {
         if (!player.playing && !player.paused && !player.queue.size) {
             player.play();
         }
-        console.log(player);
     }
 }

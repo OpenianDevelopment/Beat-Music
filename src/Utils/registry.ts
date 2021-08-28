@@ -76,7 +76,10 @@ export function initErela(client: DiscordClient) {
             ) as TextChannel;
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
-                .setDescription(`**Now playing:** ${track.title}`)
+                .setTitle("Now Playing")
+                .setDescription(
+                    `[${track.title}](${track.uri}) [${track.requester}]`
+                )
                 .setThumbnail(
                     track.thumbnail
                         ? track.thumbnail
