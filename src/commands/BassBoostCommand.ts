@@ -5,7 +5,7 @@ import { checkMusicPermission } from "../Utils/functions";
 
 export default class BassCommand extends BaseCommand {
     constructor() {
-        super("bassboost", "Boost Bass of the song");
+        super("bass-boost", "Boost Bass of the song");
     }
 
     async run(client: DiscordClient, interaction: CommandInteraction) {
