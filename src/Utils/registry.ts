@@ -54,8 +54,8 @@ export function initErela(client: DiscordClient) {
         plugins: [
             new filter(),
             new Spotify({
-                clientID: "8bf6329ab57745c59de9daecb3a372d9",
-                clientSecret: "799ebe01d9ff46689c4108da9f177b5d",
+                clientID: "",
+                clientSecret: "",
             }),
         ],
         send(id, payload) {
