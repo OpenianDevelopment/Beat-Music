@@ -1,28 +1,19 @@
 {
   "name": "Beat-Music",
   "version": "1.0.0",
-  "description": "A music bot for discord",
+  "description": "Music bot for discord",
   "main": "src/index.ts",
   "repository": "https://github.com/OpenianDevelopment/Beat-Music",
-  "author": "Rohan Kumar",
+  "author": "Rohan Kumar <rohan.shuvam@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "erela.js": "^2.3.3",
-    "erela.js-filters": "^1.2.3",
-    "erela.js-spotify": "^1.2.0",
+    "erela.js-filters": "^1.2.5",
+    "erela.js-spotify": "MenuDocs/erela.js-spotify#build",
     "fs": "^0.0.1-security",
     "mongoose": "^6.0.2",
-    "spotify-info.js": "^1.0.4",
     "string-progressbar": "^1.0.4"
-  },
-  "devDependencies": {
-    "prettier": "^2.3.2"
-  },
-  "scripts": {
-    "start": "nodemon src/index.ts",
-    "register": "nodemon ./registerCommands.ts",
-    "lavalink": "java -jar Lavalink.jar"
   }
 }
