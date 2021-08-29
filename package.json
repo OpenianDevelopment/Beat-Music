@@ -13,6 +13,7 @@
     "erela.js-filters": "^1.2.3",
     "erela.js-spotify": "^1.2.0",
     "fs": "^0.0.1-security",
+    "mongoose": "^6.0.2",
     "spotify-info.js": "^1.0.4",
     "string-progressbar": "^1.0.4"
   },
