@@ -31,12 +31,13 @@ export default class PlayCommand extends BaseCommand {
         const ClientPermissions = voiceChannel.permissionsFor(client.user!);
         if (
             (ClientPermissions && !ClientPermissions.has("CONNECT")) ||
-            (ClientPermissions && !ClientPermissions.has("SPEAK"))
+            (ClientPermissions && !ClientPermissions.has("SPEAK")) ||
+            (ClientPermissions && !ClientPermissions.has("VIEW_CHANNEL"))
         ) {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription(
-                    "❗ I don't have CONNECT and SPEAK permission in that voice channel"
+                    "❗ I don't have `CONNECT` or `SPEAK` or `VIEW CHANNEL` permission in that voice channel"
                 );
             await interaction.reply({ embeds: [embed], ephemeral: false });
             return;
@@ -74,7 +75,6 @@ export default class PlayCommand extends BaseCommand {
                 )
                 .setColor("#FFBD4F");
             await interaction.reply({ embeds: [embed] });
-            player.play();
         } else {
             player.queue.add(result.tracks[0]);
             const embed = new MessageEmbed()
@@ -88,7 +88,7 @@ export default class PlayCommand extends BaseCommand {
             player.connect();
         }
 
-        if (!player.playing && !player.paused && !player.queue.size) {
+        if (!player.playing && !player.paused) {
             player.play();
         }
     }

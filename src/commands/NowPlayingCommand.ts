@@ -2,7 +2,7 @@ import { CommandInteraction, MessageEmbed } from "discord.js";
 import DiscordClient from "../Client/Client";
 import { BaseCommand } from "../Utils/structures/BaseCommand";
 import { checkMusicPermission } from "../Utils/functions";
-import { splitBar } from "string-progressbar";
+import { filledBar } from "string-progressbar";
 export default class NowPlayingCommand extends BaseCommand {
     constructor() {
         super("now-playing", "Shows the current playing song");
@@ -17,7 +17,7 @@ export default class NowPlayingCommand extends BaseCommand {
 
         let embed = new MessageEmbed()
             .setTitle("Now playing")
-            .setDescription(`[${song.title}](${song.url}) [${song.requester}]`)
+            .setDescription(`[${song.title}](${song.uri}) [${song.requester}]`)
             .setColor("#554b58")
             .setThumbnail(song.thumbnail);
 
@@ -26,7 +26,7 @@ export default class NowPlayingCommand extends BaseCommand {
                 "\u200b",
                 new Date(seek).toISOString().substr(11, 8) +
                     "[" +
-                    splitBar(
+                    filledBar(
                         song.duration == 0 ? seek : song.duration,
                         seek,
                         20

@@ -13,6 +13,15 @@ export default class QueueCommand extends BaseCommand {
         if (!(await checkMusicPermission(client, interaction))) return;
         const { player } = client.players.get(interaction.guildId);
         const embeds = generateQueueEmbed(interaction, player.queue);
+        if (!embeds.length) {
+            const embed = new MessageEmbed()
+                .setColor("#FFBD4F")
+                .setDescription("There is no other songs in the queue");
+            await interaction.reply({
+                embeds: [embed],
+            });
+            return;
+        }
         if (embeds.length === 1) {
             await interaction.reply({ embeds: [embeds[0]] });
         } else {
