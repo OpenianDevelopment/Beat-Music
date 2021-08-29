@@ -8,6 +8,7 @@ export default class DiscordClient extends Client {
     private _events = new Collection<string, BaseEvent>();
     public players = new Map();
     public manager: Manager = initErela(this);
+    public songCount!: number;
 
     constructor(options: ClientOptions) {
         super(options);

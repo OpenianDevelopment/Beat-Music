@@ -8,5 +8,12 @@ export default class ReadyEvent extends BaseEvent {
     async run(client: DiscordClient) {
         console.log(client.user!.tag, "has logged in");
         client.manager.init(client.user!.id);
+        setInterval(() => {
+            client.user!.setPresence({
+                activities: [
+                    { name: `${client.songCount} songs`, type: "LISTENING" },
+                ],
+            });
+        }, 10000);
     }
 }

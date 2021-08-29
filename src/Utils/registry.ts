@@ -6,6 +6,8 @@ import { MessageEmbed, Snowflake, TextChannel } from "discord.js";
 import filter from "erela.js-filters";
 // @ts-ignore
 import Spotify from "erela.js-spotify";
+import { updateSongCount } from "./database/functions";
+
 export async function registerCommands(
     client: DiscordClient,
     dir: string = ""
@@ -86,6 +88,8 @@ export function initErela(client: DiscordClient) {
                         : "https://i.imgur.com/FYBKE19.jpeg"
                 );
             channel?.send({ embeds: [embed] });
+            client.songCount++;
+            updateSongCount(client.songCount);
         })
         .on("queueEnd", (player) => {
             if (!player.textChannel) return;

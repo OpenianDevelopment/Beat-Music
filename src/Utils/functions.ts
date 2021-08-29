@@ -8,6 +8,7 @@ import {
     MessageEmbed,
 } from "discord.js";
 import DiscordClient from "../Client/Client";
+import { Schema, model, Types, Document } from "mongoose";
 
 export async function checkMusicPermission(
     client: DiscordClient,
