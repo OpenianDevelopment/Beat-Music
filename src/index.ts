@@ -7,7 +7,7 @@ const client = new DiscordClient({
     intents: ["GUILDS", "GUILD_VOICE_STATES"],
 });
 
-connect("mongodb://localhost:27017/Beat")
+connect(process.env.MONGO_URL!)
     .then(() => {
         console.log("Connected to DB");
     })
@@ -19,7 +19,5 @@ connect("mongodb://localhost:27017/Beat")
     await setSongCount(client);
     await registerCommands(client, "../commands");
     await registerEvents(client, "../events");
-    await client.login(
-        "ODgxMDUwMzEzODcwNjg0MTgw.YSnMCw.t59Th_FoJxPuaclvzi3q7age15I"
-    );
+    await client.login(process.env.TOKEN);
 })();
