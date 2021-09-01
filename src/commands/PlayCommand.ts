@@ -15,7 +15,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join a voice channel first");
-            await interaction.reply({ embeds: [embed], ephemeral: false });
+            await interaction.reply({ embeds: [embed], ephemeral: true });
             return;
         }
         if (
@@ -25,7 +25,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join the same channel as me");
-            await interaction.reply({ embeds: [embed], ephemeral: false });
+            await interaction.reply({ embeds: [embed], ephemeral: true });
             return;
         }
         const ClientPermissions = voiceChannel.permissionsFor(client.user!);
@@ -39,9 +39,10 @@ export default class PlayCommand extends BaseCommand {
                 .setDescription(
                     "❗ I don't have `CONNECT` or `SPEAK` or `VIEW CHANNEL` permission in that voice channel"
                 );
-            await interaction.reply({ embeds: [embed], ephemeral: false });
+            await interaction.reply({ embeds: [embed], ephemeral: true });
             return;
         }
+
         const SpotifyPlaylistPattern =
             /^(?:https:\/\/open\.spotify\.com\/(?:user\/[A-Za-z0-9]+\/)?|spotify:)(playlist)[\/:]([A-Za-z0-9]+).*$/;
         const YTPlaylistPattern = /^.*(youtu.be\/|list=)([^#\&\?]*).*/gi;
@@ -50,12 +51,15 @@ export default class PlayCommand extends BaseCommand {
                 guild: guild.id,
                 textChannel: interaction.channel!.id,
                 voiceChannel: voiceChannel.id,
+                selfDeafen: true,
             });
             client.players.set(guild.id, { player });
             player.connect();
         }
         const { player } = client.players.get(guild.id);
-
+        if (!player.voiceChannel) {
+            player.voiceChannel = voiceChannel;
+        }
         const result = await client.manager.search(songQuery, member.user);
         if (!result.tracks.length) {
             const embed = new MessageEmbed()
@@ -64,6 +68,7 @@ export default class PlayCommand extends BaseCommand {
             await interaction.reply({ embeds: [embed] });
             return;
         }
+
         if (
             YTPlaylistPattern.test(songQuery) ||
             SpotifyPlaylistPattern.test(songQuery)

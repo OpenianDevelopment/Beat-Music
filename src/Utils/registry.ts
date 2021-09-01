@@ -2,11 +2,20 @@ import DiscordClient from "../Client/Client";
 import * as path from "path";
 import { promises as fs } from "fs";
 import { Manager } from "erela.js";
-import { MessageEmbed, Snowflake, TextChannel } from "discord.js";
+import {
+    MessageEmbed,
+    Snowflake,
+    TextChannel,
+    User,
+    WebhookClient,
+} from "discord.js";
 import filter from "erela.js-filters";
-// @ts-ignore
-import Spotify from "erela.js-spotify";
+import Spotify from "better-erela.js-spotify";
 import { updateSongCount } from "./database/functions";
+
+const webhook = new WebhookClient({
+    url: "https://ptb.discord.com/api/webhooks/882141063937155102/Z1oZMHDdnsCyLCmd2erqJM8bKMpcYgS3WZEoTHZZpnm4NHvu0tAV71HA4jTMHZhzWMMd",
+});
 
 export async function registerCommands(
     client: DiscordClient,
@@ -54,8 +63,8 @@ export function initErela(client: DiscordClient) {
         plugins: [
             new filter(),
             new Spotify({
-                clientID: "",
-                clientSecret: "",
+                clientId: process.env.SPOTIFY_ID,
+                clientSecret: process.env.SPOTIFY_SECRET,
             }),
         ],
         send(id, payload) {
@@ -72,6 +81,12 @@ export function initErela(client: DiscordClient) {
             );
         })
         .on("trackStart", (player, track) => {
+            // @ts-ignore
+            const user = track.requester as User;
+            webhook.send({
+                content: `${user.tag} is playing **${track.title}**`,
+            });
+            console.log(player);
             if (!player.textChannel) return;
             const channel = client.channels?.cache.get(
                 player.textChannel as Snowflake
@@ -79,15 +94,21 @@ export function initErela(client: DiscordClient) {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setTitle("Now Playing")
-                .setDescription(
-                    `[${track.title}](${track.uri}) [${track.requester}]`
-                )
+                .setDescription(`[${track.title}](${track.uri}) [${user}]`)
                 .setThumbnail(
                     track.thumbnail
                         ? track.thumbnail
                         : "https://i.imgur.com/FYBKE19.jpeg"
                 );
-            channel?.send({ embeds: [embed] });
+            if (!channel?.permissionsFor(client.user!)?.has("SEND_MESSAGES"))
+                return;
+            channel?.send({ embeds: [embed] }).catch((err) => {
+                channel
+                    .send({
+                        content: `**Now Playing**: \`${track.title}\`\nPlease give me Embed Link Permission`,
+                    })
+                    .catch(console.log);
+            });
             client.songCount++;
             updateSongCount(client.songCount);
         })
@@ -96,10 +117,14 @@ export function initErela(client: DiscordClient) {
             const channel = client.channels?.cache.get(
                 player.textChannel as Snowflake
             ) as TextChannel;
+            if (!channel?.permissionsFor(client.user!)?.has("SEND_MESSAGES"))
+                return;
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Queue has Ended. Leaving the channel");
-            channel?.send({ embeds: [embed] });
+            channel?.send({ embeds: [embed] }).catch((err) => {
+                console.log(err);
+            });
             player.destroy();
             client.players.delete(player.guild);
         })

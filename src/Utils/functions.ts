@@ -2,13 +2,11 @@ import {
     CommandInteraction,
     GuildMember,
     Interaction,
-    InteractionCollector,
     MessageActionRow,
     MessageButton,
     MessageEmbed,
 } from "discord.js";
 import DiscordClient from "../Client/Client";
-import { Schema, model, Types, Document } from "mongoose";
 
 export async function checkMusicPermission(
     client: DiscordClient,
