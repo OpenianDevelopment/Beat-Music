@@ -12,12 +12,16 @@ lavalink:
       vimeo: true
       http: true
       local: false
+    ratelimit:
+      ipBlocks: [ "2a02:c207:2061:129::1/64" ]
+      strategy: "NanoSwitch"
     bufferDurationMs: 400
     youtubePlaylistLoadLimit: 6 # Number of pages at 100 each
     playerUpdateInterval: 5 # How frequently to send player updates to clients, in seconds
     youtubeSearchEnabled: true
     soundcloudSearchEnabled: true
     gc-warnings: true
+
     #ratelimit:
     #ipBlocks: ["1.0.0.0/8", "..."] # list of ip blocks
     #excludedIps: ["...", "..."] # ips which should be explicit excluded from usage by lavalink

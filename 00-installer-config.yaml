@@ -1,0 +1,25 @@
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens18:
+      match:
+        macaddress: 00:50:56:42:b7:b7
+      addresses:
+        - 167.86.68.74/32
+        - 2a02:c207:2061:0129:0000:0000:0000:0001/64
+        - 2a02:c207:2061:0129:0000:0000:0000:0002/64
+        - 2a02:c207:2061:0129:0000:0000:0000:0003/64
+      gateway6: fe80::1
+      routes:
+        - to: 0.0.0.0/0
+          via: 167.86.68.1
+          on-link: true
+      nameservers:
+        search: [ invalid ]
+        addresses:
+          - 213.136.95.10
+          - 213.136.95.11
+          - 2a02:c207::1:53
+          - 2a02:c207::2:53
