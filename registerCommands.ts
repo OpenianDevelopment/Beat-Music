@@ -102,17 +102,18 @@ const commands: ApplicationCommandData[] = [
         name: "treblebass",
         description: "Add treblebass filter to the song",
     },
-    {
-        name: "help",
-        description: "Get List of All Commands",
-    },
+
     {
         name: "reset-filter",
         description: "Reset all filters",
     },
     {
+        name: "8d",
+        description: "Apply 8D Filter",
+    },
+    {
         name: "help",
-        description: "list all commands",
+        description: "Get list of commands",
     },
 ];
 
