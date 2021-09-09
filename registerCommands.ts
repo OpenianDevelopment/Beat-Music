@@ -115,6 +115,14 @@ const commands: ApplicationCommandData[] = [
         name: "help",
         description: "Get list of commands",
     },
+    {
+        name: "vibrato",
+        description: "Apply Vibrato filters",
+    },
+    {
+        name: "tremolo",
+        description: "Apply tremolo filters",
+    },
 ];
 
 client.on("ready", () => {
