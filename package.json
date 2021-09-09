@@ -7,15 +7,15 @@
   "author": "Rohan Kumar <rohan.shuvam@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "better-erela.js-spotify": "NezuChan/better-erela.js-spotify",
+    "better-erela.js-spotify": "https://github.com/NezuChan/better-erela.js-spotify.git",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "erela.js": "^2.3.3",
-    "erela.js-filters": "^1.2.5",
+    "erela.js-filters": "^1.2.6",
     "erela.js-spotify": "^1.2.0",
     "fs": "^0.0.1-security",
     "i": "^0.3.6",
-    "mongoose": "^6.0.2",
+    "mongoose": "^6.0.5",
     "npm": "^7.21.1",
     "string-progressbar": "^1.0.4",
     "topgg-autoposter": "^2.0.0"
