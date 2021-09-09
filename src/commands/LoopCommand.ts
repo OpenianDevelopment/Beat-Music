@@ -14,12 +14,12 @@ export default class LoopCommand extends BaseCommand {
         if (player.queueRepeat) {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
-                .setDescription("Loop is on");
+                .setDescription("Loop is off");
             await interaction.reply({ embeds: [embed] });
         } else {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
-                .setDescription("Loop is off");
+                .setDescription("Loop is on");
             await interaction.reply({ embeds: [embed] });
         }
         player.setQueueRepeat(!player.queueRepeat);
