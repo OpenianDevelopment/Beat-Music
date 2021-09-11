@@ -1,4 +1,5 @@
 import {
+    ButtonInteraction,
     CommandInteraction,
     GuildMember,
     Interaction,
@@ -70,17 +71,18 @@ export async function PageInteraction(
         filter,
         time: 60000,
     });
-    collector.on("collect", async (i) => {
+    collector.on("collect", async (i: ButtonInteraction) => {
+        await i.deferUpdate({});
         if (i.customId === "forward") {
             if (currentPage < embeds.length - 1) {
                 currentPage++;
                 if (currentPage === embeds.length - 1) {
-                    await i.update({
+                    await i.editReply({
                         embeds: [embeds[currentPage]],
                         components: [prevButton],
                     });
                 } else {
-                    await i.update({
+                    await i.editReply({
                         embeds: [embeds[currentPage]],
                         components: [bothButton],
                     });
@@ -90,12 +92,12 @@ export async function PageInteraction(
             if (currentPage !== 0) {
                 --currentPage;
                 if (currentPage === 0) {
-                    await i.update({
+                    await i.editReply({
                         embeds: [embeds[currentPage]],
                         components: [forwardButton],
                     });
                 } else {
-                    await i.update({
+                    await i.editReply({
                         embeds: [embeds[currentPage]],
                         components: [bothButton],
                     });
