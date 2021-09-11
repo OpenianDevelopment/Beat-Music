@@ -2,7 +2,7 @@ import DiscordClient from "./Client/Client";
 import { registerCommands, registerEvents } from "./Utils/registry";
 import { connect } from "mongoose";
 import { setSongCount } from "./Utils/database/functions";
-
+require("dotenv").config();
 const client = new DiscordClient({
     intents: ["GUILDS", "GUILD_VOICE_STATES"],
 });
