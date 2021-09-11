@@ -15,6 +15,5 @@ export async function setSongCount(client: DiscordClient) {
 
 export async function updateSongCount(count: number) {
     song.updateOne({ bot_id: "881050313870684180" }, { $set: { count: count } })
-        .then(console.log)
-        .catch(console.error);
+    .catch(console.error);
 }
