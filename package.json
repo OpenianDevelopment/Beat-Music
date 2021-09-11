@@ -2,7 +2,7 @@
   "name": "Beat-Music",
   "version": "1.0.0",
   "description": "Music bot for discord",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "repository": "https://github.com/OpenianDevelopment/Beat-Music",
   "author": "Rohan Kumar <rohan.shuvam@gmail.com>",
   "license": "MIT",
@@ -24,8 +24,9 @@
     "prettier": "^2.3.2"
   },
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "register": "nodemon registerCommands.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "nodemon src/index.ts",
     "lavalink": "java -jar Lavalink.jar"
   }
 }
