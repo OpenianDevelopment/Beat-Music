@@ -2,20 +2,10 @@ import DiscordClient from "../Client/Client";
 import * as path from "path";
 import { promises as fs } from "fs";
 import { Manager } from "erela.js";
-import {
-    MessageEmbed,
-    Snowflake,
-    TextChannel,
-    User,
-    WebhookClient,
-} from "discord.js";
+import { MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
 import filter from "erela.js-filters";
 import Spotify from "better-erela.js-spotify";
 import { updateSongCount } from "./database/functions";
-
-const webhook = new WebhookClient({
-    url: "https://ptb.discord.com/api/webhooks/882141063937155102/Z1oZMHDdnsCyLCmd2erqJM8bKMpcYgS3WZEoTHZZpnm4NHvu0tAV71HA4jTMHZhzWMMd",
-});
 
 export async function registerCommands(
     client: DiscordClient,
@@ -65,6 +55,7 @@ export function initErela(client: DiscordClient) {
             new Spotify({
                 clientId: process.env.SPOTIFY_ID,
                 clientSecret: process.env.SPOTIFY_SECRET,
+                strategy: "API",
             }),
         ],
         send(id, payload) {
@@ -83,10 +74,6 @@ export function initErela(client: DiscordClient) {
         .on("trackStart", (player, track) => {
             // @ts-ignore
             const user = track.requester as User;
-            webhook.send({
-                content: `${user.tag} is playing **${track.title}**`,
-            });
-            console.log(player);
             if (!player.textChannel) return;
             const channel = client.channels?.cache.get(
                 player.textChannel as Snowflake
@@ -110,7 +97,7 @@ export function initErela(client: DiscordClient) {
                     .catch(console.log);
             });
             client.songCount++;
-            updateSongCount(client.songCount);
+            updateSongCount(client.songCount).catch(console.error);
         })
         .on("queueEnd", (player) => {
             if (!player.textChannel) return;
