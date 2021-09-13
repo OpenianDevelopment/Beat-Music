@@ -15,12 +15,12 @@ export default class PopCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("POP Deactivated");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         } else {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("POP Activated");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         }
         player.pop = !player.pop;
     }

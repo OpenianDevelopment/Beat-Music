@@ -14,12 +14,12 @@ export default class TreblebassCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Treble Bass Deactivated");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         } else {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Treble Bass Activated");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         }
         player.treblebass = !player.treblebass;
     }

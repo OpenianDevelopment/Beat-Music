@@ -14,13 +14,13 @@ export default class PauseCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Player is already paused");
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
         } else {
             player.pause(true);
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Player Paused");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         }
     }
 }

@@ -15,12 +15,12 @@ export default class ResumeCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#ffbd4f")
                 .setDescription("Player Resumed");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         } else {
             const embed = new MessageEmbed()
                 .setColor("#ffbd4f")
                 .setDescription("Player is not paused");
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
         }
     }
 }

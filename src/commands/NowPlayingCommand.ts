@@ -41,6 +41,6 @@ export default class NowPlayingCommand extends BaseCommand {
                 "Time Remaining: " + new Date(left).toISOString().substr(11, 8)
             );
         }
-        await interaction.reply({ embeds: [embed] });
+        await interaction.followUp({ embeds: [embed] });
     }
 }

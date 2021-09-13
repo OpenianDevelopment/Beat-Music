@@ -16,6 +16,6 @@ export default class StopCommand extends BaseCommand {
             .setColor("#FFBD4F")
             .setDescription("Player Stopped");
         client.players.delete(interaction.guildId);
-        await interaction.reply({ embeds: [embed] });
+        await interaction.followUp({ embeds: [embed] });
     }
 }

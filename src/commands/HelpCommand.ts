@@ -15,6 +15,6 @@ export default class HelpCommand extends BaseCommand {
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription(string);
-        await interaction.reply({ embeds: [embed] });
+        await interaction.followUp({ embeds: [embed] });
     }
 }

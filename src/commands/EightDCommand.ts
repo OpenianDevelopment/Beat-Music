@@ -14,12 +14,12 @@ export default class EightDCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("8D filter Deactivated");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         } else {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("8D Filter Activated");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         }
         player.eightD = !player.eightD;
     }

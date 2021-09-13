@@ -11,6 +11,7 @@ export default class InteractionCreateEvent extends BaseEvent {
         if (!interaction.inGuild()) return;
         const command = client.commands.get(interaction.commandName);
         if (command) {
+            await interaction.deferReply();
             command.run(client, interaction as CommandInteraction);
         }
     }

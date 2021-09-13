@@ -14,6 +14,6 @@ export default class SkipCommand extends BaseCommand {
             .setColor("#FFBD4F")
             .setDescription(`\`${player.queue.current.title}\` Skipped`);
         player.stop();
-        await interaction.reply({ embeds: [embed] });
+        await interaction.followUp({ embeds: [embed] });
     }
 }

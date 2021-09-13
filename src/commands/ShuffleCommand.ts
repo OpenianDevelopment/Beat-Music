@@ -13,7 +13,7 @@ export default class ShuffleCommand extends BaseCommand {
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription("Queue Shuffled");
-        await interaction.reply({ embeds: [embed] });
+        await interaction.followUp({ embeds: [embed] });
         player.queue.shuffle();
     }
 }

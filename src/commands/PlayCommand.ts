@@ -15,7 +15,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join a voice channel first");
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
             return;
         }
         if (
@@ -25,7 +25,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join the same channel as me");
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
             return;
         }
         const ClientPermissions = voiceChannel.permissionsFor(client.user!);
@@ -39,7 +39,7 @@ export default class PlayCommand extends BaseCommand {
                 .setDescription(
                     "❗ I don't have `CONNECT` or `SPEAK` or `VIEW CHANNEL` permission in that voice channel"
                 );
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
             return;
         }
 
@@ -65,7 +65,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("I am not able to find this song");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
             return;
         }
 
@@ -79,7 +79,7 @@ export default class PlayCommand extends BaseCommand {
                     `Enqueuing \`${result.tracks.length}\` tracks. [<@${interaction.user.id}>]`
                 )
                 .setColor("#FFBD4F");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         } else {
             player.queue.add(result.tracks[0]);
             const embed = new MessageEmbed()
@@ -87,7 +87,7 @@ export default class PlayCommand extends BaseCommand {
                     `Enqueuing track [${result.tracks[0].title}](${result.tracks[0].uri}) [<@${interaction.user.id}>].`
                 )
                 .setColor("#FFBD4F");
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
         }
         if (!guild.me!.voice.channel) {
             player.connect();

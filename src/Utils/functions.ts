@@ -19,13 +19,13 @@ export async function checkMusicPermission(
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription("❗ No Music is playing");
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.followUp({ embeds: [embed], ephemeral: true });
         return false;
     } else if (member.voice.channel !== guild.me!.voice.channel) {
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription("❗ You need to be in same channel as me");
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.followUp({ embeds: [embed], ephemeral: true });
         return false;
     }
     return true;
@@ -62,7 +62,7 @@ export async function PageInteraction(
             .setEmoji("⬅️")
             .setLabel("Previous")
     );
-    await interaction.reply({
+    await interaction.followUp({
         embeds: [embeds[0]],
         components: [forwardButton],
     });

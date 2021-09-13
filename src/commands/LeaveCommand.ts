@@ -17,6 +17,6 @@ export default class LeaveCommand extends BaseCommand {
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription("Leaving VC");
-        await interaction.reply({ embeds: [embed] });
+        await interaction.followUp({ embeds: [embed] });
     }
 }
