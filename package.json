@@ -12,7 +12,6 @@
     "dotenv": "^10.0.0",
     "erela.js": "^2.3.3",
     "erela.js-filters": "^1.2.6",
-    "erela.js-spotify": "^1.2.0",
     "fs": "^0.0.1-security",
     "i": "^0.3.6",
     "mongoose": "^6.0.5",
@@ -27,6 +26,7 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "nodemon src/index.ts",
-    "lavalink": "java -jar Lavalink.jar"
+    "lavalink": "java -jar Lavalink.jar",
+    "register": "ts-node src/registerCommands.ts"
   }
 }

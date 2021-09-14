@@ -3,7 +3,7 @@ require("dotenv").config();
 const client = new Client({
     intents: [],
 });
-client.login(process.env.TOKEN);
+client.login("ODUxMDYxNTk3ODUzMDU3MDQ2.YLyy4A.zJBLI4pdTM4GklWDw1v6NgZ0LN8");
 
 const commands: ApplicationCommandData[] = [
     {
@@ -102,26 +102,25 @@ const commands: ApplicationCommandData[] = [
         name: "treblebass",
         description: "Add treblebass filter to the song",
     },
-
     {
         name: "reset-filter",
         description: "Reset all filters",
     },
     {
-        name: "8d",
-        description: "Apply 8D Filter",
-    },
-    {
         name: "help",
-        description: "Get list of commands",
-    },
-    {
-        name: "vibrato",
-        description: "Apply Vibrato filters",
+        description: "list all commands",
     },
     {
         name: "tremolo",
-        description: "Apply tremolo filters",
+        description: "Add Tremolo filter to the song",
+    },
+    {
+        name: "vibrato",
+        description: "Add Vibrato filter to the song",
+    },
+    {
+        name: "8d",
+        description: "Add 8D filter to the song",
     },
 ];
 

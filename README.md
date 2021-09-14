@@ -90,7 +90,9 @@ Feature:
 
 5. Run Lavalink by typing `yarn run lavalink`
 
-6. Run the bot `yarn start`
+6. Compile Typescript `yarn run build`
+
+7. Start the bot `yarn start`
 
 
 
