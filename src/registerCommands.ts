@@ -3,7 +3,7 @@ require("dotenv").config();
 const client = new Client({
     intents: [],
 });
-client.login("ODUxMDYxNTk3ODUzMDU3MDQ2.YLyy4A.zJBLI4pdTM4GklWDw1v6NgZ0LN8");
+client.login(process.env.TOKEN);
 
 const commands: ApplicationCommandData[] = [
     {
