@@ -21,7 +21,7 @@ export default class NowPlayingCommand extends BaseCommand {
             .setColor("#554b58")
             .setThumbnail(song.thumbnail);
 
-        if (song.duration > 0) {
+        if (!song.isStream) {
             embed.addField(
                 "\u200b",
                 new Date(seek).toISOString().substr(11, 8) +
@@ -40,6 +40,8 @@ export default class NowPlayingCommand extends BaseCommand {
             embed.setFooter(
                 "Time Remaining: " + new Date(left).toISOString().substr(11, 8)
             );
+        } else {
+            embed.addField("\u200b", "🔴 Live");
         }
         await interaction.followUp({ embeds: [embed] });
     }

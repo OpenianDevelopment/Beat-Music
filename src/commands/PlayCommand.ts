@@ -90,7 +90,19 @@ export default class PlayCommand extends BaseCommand {
             await interaction.followUp({ embeds: [embed] });
         }
         if (!guild.me!.voice.channel) {
-            player.connect();
+            player.connect().catch(async () => {
+                const embed = new MessageEmbed()
+                    .setColor("#FFBD4F")
+                    .setDescription(
+                        "Something went wrong. Please try again. If problem still persists contact support"
+                    );
+                await interaction.followUp({
+                    embeds: [embed],
+                    ephemeral: true,
+                });
+                client.players.delete(interaction.guildId);
+                player.delete();
+            });
         }
 
         if (!player.playing && !player.paused) {
