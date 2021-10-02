@@ -48,6 +48,7 @@ Feature:
 * Music
 * Spotify 
 * Filters
+* Deezer
 
 
 
