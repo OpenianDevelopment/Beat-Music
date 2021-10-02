@@ -5,6 +5,7 @@ import { Manager } from "erela.js";
 import { MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
 import filter from "erela.js-filters";
 import Spotify from "better-erela.js-spotify";
+import Deezer from "erela.js-deezer";
 import { updateSongCount } from "./database/functions";
 
 export async function registerCommands(
@@ -57,6 +58,7 @@ export function initErela(client: DiscordClient) {
                 clientSecret: process.env.SPOTIFY_SECRET,
                 strategy: "API",
             }),
+            new Deezer(),
         ],
         send(id, payload) {
             const guild = client.guilds.cache.get(id as Snowflake);
