@@ -17,7 +17,8 @@
     "mongoose": "^6.0.5",
     "npm": "^7.21.1",
     "string-progressbar": "^1.0.4",
-    "topgg-autoposter": "^2.0.0"
+    "topgg-autoposter": "^2.0.0",
+    "erela.js-deezer": "^1.0.7"
   },
   "devDependencies": {
     "prettier": "^2.3.2"
