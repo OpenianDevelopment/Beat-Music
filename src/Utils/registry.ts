@@ -58,7 +58,7 @@ export function initErela(client: DiscordClient) {
                 clientSecret: process.env.SPOTIFY_SECRET,
                 strategy: "API",
             }),
-            new Deezer(),
+            new Deezer({}),
         ],
         send(id, payload) {
             const guild = client.guilds.cache.get(id as Snowflake);
@@ -123,6 +123,7 @@ export function initErela(client: DiscordClient) {
         .on("playerMove", (player, oldChannel, newChannel) => {
             if (!newChannel) {
                 player.destroy();
+                client.players.delete(player.guild);
             } else {
                 player.voiceChannel = newChannel;
             }

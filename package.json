@@ -11,14 +11,14 @@
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "erela.js": "^2.3.3",
+    "erela.js-deezer": "^1.0.7",
     "erela.js-filters": "^1.2.6",
     "fs": "^0.0.1-security",
     "i": "^0.3.6",
     "mongoose": "^6.0.5",
     "npm": "^7.21.1",
     "string-progressbar": "^1.0.4",
-    "topgg-autoposter": "^2.0.0",
-    "erela.js-deezer": "^1.0.7"
+    "topgg-autoposter": "^2.0.0"
   },
   "devDependencies": {
     "prettier": "^2.3.2"
