@@ -11,17 +11,31 @@ export default class LoopCommand extends BaseCommand {
     async run(client: DiscordClient, interaction: CommandInteraction) {
         if (!(await checkMusicPermission(client, interaction))) return;
         const { player } = client.players.get(interaction.guildId);
-        if (player.queueRepeat) {
-            const embed = new MessageEmbed()
-                .setColor("#FFBD4F")
-                .setDescription("Loop is off");
-            await interaction.followUp({ embeds: [embed] });
-        } else {
-            const embed = new MessageEmbed()
-                .setColor("#FFBD4F")
-                .setDescription("Loop is on");
-            await interaction.followUp({ embeds: [embed] });
+        const WhatToLoop = interaction.options.getSubcommand(true);
+        switch (WhatToLoop) {
+            case "queue": {
+                const queuetxt = player.queueRepeat
+                    ? "Looping the queue"
+                    : "Stopped looping the queue";
+                const embed = new MessageEmbed()
+                    .setColor("#FFBD4F")
+                    .setDescription(queuetxt);
+                await interaction.followUp({ embeds: [embed] });
+                player.setQueueRepeat(!player.queueRepeat);
+                break;
+            }
+            case "track": {
+                const tracktxt = player.trackRepeat
+                    ? "Looping the current track"
+                    : "Stopped looping the current track";
+                const embed = new MessageEmbed()
+                    .setColor("#FFBD4F")
+                    .setDescription(tracktxt);
+                await interaction.followUp({ embeds: [embed] });
+                player.setTrackRepeat(!player.trackRepeat);
+                break;
+            }
         }
-        player.setQueueRepeat(!player.queueRepeat);
+        return;
     }
 }

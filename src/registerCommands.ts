@@ -52,7 +52,21 @@ const commands: ApplicationCommandData[] = [
     },
     {
         name: "loop",
-        description: "loop the queue",
+        description: "loop the queue/track",
+        options: [
+            {
+                name: "queue",
+                description: "Loop the queue",
+                type: "SUB_COMMAND",
+                required: true,
+            },
+            {
+                name: "track",
+                description: "Loop the current track",
+                type: "SUB_COMMAND",
+                required: true,
+            },
+        ],
     },
     {
         name: "now-playing",
@@ -121,6 +135,38 @@ const commands: ApplicationCommandData[] = [
     {
         name: "8d",
         description: "Add 8D filter to the song",
+    },
+    {
+        name: "su",
+        description: "Developer stuff",
+        options: [
+            {
+                name: "cmd",
+                description: "Wanted command",
+                type: "STRING",
+                required: true,
+                choices: [
+                    {
+                        name: "Evaluate",
+                        value: "eval",
+                    },
+                    {
+                        name: "Dev info",
+                        value: "info",
+                    },
+                    {
+                        name: "Reload file",
+                        value: "reload",
+                    },
+                ],
+            },
+            {
+                name: "code",
+                description: "Code to evaluate (Only works with eval)",
+                type: "STRING",
+                required: false,
+            },
+        ],
     },
 ];
 
