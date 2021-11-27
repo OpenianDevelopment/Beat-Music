@@ -8,6 +8,7 @@ import {
     MessageAttachment,
     Interaction,
     MessageSelectMenu,
+    Message,
 } from "discord.js";
 import { inspect } from "util";
 import os from "os";
@@ -20,9 +21,7 @@ export default class HelpCommand extends BaseCommand {
     }
     async run(client: DiscordClient, interaction: CommandInteraction) {
         const embed = new MessageEmbed().setColor("#FFBD4F");
-        if (!process.env.DEV!.includes(interaction.user.id)
-        )
-            return;
+        if (!process.env.DEVS!.includes(interaction.user.id)) return;
         const cmd = interaction.options.getString("cmd", true);
         switch (cmd) {
             case "eval": {
@@ -69,6 +68,7 @@ async function Evaluate(
             .setStyle("PRIMARY")
             .setEmoji("❌")
     );
+    var botmsg: Message;
     try {
         const start = process.hrtime();
         var evaled = eval(code.replace(/interaction.reply/g, "channel.send"));
@@ -91,15 +91,15 @@ async function Evaluate(
 
         const response = clean(inspect(evaled, { depth: 0 }));
         if (response.length < 1900) {
-            await interaction.reply({
+            botmsg = (await interaction.followUp({
                 embeds: [evmbed],
                 components: [XBtn],
-            });
+            })) as Message;
         } else if (response.length <= 2000) {
-            await interaction.reply({
+            botmsg = (await interaction.followUp({
                 content: "```js\n" + response + "\n```",
                 components: [XBtn],
-            });
+            })) as Message;
         } else {
             const output = new MessageAttachment(
                 Buffer.from(response),
@@ -117,10 +117,10 @@ async function Evaluate(
                 client!.user!.username,
                 client!.user!.displayAvatarURL()
             );
-        await interaction.reply({
+        botmsg = (await interaction.followUp({
             embeds: [errevmbed],
             components: [XBtn],
-        });
+        })) as Message;
     }
 
     const filter = (m: Interaction) => interaction.user.id === m.user.id;
@@ -129,7 +129,7 @@ async function Evaluate(
     });
     collector.on("collect", async (int) => {
         if (int.customId === "delete-" + date) {
-            interaction.deleteReply();
+            botmsg.delete();
         }
     });
     function clean(text: string) {
@@ -166,12 +166,13 @@ Ram Usage in MB: **${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(
     )} MB**
 Total ram: **${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB**`);
 
-    interaction.reply({ embeds: [embed] });
+    interaction.followUp({ embeds: [embed] });
     return;
 }
 
 async function Reload(client: DiscordClient, interaction: CommandInteraction) {
     const date = Date.now();
+    var botmsg: Message;
     const commandMenu = new MessageSelectMenu()
         .setCustomId("select_file_tr-" + date)
         .setPlaceholder("Nothing Selected")
@@ -195,10 +196,10 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
     const embed = new MessageEmbed()
         .setColor("DARK_RED")
         .setDescription("Choose the File(s) you want to reload");
-    await interaction.reply({
+    botmsg = (await interaction.followUp({
         embeds: [embed],
         components: [commandsRow],
-    });
+    })) as Message;
     const filter = (m: Interaction) => interaction.user.id === m.user.id;
     const collector = interaction.channel!.createMessageComponentCollector({
         filter,
@@ -208,7 +209,7 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
         if (int.isSelectMenu() && int.customId === "select_file_tr-" + date) {
             var files = int.values.map((v) => MCFCD(v));
             if (int.values.includes("all")) {
-                files = await readdir("./");
+                files = await readdir("./dist/commands/");
             }
             for (const f of files) {
                 delete require.cache[require.resolve(`./${f}`)];
@@ -219,19 +220,19 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
             const embed2 = new MessageEmbed()
                 .setColor("DARK_VIVID_PINK")
                 .setDescription(
-                    `Reload \`${files.join(", ").replace(/Command.ts/, "")}\``
+                    `Reload \`${files.join(", ").replace(/Command.js/, "")}\``
                 );
-            await interaction.editReply({ embeds: [embed2], components: [] });
+            botmsg.edit({ embeds: [embed2], components: [] });
             return;
         }
     });
     collector.on("end", async (coll, reason) => {
-        await interaction.deleteReply();
+        await botmsg.delete();
         return;
     });
     return;
     function MCFCD(input: string) {
-        input = input.replace(/-/, "") + "Command.ts";
+        input = input.replace(/-/, "") + "Command.js";
         return input;
     }
 }

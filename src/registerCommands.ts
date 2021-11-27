@@ -58,13 +58,11 @@ const commands: ApplicationCommandData[] = [
                 name: "queue",
                 description: "Loop the queue",
                 type: "SUB_COMMAND",
-                required: true,
             },
             {
                 name: "track",
                 description: "Loop the current track",
                 type: "SUB_COMMAND",
-                required: true,
             },
         ],
     },

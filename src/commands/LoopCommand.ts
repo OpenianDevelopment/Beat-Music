@@ -14,7 +14,7 @@ export default class LoopCommand extends BaseCommand {
         const WhatToLoop = interaction.options.getSubcommand(true);
         switch (WhatToLoop) {
             case "queue": {
-                const queuetxt = player.queueRepeat
+                const queuetxt = !player.queueRepeat
                     ? "Looping the queue"
                     : "Stopped looping the queue";
                 const embed = new MessageEmbed()
@@ -25,7 +25,7 @@ export default class LoopCommand extends BaseCommand {
                 break;
             }
             case "track": {
-                const tracktxt = player.trackRepeat
+                const tracktxt = !player.trackRepeat
                     ? "Looping the current track"
                     : "Stopped looping the current track";
                 const embed = new MessageEmbed()
