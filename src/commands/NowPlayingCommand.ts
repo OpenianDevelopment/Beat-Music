@@ -13,6 +13,13 @@ export default class NowPlayingCommand extends BaseCommand {
         const { player } = client.players.get(interaction.guildId);
         const song = player.queue.current;
         const seek = player.position;
+        if (!song) {
+            const embed = new MessageEmbed()
+                .setColor("#FFBD4F")
+                .setDescription("❗ No Music is playing");
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            return;
+        }
         const left = song.duration - seek;
 
         let embed = new MessageEmbed()

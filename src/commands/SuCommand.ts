@@ -12,6 +12,7 @@ import {
 import { inspect } from "util";
 import os from "os";
 import { readdir } from "fs/promises";
+require("dotenv").config();
 
 export default class HelpCommand extends BaseCommand {
     constructor() {
@@ -19,12 +20,7 @@ export default class HelpCommand extends BaseCommand {
     }
     async run(client: DiscordClient, interaction: CommandInteraction) {
         const embed = new MessageEmbed().setColor("#FFBD4F");
-        if (
-            ![
-                "534783899331461123",
-                "687893451534106669",
-                "180485886184521728",
-            ].includes(interaction.user.id)
+        if (!process.env.DEV!.includes(interaction.user.id)
         )
             return;
         const cmd = interaction.options.getString("cmd", true);
