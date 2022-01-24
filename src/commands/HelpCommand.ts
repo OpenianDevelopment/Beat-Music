@@ -6,7 +6,7 @@ import {
     MessageButton,
     MessageEmbed,
 } from "discord.js";
-import { checkMusicPermission } from "../Utils/functions";
+
 
 export default class HelpCommand extends BaseCommand {
     constructor() {
@@ -32,9 +32,9 @@ export default class HelpCommand extends BaseCommand {
                 .setURL("https://discord.com/invite/fBKZngbHHb")
                 .setLabel("Support Server"),
         ]);
-        await interaction.followUp({
+        interaction.editReply({
             embeds: [embed],
             components: [components],
-        });
+        }).catch(console.error);
     }
 }

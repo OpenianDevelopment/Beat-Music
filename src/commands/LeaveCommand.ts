@@ -10,13 +10,13 @@ export default class LeaveCommand extends BaseCommand {
 
     async run(client: DiscordClient, interaction: CommandInteraction) {
         if (!(await checkMusicPermission(client, interaction))) return;
+        const embed = new MessageEmbed()
+            .setColor("#FFBD4F")
+            .setDescription("Leaving VC");
+        interaction.editReply({ embeds: [embed] }).catch(console.error);
         const { player } = client.players.get(interaction.guildId);
         player.disconnect();
         player.destroy();
         client.players.delete(interaction.guildId);
-        const embed = new MessageEmbed()
-            .setColor("#FFBD4F")
-            .setDescription("Leaving VC");
-        await interaction.followUp({ embeds: [embed] });
     }
 }

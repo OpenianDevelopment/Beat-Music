@@ -15,12 +15,12 @@ export default class NightcoreCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Nightcore Deactivated");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         } else {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Nightcore Activated");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         }
         player.nightcore = !player.nightcore;
     }

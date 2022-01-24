@@ -17,7 +17,7 @@ export default class NowPlayingCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("❗ No Music is playing");
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
             return;
         }
         const left = song.duration - seek;

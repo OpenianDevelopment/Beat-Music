@@ -14,12 +14,12 @@ export default class TremoloCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Tremolo Deactivated");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         } else {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Tremolo Activated");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         }
         player.tremolo = !player.tremolo;
     }

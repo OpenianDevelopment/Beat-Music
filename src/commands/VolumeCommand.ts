@@ -16,6 +16,6 @@ export default class VolumeCommand extends BaseCommand {
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription(`Volume set to ${volume}%`);
-        await interaction.followUp({ embeds: [embed] });
+        interaction.editReply({ embeds: [embed] }).catch(console.error);
     }
 }

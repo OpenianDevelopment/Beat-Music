@@ -20,7 +20,7 @@ export default class LoopCommand extends BaseCommand {
                 const embed = new MessageEmbed()
                     .setColor("#FFBD4F")
                     .setDescription(queuetxt);
-                await interaction.followUp({ embeds: [embed] });
+                interaction.editReply({ embeds: [embed] }).catch(console.error);
                 player.setQueueRepeat(!player.queueRepeat);
                 break;
             }
@@ -31,7 +31,7 @@ export default class LoopCommand extends BaseCommand {
                 const embed = new MessageEmbed()
                     .setColor("#FFBD4F")
                     .setDescription(tracktxt);
-                await interaction.followUp({ embeds: [embed] });
+                interaction.editReply({ embeds: [embed] }).catch(console.error);
                 player.setTrackRepeat(!player.trackRepeat);
                 break;
             }

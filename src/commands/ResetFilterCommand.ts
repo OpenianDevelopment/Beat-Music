@@ -14,6 +14,6 @@ export default class ResetFilterCommand extends BaseCommand {
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription("Filters Removed");
-        await interaction.followUp({ embeds: [embed] });
+        interaction.editReply({ embeds: [embed] }).catch(console.error);
     }
 }

@@ -18,7 +18,7 @@ export default class QueueCommand extends BaseCommand {
             return;
         }
         if (embeds.length === 1) {
-            await interaction.followUp({ embeds: [embeds[0]] });
+            interaction.editReply({ embeds: [embeds[0]] }).catch(console.error);
         } else {
             await PageInteraction(embeds, interaction);
         }

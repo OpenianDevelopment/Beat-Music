@@ -14,12 +14,12 @@ export default class VibratoCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Vibrato Deactivated");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         } else {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("Vibrato Activated");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         }
         player.vibrato = !player.vibrato;
     }

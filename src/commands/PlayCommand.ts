@@ -6,6 +6,7 @@ export default class PlayCommand extends BaseCommand {
     constructor() {
         super("play", "Play a Song");
     }
+
     async run(client: DiscordClient, interaction: CommandInteraction) {
         const member = interaction.member as GuildMember;
         const guild = interaction.guild!;
@@ -15,7 +16,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join a voice channel first");
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
             return;
         }
         if (
@@ -25,7 +26,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFDB4F")
                 .setDescription("❗ You need to join the same channel as me");
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
             return;
         }
         const ClientPermissions = voiceChannel.permissionsFor(client.user!);
@@ -39,19 +40,19 @@ export default class PlayCommand extends BaseCommand {
                 .setDescription(
                     "❗ I don't have `CONNECT` or `SPEAK` or `VIEW CHANNEL` permission in that voice channel"
                 );
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
             return;
         }
 
         const SpotifyPlaylistPattern =
             /^(?:https:\/\/open\.spotify\.com\/(?:user\/[A-Za-z0-9]+\/)?|spotify:)(playlist)[\/:]([A-Za-z0-9]+).*$/;
-        const YTPlaylistPattern = /^.*(youtu.be\/|list=)([^#\&\?]*).*/gi;
+        const YTPlaylistPattern = /^.*(youtu.be\/|list=)([^#]*).*/gi;
         if (!client.players.has(guild.id)) {
             const player = client.manager.create({
                 guild: guild.id,
                 textChannel: interaction.channel!.id,
                 voiceChannel: voiceChannel.id,
-                selfDeafen: true,
+                selfDeafen: true
             });
             client.players.set(guild.id, { player });
             player.connect();
@@ -65,7 +66,7 @@ export default class PlayCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("I am not able to find this song");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
             return;
         }
 
@@ -79,7 +80,7 @@ export default class PlayCommand extends BaseCommand {
                     `Enqueuing \`${result.tracks.length}\` tracks. [<@${interaction.user.id}>]`
                 )
                 .setColor("#FFBD4F");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         } else {
             player.queue.add(result.tracks[0]);
             const embed = new MessageEmbed()
@@ -87,22 +88,10 @@ export default class PlayCommand extends BaseCommand {
                     `Enqueuing track [${result.tracks[0].title}](${result.tracks[0].uri}) [<@${interaction.user.id}>].`
                 )
                 .setColor("#FFBD4F");
-            await interaction.followUp({ embeds: [embed] });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
         }
         if (!guild.me!.voice.channel) {
-            player.connect().catch(async () => {
-                const embed = new MessageEmbed()
-                    .setColor("#FFBD4F")
-                    .setDescription(
-                        "Something went wrong. Please try again. If problem still persists contact support"
-                    );
-                await interaction.followUp({
-                    embeds: [embed],
-                    ephemeral: true,
-                });
-                client.players.delete(interaction.guildId);
-                player.delete();
-            });
+            player.connect();
         }
 
         if (!player.playing && !player.paused) {

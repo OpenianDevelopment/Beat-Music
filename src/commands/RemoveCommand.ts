@@ -16,7 +16,7 @@ export default class RemoveCommand extends BaseCommand {
             const embed = new MessageEmbed()
                 .setColor("#FFBD4F")
                 .setDescription("❗ Song do not exist in the queue");
-            await interaction.followUp({ embeds: [embed], ephemeral: true });
+            interaction.editReply({ embeds: [embed] }).catch(console.error);
             return;
         }
         const song = player.queue[position - 1];
@@ -26,6 +26,6 @@ export default class RemoveCommand extends BaseCommand {
             .setDescription(
                 `[${song.title}](${song.uri}) removed from the queue`
             );
-        await interaction.followUp({ embeds: [embed] });
+        interaction.editReply({ embeds: [embed] }).catch(console.error);
     }
 }
