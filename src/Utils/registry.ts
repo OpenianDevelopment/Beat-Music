@@ -57,7 +57,6 @@ export function initErela(client: DiscordClient) {
             new Spotify({
                 clientID: process.env.SPOTIFY_ID!,
                 clientSecret: process.env.SPOTIFY_SECRET!,
-                convertUnresolved: true
             }),
             new Deezer({}),
         ],
