@@ -2,12 +2,13 @@ import DiscordClient from "../Client/Client";
 import * as path from "path";
 import { promises as fs } from "fs";
 import { Manager } from "erela.js";
-import { MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
-import filter from "erela.js-filters";
-import Spotify from "better-erela.js-spotify";
+import { MessageEmbed, Snowflake, TextChannel, User, WebhookClient } from "discord.js";
+import Filter from "erela.js-filters";
+import Spotify from "erela.js-spotify";
 import Deezer from "erela.js-deezer";
 import { updateSongCount } from "./database/functions";
 
+const player_log_webhook = new WebhookClient({url: process.env.PLAYER_LOG_WEBHOOK!})
 export async function registerCommands(
     client: DiscordClient,
     dir: string = ""
@@ -43,7 +44,7 @@ export async function registerEvents(client: DiscordClient, dir: string = "") {
 }
 
 export function initErela(client: DiscordClient) {
-    const manager = new Manager({
+    return new Manager({
         nodes: [
             {
                 host: "localhost",
@@ -52,11 +53,11 @@ export function initErela(client: DiscordClient) {
             },
         ],
         plugins: [
-            new filter(),
+            new Filter(),
             new Spotify({
-                clientId: process.env.SPOTIFY_ID,
-                clientSecret: process.env.SPOTIFY_SECRET,
-                strategy: "API",
+                clientID: process.env.SPOTIFY_ID!,
+                clientSecret: process.env.SPOTIFY_SECRET!,
+                convertUnresolved: true
             }),
             new Deezer({}),
         ],
@@ -98,6 +99,8 @@ export function initErela(client: DiscordClient) {
                     })
                     .catch(console.log);
             });
+            const playerLogEmbed = new MessageEmbed().setDescription(`**${user.tag}** started playing [${track.title}](${track.uri})`).setColor("#FFBD4F");
+            player_log_webhook.send({embeds:[playerLogEmbed]}).catch(console.error)
             client.songCount++;
             updateSongCount(client.songCount).catch(console.error);
         })
@@ -128,5 +131,5 @@ export function initErela(client: DiscordClient) {
                 player.voiceChannel = newChannel;
             }
         });
-    return manager;
+
 }
