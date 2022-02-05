@@ -49,7 +49,7 @@ function generateQueueEmbed(interaction: CommandInteraction, queue: Queue) {
                 `**Current Song** - [${queue.current?.title}](${queue.current?.uri}) [${queue.current?.requester}]\n\n${info}`
             )
             .setTimestamp()
-            .setFooter(`Page: ${p}/${Math.round(queue.length / 10)}`);
+            .setFooter(`Page: ${p}/${Math.ceil(queue.length / 10)}`);
         embeds.push(embed);
         p++;
     }

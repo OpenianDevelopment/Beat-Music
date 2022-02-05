@@ -2,7 +2,6 @@ import { CommandInteraction, MessageEmbed } from "discord.js";
 import DiscordClient from "../Client/Client";
 import { BaseCommand } from "../Utils/structures/BaseCommand";
 import { checkMusicPermission } from "../Utils/functions";
-import { Track } from "erela.js/structures/Player";
 
 export default class RemoveCommand extends BaseCommand {
     constructor() {
@@ -20,19 +19,15 @@ export default class RemoveCommand extends BaseCommand {
             interaction.editReply({ embeds: [embed] }).catch(console.error);
             return;
         }
-        const song = player.queue[position-1] as Track;
-        console.log(song)
-        if(!song){
-            const embed = new MessageEmbed().setColor("#FFBD4F").setDescription('Songs you are trying to remove do not exist')
-            interaction.editReply({ embeds: [embed] }).catch(console.error);
-            return;
-        }
 
-        player.queue.remove(position);
+
+
+
+        const song = player.queue.remove(position);
         const embed = new MessageEmbed()
             .setColor("#FFBD4F")
             .setDescription(
-                `[${song.title}](${song.uri}) removed from the queue`
+                `\`${song[0].title}\` removed from the queue`
             );
         interaction.editReply({ embeds: [embed] }).catch(console.error);
     }
