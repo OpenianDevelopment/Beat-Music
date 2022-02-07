@@ -23,31 +23,35 @@ export default class HelpCommand extends BaseCommand {
         const embed = new MessageEmbed().setColor("#FFBD4F");
         if (!process.env.DEVS!.includes(interaction.user.id)) return;
         const cmd = interaction.options.getString("cmd", true);
-        switch (cmd) {
-            case "eval": {
-                if (!interaction.options.getString("code", false)) {
-                    await interaction.reply({
-                        embeds: [
-                            embed.setDescription(
-                                "You need the 'code' argument to use eval"
-                            ),
-                        ],
-                    });
-                    return;
+        try {
+            switch (cmd) {
+                case "eval": {
+                    if (!interaction.options.getString("code", false)) {
+                        await interaction.reply({
+                            embeds: [
+                                embed.setDescription(
+                                    "You need the 'code' argument to use eval"
+                                ),
+                            ],
+                        });
+                        return;
+                    }
+                    await Evaluate(client, interaction);
+                    break;
                 }
-                await Evaluate(client, interaction);
-                break;
+                case "info": {
+                    await Dev_info(client, interaction);
+                    break;
+                }
+                case "reload": {
+                    await Reload(client, interaction);
+                    break;
+                }
             }
-            case "info": {
-                await Dev_info(client, interaction);
-                break;
-            }
-            case "reload": {
-                await Reload(client, interaction);
-                break;
-            }
+            return;
+        } catch (err: any) {
+            console.log(`Error /Su ${cmd}:`, err);
         }
-        return;
     }
 }
 
@@ -203,7 +207,7 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
     const filter = (m: Interaction) => interaction.user.id === m.user.id;
     const collector = interaction.channel!.createMessageComponentCollector({
         filter,
-        time: 15e3,
+        time: 60e3,
     });
     collector.on("collect", async (int) => {
         if (int.isSelectMenu() && int.customId === "select_file_tr-" + date) {
@@ -232,7 +236,15 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
     });
     return;
     function MCFCD(input: string) {
-        input = input.replace(/-/, "") + "Command.js";
+        var str0: string = capFirstLetter(input.split(/-/)[0]);
+        var str2: string | boolean = false;
+        if (input.split(/-/)[1]) {
+            str2 = capFirstLetter(input.split(/-/)[1]);
+        }
+        input = `${str0}${str2 ? str2 : ""}Command.js`;
         return input;
+    }
+    function capFirstLetter(value: string) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
     }
 }
