@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+
+mainClassName = 'me.rohank05.Bot'
+version '1.0'
+sourceCompatibility = 1.8
+
+repositories {
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+    mavenCentral()
+    jcenter()
+    maven {
+        name 'jfrog-duncte123'
+        url 'https://duncte123.jfrog.io/artifactory/maven'
+    }
+}
+
+dependencies {
+    implementation group: 'net.dv8tion', name: 'JDA', version: '4.4.0_352'
+    implementation group: 'com.jagrosh', name: 'jda-utilities', version: '3.0.5'
+    implementation group: 'me.duncte123', name: 'botCommons', version: '2.3.9'
+    implementation group: 'io.github.cdimascio', name: 'java-dotenv', version: '5.2.2'
+    implementation("ch.qos.logback:logback-classic:1.2.8")
+}
+
+compileJava.options.encoding = 'UTF-8'
