@@ -38,12 +38,8 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     @Override
-    public void onEvent(AudioEvent event) {
-        super.onEvent(event);
-    }
-
-    @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         this.channel.sendMessage(track.getInfo().title + " has started playing").queue();
     }
+
 }

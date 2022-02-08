@@ -25,7 +25,6 @@ public class PlayCommand implements ICommand {
         final Member member = event.getMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
-        final TextChannel channel = event.getTextChannel();
         final AudioManager audioManager = event.getGuild().getAudioManager();
         String track = event.getOption("song-or-playlist").getAsString();
         if (!memberVoiceState.inVoiceChannel()) {
@@ -38,6 +37,9 @@ public class PlayCommand implements ICommand {
                 MessageEmbed embed = new EmbedBuilder().setAuthor(self.getNickname(), self.getEffectiveAvatarUrl()).setDescription("You need to be in same channel as me").setColor(16760143).build();
                 event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
                 return;
+            }
+            if(!audioManager.isConnected()){
+                audioManager.openAudioConnection(selfVoiceState.getChannel());
             }
         }else {
             EnumSet<Permission> permissionList = self.getPermissions(memberVoiceState.getChannel());
