@@ -5,10 +5,14 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEvent;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class TrackScheduler extends AudioEventAdapter {
     public final AudioPlayer player;
@@ -39,7 +43,20 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        this.channel.sendMessage(track.getInfo().title + " has started playing").queue();
+        if(channel.getGuild().getSelfMember().getPermissions(channel).contains(Permission.MESSAGE_EMBED_LINKS)){
+            MessageEmbed embed = new EmbedBuilder()
+                    .setTitle("Now Playing")
+                    .addField("Track Name", "["+track.getInfo().title+"]("+track.getInfo().uri+")", true)
+                    .addField("Length", String.format("%02d min %02d sec",
+                            track.getDuration()/ TimeUnit.MINUTES.toMillis(1),
+                            track.getDuration() % TimeUnit.MINUTES.toMillis(1) / TimeUnit.SECONDS.toMillis(1)
+                    ), true)
+                    .setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/default.jpg")
+                    .build();
+            this.channel.sendMessageEmbeds(embed).queue();
+        }else{
+            this.channel.sendMessage(track.getInfo().title + " has started playing").queue();
+        }
     }
 
 }

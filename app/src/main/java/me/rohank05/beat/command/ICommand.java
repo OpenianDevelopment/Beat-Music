@@ -1,8 +1,9 @@
 package me.rohank05.beat.command;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+
 
 public interface ICommand {
-    void run(SlashCommandEvent event);
+    void run(SlashCommandInteractionEvent event);
     String getName();
 }

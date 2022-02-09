@@ -2,7 +2,10 @@ package me.rohank05.beat;
 
 import me.rohank05.beat.command.ICommand;
 import me.rohank05.beat.command.commands.*;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+
+
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -14,10 +17,10 @@ public class CommandManager {
 
     public CommandManager(){
         addCommand(new ShutdownCommand());
-        addCommand(new JoinCommand());
         addCommand(new PlayCommand());
         addCommand(new StopCommand());
         addCommand(new NightcoreCommand());
+        addCommand(new SkipCommand());
     }
     private void addCommand(ICommand cmd){
         boolean nameFound = this.commands.stream().anyMatch((it)-> it.getName().equalsIgnoreCase(cmd.getName()));
@@ -37,7 +40,7 @@ public class CommandManager {
         return null;
     }
 
-    void run(SlashCommandEvent event){
+    void run(@NotNull SlashCommandInteractionEvent event){
         ICommand cmd = this.getCommand(event.getName());
         event.getInteraction().deferReply().queue();
         if(!event.isFromGuild()){
