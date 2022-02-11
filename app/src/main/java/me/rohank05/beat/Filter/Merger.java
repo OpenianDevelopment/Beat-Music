@@ -2,6 +2,7 @@ package me.rohank05.beat.Filter;
 
 import com.github.natanbc.lavadsp.rotation.RotationPcmAudioFilter;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
@@ -16,7 +17,9 @@ public class Merger {
     private boolean EightDEnabled = false;
     private FloatPcmAudioFilter lastOutput;
     private List<AudioFilter> audioFilters = new ArrayList<AudioFilter>();
-    public Merger(){}
+
+    public Merger() {
+    }
 
     public boolean isNightcoreEnabled() {
         return NightcoreEnabled;
@@ -34,16 +37,16 @@ public class Merger {
         NightcoreEnabled = nightcoreEnabled;
     }
 
-    public List<AudioFilter> enableFilter(FloatPcmAudioFilter output, AudioDataFormat format){
+    public List<AudioFilter> enableFilter(FloatPcmAudioFilter output, AudioDataFormat format) {
         audioFilters.clear();
         this.lastOutput = output;
-        if(this.isNightcoreEnabled()){
+        if (this.isNightcoreEnabled()) {
             TimescalePcmAudioFilter nightCoreFilter = new TimescalePcmAudioFilter(this.lastOutput, format.channelCount, format.sampleRate);
             nightCoreFilter.setSpeed(1.29).setPitch(1.29);
             this.lastOutput = nightCoreFilter;
             audioFilters.add(0, nightCoreFilter);
         }
-        if(this.isEightDEnabled()){
+        if (this.isEightDEnabled()) {
             RotationPcmAudioFilter eightDFilter = new RotationPcmAudioFilter(this.lastOutput, format.sampleRate);
             eightDFilter.setRotationSpeed(0.2);
             this.lastOutput = eightDFilter;

@@ -2,9 +2,11 @@ package me.rohank05.beat.command.commands;
 
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
 import me.rohank05.beat.command.ICommand;
 import me.rohank05.beat.lavaplayer.PlayerManager;
 import me.rohank05.beat.paginator.PageManager;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Emoji;
@@ -14,6 +16,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+
 import java.util.ArrayList;
 
 
@@ -36,7 +39,7 @@ public class QueueCommand implements ICommand {
         String[] track = new String[queue.size()];
         for (int i = 0; i < queue.size(); i++) {
             AudioTrack song = queue.get(i);
-            track[i] = "**"+i+"** [" + song.getInfo().title + "](" + song.getInfo().uri + ")" + " by " + song.getInfo().author;
+            track[i] = "**" + i + "** [" + song.getInfo().title + "](" + song.getInfo().uri + ")" + " by " + song.getInfo().author;
         }
 
         for (int i = 0; i <= track.length; i += 10) {
@@ -62,12 +65,12 @@ public class QueueCommand implements ICommand {
         event.getInteraction().getHook().sendMessage(message)
                 .queue(buttonMessage -> {
                     PageManager.getINSTANCE().setPaginator(buttonMessage.getIdLong(), embeds, 0, event.getUser().getIdLong());
-                    new Thread(()->{
+                    new Thread(() -> {
                         try {
                             Thread.sleep(60000);
                             PageManager.getINSTANCE().getPaginator().remove(buttonMessage.getIdLong());
                             buttonMessage.editMessageComponents();
-                        }catch ( Exception e){
+                        } catch (Exception e) {
                             System.out.println(e);
                         }
                     }).start();

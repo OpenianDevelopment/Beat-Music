@@ -18,15 +18,15 @@ public class PageManager {
         return this.paginator;
     }
 
-    public void setPaginator(Long id, ArrayList<MessageEmbed> embeds, Integer page, Long userId){
-        this.paginator.computeIfAbsent(id, (messageId)->{
+    public void setPaginator(Long id, ArrayList<MessageEmbed> embeds, Integer page, Long userId) {
+        this.paginator.computeIfAbsent(id, (messageId) -> {
             final Paginator paginator = new Paginator(embeds, page, userId);
             return paginator;
         });
     }
 
     public static PageManager getINSTANCE() {
-        if(INSTANCE == null){
+        if (INSTANCE == null) {
             INSTANCE = new PageManager();
         }
         return INSTANCE;

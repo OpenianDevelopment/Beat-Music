@@ -1,10 +1,11 @@
 package me.rohank05.beat.command.commands;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+
 import me.rohank05.beat.command.ICommand;
 import me.rohank05.beat.lavaplayer.PlayerManager;
+
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.awt.*;
@@ -17,10 +18,10 @@ public class ResumeCommand implements ICommand {
         if (!CheckMusicPermission.checkPermission(event)) return;
         AudioPlayer audioPlayer = PlayerManager.getINSTANCE().getMusicManager(event.getGuild()).audioPlayer;
         EmbedBuilder embed = new EmbedBuilder();
-        if(audioPlayer.isPaused()){
+        if (audioPlayer.isPaused()) {
             audioPlayer.setPaused(false);
             event.getInteraction().getHook().sendMessageEmbeds(embed.setColor(Color.RED).setDescription("Track Resumed").build());
-        }else{
+        } else {
             event.getInteraction().getHook().sendMessageEmbeds(embed.setColor(Color.RED).setDescription("Track is not Paused").build());
         }
 

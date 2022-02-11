@@ -7,9 +7,11 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
 import me.rohank05.beat.Config;
 import me.rohank05.beat.lavaplayer.sourcemod.spotify.SpotifyConfig;
 import me.rohank05.beat.lavaplayer.sourcemod.spotify.SpotifySourceManager;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -92,7 +94,8 @@ public class PlayerManager {
             }
 
             @Override
-            public void loadFailed(FriendlyException exception) {}
+            public void loadFailed(FriendlyException exception) {
+            }
         });
     }
 

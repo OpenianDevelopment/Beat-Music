@@ -10,16 +10,17 @@ public class Paginator {
     public final Long userId;
 
 
-    public Paginator(ArrayList<MessageEmbed> embeds, Integer page, Long userId){
+    public Paginator(ArrayList<MessageEmbed> embeds, Integer page, Long userId) {
         this.embeds = embeds;
         this.page = page;
         this.userId = userId;
     }
 
-    public void increasePage(){
+    public void increasePage() {
         page++;
     }
-    public void decreasePage(){
+
+    public void decreasePage() {
         page++;
     }
 }
