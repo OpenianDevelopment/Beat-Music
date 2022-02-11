@@ -18,7 +18,6 @@ public class ResetFilterCommand implements ICommand {
         MessageEmbed embed = new EmbedBuilder()
                 .setColor(16760143).setDescription("All filters has been disabled").build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
-
     }
 
     @Override

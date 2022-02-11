@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -91,9 +92,7 @@ public class PlayerManager {
             }
 
             @Override
-            public void loadFailed(FriendlyException exception) {
-
-            }
+            public void loadFailed(FriendlyException exception) {}
         });
     }
 

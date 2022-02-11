@@ -15,9 +15,9 @@ import java.util.List;
 public class CommandManager {
     private final List<ICommand> commands = new ArrayList<>();
 
-    public CommandManager(){
+    public CommandManager() {
         addCommand(new ShutdownCommand());
-        // Baisc Feature
+        // Basic Feature
         addCommand(new PlayCommand());
         addCommand(new StopCommand());
         addCommand(new SkipCommand());
@@ -29,31 +29,32 @@ public class CommandManager {
         addCommand(new EightDCommand());
         addCommand(new ResetFilterCommand());
     }
-    private void addCommand(ICommand cmd){
-        boolean nameFound = this.commands.stream().anyMatch((it)-> it.getName().equalsIgnoreCase(cmd.getName()));
-        if(nameFound){
+
+    private void addCommand(ICommand cmd) {
+        boolean nameFound = this.commands.stream().anyMatch((it) -> it.getName().equalsIgnoreCase(cmd.getName()));
+        if (nameFound) {
             throw new IllegalArgumentException("Command Name Already Exist");
         }
         commands.add(cmd);
     }
 
     @Nullable
-    private ICommand getCommand(String search){
-        for(ICommand cmd: this.commands){
-            if(cmd.getName().equals(search)){
+    private ICommand getCommand(String search) {
+        for (ICommand cmd : this.commands) {
+            if (cmd.getName().equals(search)) {
                 return cmd;
             }
         }
         return null;
     }
 
-    void run(@NotNull SlashCommandInteractionEvent event){
+    void run(@NotNull SlashCommandInteractionEvent event) {
         ICommand cmd = this.getCommand(event.getName());
         event.getInteraction().deferReply().queue();
-        if(!event.isFromGuild()){
+        if (!event.isFromGuild()) {
             event.getInteraction().getHook().sendMessage("This command can only be used in a server").queue();
             return;
         }
-        if(cmd!= null) cmd.run(event);
+        if (cmd != null) cmd.run(event);
     }
 }
