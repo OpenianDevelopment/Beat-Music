@@ -17,10 +17,17 @@ public class CommandManager {
 
     public CommandManager(){
         addCommand(new ShutdownCommand());
+        // Baisc Feature
         addCommand(new PlayCommand());
         addCommand(new StopCommand());
-        addCommand(new NightcoreCommand());
         addCommand(new SkipCommand());
+        addCommand(new QueueCommand());
+        addCommand(new ResumeCommand());
+        addCommand(new PauseCommand());
+        // Filter Commands
+        addCommand(new NightcoreCommand());
+        addCommand(new EightDCommand());
+        addCommand(new ResetFilterCommand());
     }
     private void addCommand(ICommand cmd){
         boolean nameFound = this.commands.stream().anyMatch((it)-> it.getName().equalsIgnoreCase(cmd.getName()));

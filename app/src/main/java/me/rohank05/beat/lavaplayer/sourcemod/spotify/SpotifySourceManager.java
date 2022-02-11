@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class SpotifySourceManager extends ISRCAudioSourceManager {
+
     public static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile("(https?://)?(www\\.)?open\\.spotify\\.com/(user/[a-zA-Z0-9-_]+/)?(?<type>track|album|playlist|artist)/(?<identifier>[a-zA-Z0-9-_]+)");
     public static final String SEARCH_PREFIX = "spsearch:";
     public static final int PLAYLIST_MAX_PAGE_ITEMS = 100;
@@ -149,6 +150,7 @@ public class SpotifySourceManager extends ISRCAudioSourceManager {
     }
 
     public AudioItem getPlaylist(String id) throws IOException, ParseException, SpotifyWebApiException {
+
         var playlist = this.spotify.getPlaylist(id).build().execute();
         var tracks = new ArrayList<AudioTrack>();
 

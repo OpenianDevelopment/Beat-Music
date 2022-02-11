@@ -34,7 +34,7 @@ public class PlayCommand implements ICommand {
             }
 
         }
-        String track = event.getOption("song-or-playlist").getAsString();
+        String track = event.getOption("song").getAsString();
         if(!isURL(track)){
             track = "ytmsearch:" + track;
         }

@@ -1,7 +1,6 @@
 package me.rohank05.beat.lavaplayer;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEvent;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
@@ -9,29 +8,27 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class TrackScheduler extends AudioEventAdapter {
     public final AudioPlayer player;
-    public final BlockingQueue<AudioTrack> queue;
+    public final ArrayList<AudioTrack> queue;
     public final TextChannel channel;
 
     public TrackScheduler(AudioPlayer player, TextChannel channel){
         this.player = player;
-        this.queue = new LinkedBlockingQueue<>();
+        this.queue = new ArrayList<>();
         this.channel = channel;
     }
     public void queue(AudioTrack track){
         if(!this.player.startTrack(track, true)){
-            this.queue.offer(track);
+            this.queue.add(track);
         }
     }
 
     public void nextTrack(){
-        this.player.startTrack(this.queue.poll(), false);
+        this.player.startTrack(this.queue.remove(0), false);
     }
 
     @Override

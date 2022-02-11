@@ -38,13 +38,15 @@ public class Merger {
         audioFilters.clear();
         this.lastOutput = output;
         if(this.isNightcoreEnabled()){
-            TimescalePcmAudioFilter nightCoreFilter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+            TimescalePcmAudioFilter nightCoreFilter = new TimescalePcmAudioFilter(this.lastOutput, format.channelCount, format.sampleRate);
             nightCoreFilter.setSpeed(1.29).setPitch(1.29);
+            this.lastOutput = nightCoreFilter;
             audioFilters.add(0, nightCoreFilter);
         }
         if(this.isEightDEnabled()){
-            RotationPcmAudioFilter eightDFilter = new RotationPcmAudioFilter(output, format.sampleRate);
+            RotationPcmAudioFilter eightDFilter = new RotationPcmAudioFilter(this.lastOutput, format.sampleRate);
             eightDFilter.setRotationSpeed(0.2);
+            this.lastOutput = eightDFilter;
             audioFilters.add(0, eightDFilter);
         }
         return audioFilters;
