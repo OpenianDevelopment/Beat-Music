@@ -7,7 +7,8 @@ public class SpotifyConfig {
     private String clientSecret;
     private CountryCode countryCode = CountryCode.US;
 
-    public SpotifyConfig() {}
+    public SpotifyConfig() {
+    }
 
     public SpotifyConfig(String clientId, String clientSecret, CountryCode countryCode) {
         this.clientId = clientId;

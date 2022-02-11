@@ -14,7 +14,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
-
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 
@@ -36,6 +35,7 @@ public class PlayerManager {
         spotifyConfig.setClientId(Config.get("SPOTIFY_ID"));
         spotifyConfig.setClientSecret(Config.get("SPOTIFY_SECRET"));
         spotifyConfig.setCountryCode("US");
+        this.audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
         this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(null, spotifyConfig, this.audioPlayerManager));
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
@@ -57,8 +57,8 @@ public class PlayerManager {
                 musicManager.scheduler.queue(track);
                 MessageEmbed embed = new EmbedBuilder()
                         .setTitle("Added to Queue")
-                        .addField("Track Name", "["+track.getInfo().title+"]("+track.getInfo().uri+")", true)
-                        .setThumbnail("https://img.youtube.com/vi/"+track.getIdentifier()+"/default.jpg")
+                        .addField("Track Name", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true)
+                        .setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/default.jpg")
                         .build();
                 event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             }
@@ -79,7 +79,6 @@ public class PlayerManager {
                         musicManager.scheduler.queue(track);
                     }
                 }
-
             }
 
             @Override
@@ -104,7 +103,8 @@ public class PlayerManager {
         }
         return INSTANCE;
     }
-    public static PlayerManager getINSTANCE(){
+
+    public static PlayerManager getINSTANCE() {
         return INSTANCE;
     }
 

@@ -23,7 +23,7 @@ public class ISRCAudioTrack extends DelegatedAudioTrack {
     protected final String artworkURL;
     protected final ISRCAudioSourceManager sourceManager;
 
-    public ISRCAudioTrack(AudioTrackInfo trackInfo, String isrc, String artworkURL, ISRCAudioSourceManager sourceManager){
+    public ISRCAudioTrack(AudioTrackInfo trackInfo, String isrc, String artworkURL, ISRCAudioSourceManager sourceManager) {
         super(trackInfo);
         this.isrc = isrc;
         this.artworkURL = artworkURL;
@@ -31,7 +31,7 @@ public class ISRCAudioTrack extends DelegatedAudioTrack {
     }
 
 
-    public static ISRCAudioTrack ofSpotify(String title, String identifier, String isrc, Image[] images, ArtistSimplified[] artists, Integer trackDuration, SpotifySourceManager spotifySourceManager){
+    public static ISRCAudioTrack ofSpotify(String title, String identifier, String isrc, Image[] images, ArtistSimplified[] artists, Integer trackDuration, SpotifySourceManager spotifySourceManager) {
         return new ISRCAudioTrack(new AudioTrackInfo(title,
                 artists.length == 0 ? "unknown" : artists[0].getName(),
                 trackDuration.longValue(),
@@ -41,45 +41,44 @@ public class ISRCAudioTrack extends DelegatedAudioTrack {
         ), isrc, images.length == 0 ? null : images[0].getUrl(), spotifySourceManager);
     }
 
-    public static ISRCAudioTrack ofSpotify(TrackSimplified track, Album album, SpotifySourceManager spotifySourceManager){
+    public static ISRCAudioTrack ofSpotify(TrackSimplified track, Album album, SpotifySourceManager spotifySourceManager) {
         return ofSpotify(track.getName(), track.getId(), null, album.getImages(), track.getArtists(), track.getDurationMs(), spotifySourceManager);
     }
 
-    public static ISRCAudioTrack ofSpotify(Track track, SpotifySourceManager spotifySourceManager){
+    public static ISRCAudioTrack ofSpotify(Track track, SpotifySourceManager spotifySourceManager) {
         return ofSpotify(track.getName(), track.getId(), track.getExternalIds().getExternalIds().getOrDefault("isrc", null), track.getAlbum().getImages(), track.getArtists(), track.getDurationMs(), spotifySourceManager);
     }
 
-    public String getISRC(){
+    public String getISRC() {
         return this.isrc;
     }
 
-    public String getArtworkURL(){
+    public String getArtworkURL() {
         return this.artworkURL;
     }
 
-    private String getTrackTitle(){
+    private String getTrackTitle() {
         var query = this.trackInfo.title;
-        if(!this.trackInfo.author.equals("unknown")){
+        if (!this.trackInfo.author.equals("unknown")) {
             query += " " + this.trackInfo.author;
         }
         return query;
     }
 
     @Override
-    public void process(LocalAudioTrackExecutor executor) throws Exception{
+    public void process(LocalAudioTrackExecutor executor) throws Exception {
         AudioItem track = null;
 
-        for(String provider : this.sourceManager.getProviders()){
-            if(provider.startsWith(SpotifySourceManager.SEARCH_PREFIX)){
+        for (String provider : this.sourceManager.getProviders()) {
+            if (provider.startsWith(SpotifySourceManager.SEARCH_PREFIX)) {
                 log.warn("Can not use spotify search as provider!");
                 continue;
             }
 
-            if(provider.contains(ISRC_PATTERN)){
-                if(this.isrc != null){
+            if (provider.contains(ISRC_PATTERN)) {
+                if (this.isrc != null) {
                     provider = provider.replace(ISRC_PATTERN, this.isrc);
-                }
-                else{
+                } else {
                     log.debug("Ignoring identifier \"" + provider + "\" because this track does not have an ISRC!");
                     continue;
                 }
@@ -87,15 +86,15 @@ public class ISRCAudioTrack extends DelegatedAudioTrack {
 
             provider = provider.replace(QUERY_PATTERN, getTrackTitle());
             track = loadItem(provider);
-            if(track != null){
+            if (track != null) {
                 break;
             }
         }
 
-        if(track instanceof AudioPlaylist){
+        if (track instanceof AudioPlaylist) {
             track = ((AudioPlaylist) track).getTracks().get(0);
         }
-        if(track instanceof InternalAudioTrack){
+        if (track instanceof InternalAudioTrack) {
             processDelegate((InternalAudioTrack) track, executor);
             return;
         }
@@ -103,31 +102,31 @@ public class ISRCAudioTrack extends DelegatedAudioTrack {
     }
 
     @Override
-    public AudioSourceManager getSourceManager(){
+    public AudioSourceManager getSourceManager() {
         return this.sourceManager;
     }
 
-    public AudioItem loadItem(String query){
+    public AudioItem loadItem(String query) {
         var cf = new CompletableFuture<AudioItem>();
-        this.sourceManager.getAudioPlayerManager().loadItem(query, new AudioLoadResultHandler(){
+        this.sourceManager.getAudioPlayerManager().loadItem(query, new AudioLoadResultHandler() {
 
             @Override
-            public void trackLoaded(AudioTrack track){
+            public void trackLoaded(AudioTrack track) {
                 cf.complete(track);
             }
 
             @Override
-            public void playlistLoaded(AudioPlaylist playlist){
+            public void playlistLoaded(AudioPlaylist playlist) {
                 cf.complete(playlist);
             }
 
             @Override
-            public void noMatches(){
+            public void noMatches() {
                 cf.complete(null);
             }
 
             @Override
-            public void loadFailed(FriendlyException exception){
+            public void loadFailed(FriendlyException exception) {
                 cf.completeExceptionally(exception);
             }
         });
@@ -135,7 +134,7 @@ public class ISRCAudioTrack extends DelegatedAudioTrack {
     }
 
     @Override
-    protected AudioTrack makeShallowClone(){
+    protected AudioTrack makeShallowClone() {
         return new ISRCAudioTrack(getInfo(), this.isrc, this.artworkURL, this.sourceManager);
     }
 }

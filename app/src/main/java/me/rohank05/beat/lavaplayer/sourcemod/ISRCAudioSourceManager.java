@@ -18,34 +18,36 @@ public abstract class ISRCAudioSourceManager implements AudioSourceManager {
             "ytmsearch:\"" + ISRC_PATTERN + "\"",
             "ytmsearch:" + QUERY_PATTERN
     };
-    protected ISRCAudioSourceManager(String[] providers, AudioPlayerManager audioPlayerManager){
-        if(providers != null && providers.length > 0){
+
+    protected ISRCAudioSourceManager(String[] providers, AudioPlayerManager audioPlayerManager) {
+        if (providers != null && providers.length > 0) {
             this.providers = providers;
         }
         this.audioPlayerManager = audioPlayerManager;
     }
-    public String[] getProviders(){
+
+    public String[] getProviders() {
         return this.providers;
     }
 
-    public AudioPlayerManager getAudioPlayerManager(){
+    public AudioPlayerManager getAudioPlayerManager() {
         return this.audioPlayerManager;
     }
 
     @Override
-    public boolean isTrackEncodable(AudioTrack track){
+    public boolean isTrackEncodable(AudioTrack track) {
         return true;
     }
 
     @Override
     public void encodeTrack(AudioTrack track, DataOutput output) throws IOException {
-        var isrcAudioTrack =((ISRCAudioTrack) track);
+        var isrcAudioTrack = ((ISRCAudioTrack) track);
         DataFormatTools.writeNullableText(output, isrcAudioTrack.getISRC());
         DataFormatTools.writeNullableText(output, isrcAudioTrack.getArtworkURL());
     }
 
     @Override
-    public AudioTrack decodeTrack(AudioTrackInfo trackInfo, DataInput input) throws IOException{
+    public AudioTrack decodeTrack(AudioTrackInfo trackInfo, DataInput input) throws IOException {
         return new ISRCAudioTrack(trackInfo, DataFormatTools.readNullableText(input), DataFormatTools.readNullableText(input), this);
     }
 }
