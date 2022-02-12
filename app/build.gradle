@@ -38,7 +38,6 @@ dependencies {
     implementation group: 'com.github.walkyst', name: 'lavaplayer-fork', version: '1.3.97'
     implementation group: 'com.github.natanbc', name: 'lavadsp', version: '0.7.7'
     implementation group: 'se.michaelthelin.spotify', name: 'spotify-web-api-java', version: '7.0.0'
-    implementation 'com.github.Topis-Lavalink-Plugins:Topis-Source-Managers:v2.0.1'
 }
 
 compileJava.options.encoding = 'UTF-8'

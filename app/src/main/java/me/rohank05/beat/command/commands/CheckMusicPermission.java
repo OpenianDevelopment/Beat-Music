@@ -40,3 +40,4 @@ public class CheckMusicPermission {
         return true;
     }
 }
+
