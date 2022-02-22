@@ -1,0 +1,4 @@
+/build/
+/.idea/
+/.gradle/
+/src/main/resources/.env
