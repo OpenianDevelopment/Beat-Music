@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class TrackManager extends AudioEventAdapter {
     public final AudioPlayer audioPlayer;
-    public final BlockingQueue<AudioTrack> queue = new LinkedBlockingQueue<>();
+    public final BlockingQueue<AudioTrack> queue;
     private final TextChannel textChannel;
     public final Filters filters;
     //Constructor
@@ -19,11 +19,12 @@ public class TrackManager extends AudioEventAdapter {
         this.audioPlayer = audioPlayer;
         this.textChannel = textChannel;
         this.filters = new Filters(this.audioPlayer);
+        this.queue = new LinkedBlockingQueue<>();
     }
 
     //Add tracks to the queue
     public void addToQueue(AudioTrack track){
-        if(this.audioPlayer.startTrack(track, true)){
+        if(!this.audioPlayer.startTrack(track, true)){
             this.queue.offer(track);
         }
     }

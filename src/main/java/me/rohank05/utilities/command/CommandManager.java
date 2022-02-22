@@ -1,8 +1,6 @@
 package me.rohank05.utilities.command;
 
-import me.rohank05.commands.music.EightDCommand;
-import me.rohank05.commands.music.NightcoreCommand;
-import me.rohank05.commands.music.PlayCommand;
+import me.rohank05.commands.music.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import javax.annotation.Nullable;
@@ -13,9 +11,16 @@ public class CommandManager {
     private final List<ICommand> commandList = new ArrayList<>();
 
     public CommandManager(){
+        //Control commands
         addCommand(new PlayCommand());
+        addCommand(new PauseCommand());
+
+        //Filters
         addCommand(new NightcoreCommand());
         addCommand(new EightDCommand());
+        addCommand(new ResetFilterCommand());
+        addCommand(new VibratoCommand());
+        addCommand(new TremoloCommand());
     }
 
     private void addCommand(ICommand command){
