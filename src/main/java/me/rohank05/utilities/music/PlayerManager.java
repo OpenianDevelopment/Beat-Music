@@ -58,16 +58,22 @@ public class PlayerManager {
         });
     }
 
+    public void deleteGuildMusicManager(Guild guild){
+        this.guildMusicManagerMap.remove(guild.getIdLong());
+    }
+
     public void loadAndPlay(SlashCommandInteractionEvent event, String trackUrl) {
         final GuildMusicManager guildMusicManager = this.getGuildMusicManager(event.getGuild());
         this.audioPlayerManager.loadItemOrdered(guildMusicManager, trackUrl, new AudioLoadResultHandler() {
 
             @Override
             public void trackLoaded(AudioTrack track) {
+                track.setUserData(event.getUser());
                 guildMusicManager.trackManager.addToQueue(track);
                 MessageEmbed embed = new EmbedBuilder()
                         .setTitle("Added to Queue")
                         .addField("Track Name", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true)
+                        .addField("Added By", event.getUser().getAsTag(), true)
                         .setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/default.jpg")
                         .build();
                 event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
@@ -84,9 +90,10 @@ public class PlayerManager {
                                     + String.valueOf(audioTracks.size())
                                     + "` songs from `"
                                     + playlist.getName()
-                                    + "`").build())
+                                    + "` Added By `"+event.getUser().getAsTag()+"`").build())
                             .queue();
                     for (final AudioTrack track : audioTracks) {
+                        track.setUserData(event.getUser());
                         guildMusicManager.trackManager.addToQueue(track);
                     }
                 }
@@ -94,12 +101,15 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-
+                MessageEmbed embed = new EmbedBuilder().setColor(16760143).setTitle("Failed to get the song").build();
+                event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-
+                MessageEmbed embed = new EmbedBuilder().setColor(16760143).setTitle("Something went wrong while playing this track. Playing the next song").build();
+                event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
+                guildMusicManager.trackManager.playNextTrack();
             }
         });
     }

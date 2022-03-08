@@ -14,6 +14,11 @@ public class CommandManager {
         //Control commands
         addCommand(new PlayCommand());
         addCommand(new PauseCommand());
+        addCommand(new SkipCommand());
+        addCommand(new LeaveCommand());
+        addCommand(new LoopCommand());
+        addCommand(new StopCommand());
+        addCommand(new QueueCommand());
 
         //Filters
         addCommand(new NightcoreCommand());
