@@ -1,5 +1,6 @@
 package me.rohank05.commands.music;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import me.rohank05.utilities.command.CommandPermissionCheck;
 import me.rohank05.utilities.command.ICommand;
 import me.rohank05.utilities.music.PlayerManager;
@@ -7,22 +8,20 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class NightcoreCommand implements ICommand {
+public class NowPlayingCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if(!CommandPermissionCheck.checkBasePermission(event)) return;
         if(!CommandPermissionCheck.checkPermission(event)) return;
-
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.setNightcore(!PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore());
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
-        String isActivated = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore() ? "Enabled" : "Disabled";
-        MessageEmbed embed = new EmbedBuilder().setTitle("Nightcore filter **"+isActivated+"**").setColor(16760143).build();
+        AudioTrack currentTrack = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.audioPlayer.getPlayingTrack();
+        if(currentTrack == null) return;
+        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setTitle("Now Playing").addField("Track Name", "["+currentTrack.getInfo().title+"]("+currentTrack.getInfo().uri+")", true).addField("By", currentTrack.getInfo().author,true).setThumbnail(currentTrack.getInfo().artworkUrl).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }
 
     @Override
     public String getName() {
-        return "nightcore";
+        return "now-playing";
     }
 
     @Override

@@ -19,6 +19,9 @@ public class CommandManager {
         addCommand(new LoopCommand());
         addCommand(new StopCommand());
         addCommand(new QueueCommand());
+        addCommand(new RemoveCommand());
+        addCommand(new ShuffleCommand());
+        addCommand(new NowPlayingCommand());
 
         //Filters
         addCommand(new NightcoreCommand());
@@ -26,6 +29,8 @@ public class CommandManager {
         addCommand(new ResetFilterCommand());
         addCommand(new VibratoCommand());
         addCommand(new TremoloCommand());
+        addCommand(new BassBoostCommand());
+        addCommand(new EchoCommand());
     }
 
     private void addCommand(ICommand command){

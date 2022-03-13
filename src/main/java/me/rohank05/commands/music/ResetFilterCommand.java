@@ -13,8 +13,7 @@ public class ResetFilterCommand implements ICommand {
         if(!CommandPermissionCheck.checkBasePermission(event)) return;
         if(!CommandPermissionCheck.checkPermission(event)) return;
         Filters filters = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters;
-        filters.setNightcore(false);
-        filters.setEightD(false);
+        filters.resetFilter();
         filters.updateFilter();
         event.getInteraction().getHook()
                 .sendMessageEmbeds(new EmbedBuilder()

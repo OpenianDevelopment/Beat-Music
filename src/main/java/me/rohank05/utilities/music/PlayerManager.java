@@ -8,6 +8,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeHttpContextFilter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -46,6 +48,7 @@ public class PlayerManager {
         };
         this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(providers, spotifyConfig, this.audioPlayerManager));
         this.audioPlayerManager.registerSourceManager(new AppleMusicSourceManager(providers, "us", this.audioPlayerManager));
+        this.audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, "rohan.shuvam@gmail.com", "$uPerNova123"));
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
     }
@@ -74,7 +77,7 @@ public class PlayerManager {
                         .setTitle("Added to Queue")
                         .addField("Track Name", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true)
                         .addField("Added By", event.getUser().getAsTag(), true)
-                        .setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/default.jpg")
+                        .setThumbnail(track.getInfo().artworkUrl)
                         .build();
                 event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             }

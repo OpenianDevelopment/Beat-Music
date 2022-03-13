@@ -12,14 +12,16 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.List;
+import java.util.Stack;
 
 
 public class TrackManager extends AudioEventAdapter {
     public final AudioPlayer audioPlayer;
-    public final BlockingDeque<AudioTrack> queue;
+    public final Stack<AudioTrack> queue;
     private final TextChannel textChannel;
     public final Filters filters;
     public String loop;
@@ -28,20 +30,25 @@ public class TrackManager extends AudioEventAdapter {
         this.audioPlayer = audioPlayer;
         this.textChannel = textChannel;
         this.filters = new Filters(this.audioPlayer);
-        this.queue = new LinkedBlockingDeque<>();
+        this.queue = new Stack<>();
         this.loop = "off";
     }
 
     //Add tracks to the queue
     public void addToQueue(AudioTrack track){
         if(!this.audioPlayer.startTrack(track, true)){
-            this.queue.offer(track);
+            this.queue.push(track);
         }
     }
 
     //Play next track from the queue
     public void playNextTrack(){
-        this.audioPlayer.startTrack(this.queue.poll(), false);
+        if(this.queue.isEmpty()){
+            this.audioPlayer.destroy();
+            return;
+        }
+        this.audioPlayer.startTrack(this.queue.firstElement(), false);
+        this.queue.remove(0);
     }
 
     @Override
@@ -49,11 +56,11 @@ public class TrackManager extends AudioEventAdapter {
         if(endReason.mayStartNext){
             if(this.loop.equals("queue")){
                 AudioTrack newTrack = track.makeClone();
-                this.queue.offer(newTrack);
+                this.queue.push(newTrack);
             }
             else if(this.loop.equals("track")){
                 AudioTrack newTrack = track.makeClone();
-                this.queue.addFirst(newTrack);
+                this.queue.add(0, newTrack);
             }
             playNextTrack();
         }
@@ -64,14 +71,12 @@ public class TrackManager extends AudioEventAdapter {
         TextChannel nowPlayingChannel = textChannel.getJDA().getTextChannelById(textChannel.getIdLong());
         if(nowPlayingChannel.canTalk()){
             if(nowPlayingChannel.getGuild().getSelfMember().hasPermission(nowPlayingChannel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))){
-                MessageEmbed embed = new EmbedBuilder().setTitle("Now Playing").setColor(16760143).setTitle("Now Playing").addField("Title", track.getInfo().title, true).setThumbnail("https://img.youtube.com/vi/" + track.getIdentifier() + "/default.jpg").build();
+                MessageEmbed embed = new EmbedBuilder().setTitle("Now Playing").setColor(16760143).setTitle("Now Playing").addField("Title", "["+track.getInfo().title+"]("+track.getInfo().uri+")", true).setThumbnail(track.getInfo().artworkUrl).build();
                 nowPlayingChannel.sendMessageEmbeds(embed).queue();
             }
             else{
                 nowPlayingChannel.sendMessage("**Now Playing**: `"+track.getInfo().title+"`").queue();
             }
         }
-
-
     }
 }

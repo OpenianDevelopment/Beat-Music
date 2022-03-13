@@ -7,9 +7,11 @@ import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter;
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import me.rohank05.echo.EchoPcmAudioFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +22,8 @@ public class Filters {
     private boolean isEightD = false;
     private boolean isVibrato = false;
     private boolean isTremolo = false;
+    private boolean isBassBoost = false;
+    private boolean isEcho = false;
     private final AudioPlayer audioPlayer;
 
     public void setNightcore(boolean nightcore) {
@@ -38,6 +42,21 @@ public class Filters {
         isTremolo = tremolo;
     }
 
+    public void setBassBoost(boolean bassBoost) {
+        isBassBoost = bassBoost;
+    }
+
+    public void setEcho(boolean echo) { isEcho = echo; }
+
+    public void resetFilter(){
+        this.isEcho = false;
+        this.isBassBoost = false;
+        this.isNightcore = false;
+        this.isTremolo = false;
+        this.isVibrato = false;
+        this.isEightD = false;
+    }
+
     public boolean isNightcore() {
         return isNightcore;
     }
@@ -54,12 +73,16 @@ public class Filters {
         return isTremolo;
     }
 
+    public boolean isBassBoost() { return isBassBoost; }
+
+    public boolean isEcho() { return isEcho; }
+
     public Filters(AudioPlayer audioPlayer){
         this.audioPlayer = audioPlayer;
     }
 
     private boolean filterEnabled(){
-        if(this.isNightcore || this.isEightD || this.isVibrato || this.isTremolo)
+        if(this.isNightcore || this.isEightD || this.isVibrato || this.isTremolo || this.isBassBoost || this.isEcho)
             return true;
         return false;
     }
@@ -94,7 +117,19 @@ public class Filters {
         if(this.isTremolo){
             TremoloPcmAudioFilter tremoloPcmAudioFilter = new TremoloPcmAudioFilter(filter, audioDataFormat.channelCount, audioDataFormat.sampleRate);
             tremoloPcmAudioFilter.setFrequency(1).setDepth((float) 0.8);
+            filter = tremoloPcmAudioFilter;
             filterList.add(tremoloPcmAudioFilter);
+        }
+        if(this.isBassBoost){
+            float[] bands = {10, 10, 1, 5, 7, 5, 2, 3, 4, 5, 6, 7, 8, 8, 9, 9, 10, 10};
+            Equalizer equalizer = new Equalizer(audioDataFormat.channelCount, filter, bands);
+            filter = equalizer;
+            filterList.add(equalizer);
+        }
+        if(this.isEcho){
+            EchoPcmAudioFilter echoPcmAudioFilter = new EchoPcmAudioFilter(filter, audioDataFormat.channelCount, audioDataFormat.sampleRate);
+            echoPcmAudioFilter.setDelay(1).setDecay(0.5f);
+            filterList.add(echoPcmAudioFilter);
         }
         Collections.reverse(filterList);
         return filterList;

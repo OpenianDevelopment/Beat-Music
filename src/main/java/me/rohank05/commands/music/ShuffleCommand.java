@@ -7,22 +7,22 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class NightcoreCommand implements ICommand {
+import java.util.Collections;
+
+public class ShuffleCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if(!CommandPermissionCheck.checkBasePermission(event)) return;
         if(!CommandPermissionCheck.checkPermission(event)) return;
-
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.setNightcore(!PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore());
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
-        String isActivated = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore() ? "Enabled" : "Disabled";
-        MessageEmbed embed = new EmbedBuilder().setTitle("Nightcore filter **"+isActivated+"**").setColor(16760143).build();
+        if(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.size()<1) return;
+        Collections.shuffle(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue);
+        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Queue Shuffled").build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }
 
     @Override
     public String getName() {
-        return "nightcore";
+        return "shuffle";
     }
 
     @Override

@@ -44,7 +44,7 @@ public class QueueCommand implements ICommand {
             for (int j = startItem; j < endItem; j++) {
                 str.append(queueTracks[j]).append("\n");
             }
-            MessageEmbed embed = new EmbedBuilder().setDescription(str).setColor(event.getMember().getColor()).setThumbnail(event.getGuild().getIconUrl()).setTitle("Queue").build();
+            MessageEmbed embed = new EmbedBuilder().setDescription(str).setColor(16760143).setThumbnail(event.getGuild().getIconUrl()).setTitle("Queue").build();
             queueEmbeds.add(embed);
         }
         event.getInteraction().getHook().sendMessageEmbeds(queueEmbeds.get(0)).queue(message -> {
