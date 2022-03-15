@@ -16,21 +16,21 @@ import java.util.List;
 public class QueueCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
         List<AudioTrack> queue = new ArrayList<>(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue);
-        if(queue.isEmpty()){
+        if (queue.isEmpty()) {
             MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("There is no other song in queue").build();
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return;
         }
         ArrayList<MessageEmbed> queueEmbeds = new ArrayList<>();
         String[] queueTracks = new String[queue.size()];
-        for(int i=0; i< queue.size(); i++){
+        for (int i = 0; i < queue.size(); i++) {
             AudioTrack track = queue.get(i);
-            queueTracks[i] = "**"+(i+1)+"**. ["+ track.getInfo().title+"]("+track.getInfo().uri+")"+ " By ["+track.getInfo().author+"]";
+            queueTracks[i] = "**" + (i + 1) + "**. [" + track.getInfo().title + "](" + track.getInfo().uri + ")" + " By [" + track.getInfo().author + "]";
         }
-        for(int i =0; i<= queueTracks.length; i+=10){
+        for (int i = 0; i <= queueTracks.length; i += 10) {
             int startItem = i;
             int endItem = queueTracks.length > (i + 9) ? (i + 9) : queueTracks.length;
             StringBuilder str = new StringBuilder();
@@ -59,6 +59,6 @@ public class QueueCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Display the queue";
     }
 }

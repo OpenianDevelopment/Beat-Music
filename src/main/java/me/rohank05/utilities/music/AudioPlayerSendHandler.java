@@ -12,7 +12,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
     private final ByteBuffer byteBuffer;
     private final MutableAudioFrame mutableAudioFrame;
 
-    public AudioPlayerSendHandler(AudioPlayer audioPlayer){
+    public AudioPlayerSendHandler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
         this.byteBuffer = ByteBuffer.allocate(1024);
         this.mutableAudioFrame = new MutableAudioFrame();

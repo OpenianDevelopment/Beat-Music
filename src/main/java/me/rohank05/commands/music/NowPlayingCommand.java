@@ -11,11 +11,11 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class NowPlayingCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
         AudioTrack currentTrack = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.audioPlayer.getPlayingTrack();
-        if(currentTrack == null) return;
-        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setTitle("Now Playing").addField("Track Name", "["+currentTrack.getInfo().title+"]("+currentTrack.getInfo().uri+")", true).addField("By", currentTrack.getInfo().author,true).setThumbnail(currentTrack.getInfo().artworkUrl).build();
+        if (currentTrack == null) return;
+        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setTitle("Now Playing").addField("Track Name", "[" + currentTrack.getInfo().title + "](" + currentTrack.getInfo().uri + ")", true).addField("By", currentTrack.getInfo().author, true).setThumbnail(currentTrack.getInfo().artworkUrl).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }
 
@@ -26,6 +26,6 @@ public class NowPlayingCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Show the current playing song";
     }
 }

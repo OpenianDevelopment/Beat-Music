@@ -10,8 +10,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class StopCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
         MessageEmbed embed = new EmbedBuilder().setTitle("Player stopped!").setColor(16760143).build();
         PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.destroy();
         PlayerManager.getINSTANCE().deleteGuildMusicManager(event.getGuild());
@@ -25,6 +25,6 @@ public class StopCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Stop the queue and delete it";
     }
 }

@@ -10,8 +10,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class ResetFilterCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
         Filters filters = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters;
         filters.resetFilter();
         filters.updateFilter();
@@ -27,6 +27,6 @@ public class ResetFilterCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Reset all filters";
     }
 }

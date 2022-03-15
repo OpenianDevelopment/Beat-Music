@@ -1,10 +1,13 @@
 plugins {
     id 'java'
     id 'application'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 group 'me.rohank05'
 version '1.0.0'
+
+mainClassName = "me.rohank05.Bot"
 
 repositories {
     maven { url 'https://m2.dv8tion.net/releases' }
@@ -20,13 +23,13 @@ dependencies {
     implementation (group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.9'){
         exclude module: 'opus-java'
     }
-    implementation group: 'com.github.walkyst', name: 'lavaplayer-fork', version: '1a8a1ad952'
+    implementation group: 'com.github.walkyst', name: 'lavaplayer-fork', version: 'fc6b9de7e7'
     implementation group: 'com.github.natanbc', name: 'lavadsp', version: '0.7.7'
     implementation group: 'me.rohank05', name: 'lavadsp-extended', version: '0.0.2'
     implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '2.2.0'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.8'
     implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
-    implementation group: 'com.github.Topis-Lavalink-Plugins', name: 'Topis-Source-Managers', version: 'v2.0.1'
+    implementation group: 'me.rohank05', name: 'Spotify-Source-Manager', version: '0.0.1'
     implementation group: 'me.rohank05', name: 'jda-paginator', version: '1.0.5'
 }
 
@@ -34,8 +37,13 @@ test {
     useJUnitPlatform()
 }
 
-application {
-    mainClass = 'me.rohank05.Bot'
+shadowJar {
+    def impl = project.configurations.implementation
+    impl.canBeResolved(true)
+    configurations = [impl]
+    archiveClassifier.set("")
 }
+
+
 
 compileJava.options.encoding = 'UTF-8'

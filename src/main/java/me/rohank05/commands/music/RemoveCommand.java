@@ -11,17 +11,17 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class RemoveCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
         int removeIndex = event.getOption("position").getAsInt();
-        if(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.size()< removeIndex){
+        if (PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.size() < removeIndex) {
             MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("This track do not exist").build();
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return;
         }
         AudioTrack removedTrack = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.get(removeIndex - 1);
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.remove(removeIndex-1);
-        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("["+removedTrack.getInfo().title+"]("+removedTrack.getInfo().uri+") removed from the queue").build();
+        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.remove(removeIndex - 1);
+        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("[" + removedTrack.getInfo().title + "](" + removedTrack.getInfo().uri + ") removed from the queue").build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
         return;
     }
@@ -33,6 +33,6 @@ public class RemoveCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Remove a song from the queue";
     }
 }

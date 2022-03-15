@@ -8,14 +8,15 @@ public class GuildMusicManager {
     public final AudioPlayer audioPlayer;
     public final TrackManager trackManager;
     private final AudioPlayerSendHandler audioPlayerSendHandler;
-    public GuildMusicManager(AudioPlayerManager audioPlayerManager, TextChannel textChannel){
+
+    public GuildMusicManager(AudioPlayerManager audioPlayerManager, TextChannel textChannel) {
         this.audioPlayer = audioPlayerManager.createPlayer();
         this.trackManager = new TrackManager(audioPlayer, textChannel);
         this.audioPlayer.addListener(this.trackManager);
         this.audioPlayerSendHandler = new AudioPlayerSendHandler(this.audioPlayer);
     }
 
-    public AudioPlayerSendHandler getAudioPlayerSendHandler(){
+    public AudioPlayerSendHandler getAudioPlayerSendHandler() {
         return this.audioPlayerSendHandler;
     }
 }

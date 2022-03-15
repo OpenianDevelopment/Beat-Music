@@ -12,9 +12,9 @@ import java.util.Collections;
 public class ShuffleCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
-        if(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.size()<1) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue.size() < 1) return;
         Collections.shuffle(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue);
         MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Queue Shuffled").build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
@@ -27,6 +27,6 @@ public class ShuffleCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Shuffles the queue";
     }
 }

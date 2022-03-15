@@ -2,7 +2,10 @@ package me.rohank05;
 
 import me.rohank05.utilities.command.CommandManager;
 import me.rohank05.utilities.music.PlayerManager;
+import net.dv8tion.jda.api.entities.AudioChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -45,7 +48,7 @@ public class EventListeners extends ListenerAdapter {
          */
         if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel())
             if (PlayerManager.getINSTANCE() != null)
-                if (PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null){
+                if (PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null) {
                     PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.destroy();
                     PlayerManager.getINSTANCE().deleteGuildMusicManager(event.getGuild());
                 }
@@ -63,4 +66,6 @@ public class EventListeners extends ListenerAdapter {
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
         PageManager.getINSTANCE().initListener(event);
     }
+
+
 }

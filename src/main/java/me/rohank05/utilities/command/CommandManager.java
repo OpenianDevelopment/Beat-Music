@@ -10,7 +10,9 @@ import java.util.List;
 public class CommandManager {
     private final List<ICommand> commandList = new ArrayList<>();
 
-    public CommandManager(){
+    public CommandManager() {
+        //Help
+        addCommand(new HelpCommand(this));
         //Control commands
         addCommand(new PlayCommand());
         addCommand(new PauseCommand());
@@ -22,6 +24,8 @@ public class CommandManager {
         addCommand(new RemoveCommand());
         addCommand(new ShuffleCommand());
         addCommand(new NowPlayingCommand());
+        addCommand(new ResumeCommand());
+        addCommand(new VolumeCommand());
 
         //Filters
         addCommand(new NightcoreCommand());
@@ -33,25 +37,29 @@ public class CommandManager {
         addCommand(new EchoCommand());
     }
 
-    private void addCommand(ICommand command){
+    private void addCommand(ICommand command) {
         commandList.add(command);
     }
 
+    public List<ICommand> getCommandList() {
+        return commandList;
+    }
+
     @Nullable
-    private ICommand getCommand(String commandName){
-        for(ICommand command : this.commandList)
-            if(command.getName().equals(commandName))
+    private ICommand getCommand(String commandName) {
+        for (ICommand command : this.commandList)
+            if (command.getName().equals(commandName))
                 return command;
         return null;
     }
 
-    public void run(SlashCommandInteractionEvent event){
+    public void run(SlashCommandInteractionEvent event) {
         ICommand command = getCommand(event.getName());
         event.deferReply().queue();
         if (!event.isFromGuild()) {
             event.getInteraction().getHook().sendMessage("This command can only be used in a server").queue();
             return;
         }
-        if(command != null) command.run(event);
+        if (command != null) command.run(event);
     }
 }

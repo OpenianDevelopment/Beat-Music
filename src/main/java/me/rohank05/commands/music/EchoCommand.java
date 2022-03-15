@@ -10,13 +10,13 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class EchoCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
 
         PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.setEcho(!PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isEcho());
         PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
         String isActivated = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isEcho() ? "Enabled" : "Disabled";
-        MessageEmbed embed = new EmbedBuilder().setTitle("Echo filter **"+isActivated+"**").setColor(16760143).build();
+        MessageEmbed embed = new EmbedBuilder().setTitle("Echo filter **" + isActivated + "**").setColor(16760143).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }
 
@@ -27,6 +27,6 @@ public class EchoCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Add Echo filter to the song";
     }
 }

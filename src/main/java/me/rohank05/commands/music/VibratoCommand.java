@@ -11,13 +11,13 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class VibratoCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
         Filters filters = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters;
         filters.setVibrato(!filters.isVibrato());
         filters.updateFilter();
         String isActivated = filters.isVibrato() ? "Enabled" : "Disabled";
-        MessageEmbed embed = new EmbedBuilder().setTitle("Vibrato filter **"+isActivated+"**").setColor(16760143).build();
+        MessageEmbed embed = new EmbedBuilder().setTitle("Vibrato filter **" + isActivated + "**").setColor(16760143).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }
 
@@ -28,6 +28,6 @@ public class VibratoCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Add Vibrato filter to the song";
     }
 }

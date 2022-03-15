@@ -13,7 +13,7 @@ import java.net.URL;
 public class PlayCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
         if (event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
             if (!event.getGuild().getAudioManager().isConnected()) {
                 event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getSelfMember().getVoiceState().getChannel());
@@ -30,8 +30,8 @@ public class PlayCommand implements ICommand {
             }
         }
         String track = event.getOption("song").getAsString();
-        if(!isURL(track))
-            track = "ytmsearch:"+track;
+        if (!isURL(track))
+            track = "ytmsearch:" + track;
         PlayerManager.getINSTANCE(event.getTextChannel()).loadAndPlay(event, track);
     }
 
@@ -42,15 +42,14 @@ public class PlayCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Play a song from given query or url";
     }
 
-    private boolean isURL(String url){
+    private boolean isURL(String url) {
         try {
             new URL(url).toURI();
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

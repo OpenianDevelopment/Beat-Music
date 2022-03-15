@@ -11,8 +11,8 @@ public class LeaveCommand implements ICommand {
 
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) return;
         event.getGuild().getAudioManager().closeAudioConnection();
         MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Leaving Channel").build();
         PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.destroy();
@@ -27,6 +27,6 @@ public class LeaveCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Leaves the channel";
     }
 }

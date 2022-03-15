@@ -1,31 +1,30 @@
 package me.rohank05.utilities.music;
 
-import com.github.topislavalinkplugins.topissourcemanagers.ISRCAudioTrack;
-import com.github.topislavalinkplugins.topissourcemanagers.applemusic.AppleMusicSourceManager;
-import com.github.topislavalinkplugins.topissourcemanagers.spotify.SpotifyConfig;
-import com.github.topislavalinkplugins.topissourcemanagers.spotify.SpotifySourceManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeHttpContextFilter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup;
+import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner;
+import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block;
 import me.rohank05.Config;
+import me.rohank05.SpotifyConfig;
+import me.rohank05.SpotifySourceManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.topislavalinkplugins.topissourcemanagers.ISRCAudioSourceManager.ISRC_PATTERN;
-import static com.github.topislavalinkplugins.topissourcemanagers.ISRCAudioSourceManager.QUERY_PATTERN;
 
 @SuppressWarnings("unchecked")
 public class PlayerManager {
@@ -38,19 +37,13 @@ public class PlayerManager {
         this.textChannel = textChannel;
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         this.audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
-        SpotifyConfig spotifyConfig = new SpotifyConfig();
-        spotifyConfig.setClientId(Config.get("SPOTIFY_ID"));
-        spotifyConfig.setClientSecret(Config.get("SPOTIFY_SECRET"));
-        spotifyConfig.setCountryCode("US");
-        String[] providers = {
-                "ytmsearch:\"" + ISRC_PATTERN + "\"",
-                "ytmsearch:" + QUERY_PATTERN
-        };
-        this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(providers, spotifyConfig, this.audioPlayerManager));
-        this.audioPlayerManager.registerSourceManager(new AppleMusicSourceManager(providers, "us", this.audioPlayerManager));
-        this.audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager(true, "rohan.shuvam@gmail.com", "$uPerNova123"));
+        SpotifyConfig spotifyConfig = new SpotifyConfig(Config.get("SPOTIFY_ID"), Config.get("SPOTIFY_SECRET"));
+        YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager(true, "rohan.shuvam@gmail.com", "$uPerNova123");
+        this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(spotifyConfig, this.audioPlayerManager));
+        this.audioPlayerManager.registerSourceManager(youtubeAudioSourceManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
+//        new YoutubeIpRotatorSetup(new NanoIpRoutePlanner(Collections.singletonList(new Ipv6Block("2a02:c207:2061:129::/64")), true)).forSource(youtubeAudioSourceManager).setup();
     }
 
     public GuildMusicManager getGuildMusicManager(Guild guild) {
@@ -61,7 +54,7 @@ public class PlayerManager {
         });
     }
 
-    public void deleteGuildMusicManager(Guild guild){
+    public void deleteGuildMusicManager(Guild guild) {
         this.guildMusicManagerMap.remove(guild.getIdLong());
     }
 
@@ -87,13 +80,12 @@ public class PlayerManager {
                 final List<AudioTrack> audioTracks = playlist.getTracks();
                 if (playlist.isSearchResult()) {
                     trackLoaded(audioTracks.get(0));
-                }
-                else {
+                } else {
                     event.getInteraction().getHook().sendMessageEmbeds(new EmbedBuilder().setDescription("Enqueuing `"
                                     + String.valueOf(audioTracks.size())
                                     + "` songs from `"
                                     + playlist.getName()
-                                    + "` Added By `"+event.getUser().getAsTag()+"`").build())
+                                    + "` Added By `" + event.getUser().getAsTag() + "`").build())
                             .queue();
                     for (final AudioTrack track : audioTracks) {
                         track.setUserData(event.getUser());

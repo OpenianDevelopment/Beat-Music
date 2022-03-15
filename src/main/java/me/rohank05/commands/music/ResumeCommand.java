@@ -9,30 +9,31 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.awt.*;
 
-public class PauseCommand implements ICommand {
+public class ResumeCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if(!CommandPermissionCheck.checkBasePermission(event)) return;
+        if(!CommandPermissionCheck.checkPermission(event)) return;
 
         AudioPlayer audioPlayer = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer;
-        if (audioPlayer.isPaused())
+        if(audioPlayer.isPaused()) {
+            audioPlayer.setPaused(false);
             event.getInteraction().getHook()
-                    .sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Player is already paused").build()).queue();
+                    .sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Player **Resuming**").build()).queue();
+        }
         else {
-            audioPlayer.setPaused(true);
             event.getInteraction().getHook()
-                    .sendMessageEmbeds(new EmbedBuilder().setColor(16760143).setTitle("Player **Paused**").build()).queue();
+                    .sendMessageEmbeds(new EmbedBuilder().setColor(16760143).setTitle("Player is not **Paused**").build()).queue();
         }
     }
 
     @Override
     public String getName() {
-        return "pause";
+        return "resume";
     }
 
     @Override
     public String getDescription() {
-        return "Pause the music";
+        return "Resumes the paused song";
     }
 }

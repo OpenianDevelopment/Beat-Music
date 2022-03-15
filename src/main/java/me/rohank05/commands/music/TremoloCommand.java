@@ -11,13 +11,13 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class TremoloCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
-        if(!CommandPermissionCheck.checkBasePermission(event)) return;
-        if(!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkBasePermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event)) return;
         Filters filters = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters;
         filters.setTremolo(!filters.isTremolo());
         filters.updateFilter();
         String isActivated = filters.isTremolo() ? "Enabled" : "Disabled";
-        MessageEmbed embed = new EmbedBuilder().setTitle("Tremolo filter **"+isActivated+"**").setColor(16760143).build();
+        MessageEmbed embed = new EmbedBuilder().setTitle("Tremolo filter **" + isActivated + "**").setColor(16760143).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }
 
@@ -28,6 +28,6 @@ public class TremoloCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Add Tremolo filter to the song";
     }
 }
