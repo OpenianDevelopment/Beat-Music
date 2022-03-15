@@ -3,11 +3,9 @@ package me.rohank05.commands.music;
 import me.rohank05.utilities.command.CommandManager;
 import me.rohank05.utilities.command.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-import java.awt.*;
 import java.util.List;
 
 public class HelpCommand implements ICommand {
@@ -22,7 +20,7 @@ public class HelpCommand implements ICommand {
         List<ICommand> commandList = manager.getCommandList();
         StringBuilder commandString = new StringBuilder();
         for (ICommand command : commandList) {
-            commandString.append("`" + command.getName() + "` - " + command.getDescription() + "\n");
+            commandString.append("`").append(command.getName()).append("` - ").append(command.getDescription()).append("\n");
         }
         MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription(commandString).setTitle("Help").build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();

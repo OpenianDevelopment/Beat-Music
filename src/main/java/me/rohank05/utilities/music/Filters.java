@@ -5,11 +5,9 @@ import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.github.natanbc.lavadsp.tremolo.TremoloPcmAudioFilter;
 import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter;
-import com.sedmelluq.discord.lavaplayer.filter.FilterChainBuilder;
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer;
-import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -90,9 +88,7 @@ public class Filters {
     }
 
     private boolean filterEnabled() {
-        if (this.isNightcore || this.isEightD || this.isVibrato || this.isTremolo || this.isBassBoost || this.isEcho)
-            return true;
-        return false;
+        return this.isNightcore || this.isEightD || this.isVibrato || this.isTremolo || this.isBassBoost || this.isEcho;
     }
 
     public void updateFilter() {

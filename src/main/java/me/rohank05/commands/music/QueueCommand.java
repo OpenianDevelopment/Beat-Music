@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class QueueCommand implements ICommand {
@@ -18,7 +19,7 @@ public class QueueCommand implements ICommand {
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
         if (!CommandPermissionCheck.checkPermission(event)) return;
-        List<AudioTrack> queue = new ArrayList<>(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.queue);
+        List<AudioTrack> queue = new ArrayList<>(PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.queue);
         if (queue.isEmpty()) {
             MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("There is no other song in queue").build();
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
@@ -31,8 +32,7 @@ public class QueueCommand implements ICommand {
             queueTracks[i] = "**" + (i + 1) + "**. [" + track.getInfo().title + "](" + track.getInfo().uri + ")" + " By [" + track.getInfo().author + "]";
         }
         for (int i = 0; i <= queueTracks.length; i += 10) {
-            int startItem = i;
-            int endItem = queueTracks.length > (i + 9) ? (i + 9) : queueTracks.length;
+            int endItem = Math.min(queueTracks.length, (i + 9));
             StringBuilder str = new StringBuilder();
             str.append("**Current Track**: [")
                     .append(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title)
@@ -41,15 +41,13 @@ public class QueueCommand implements ICommand {
                     .append(") By ")
                     .append(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().author)
                     .append("\n");
-            for (int j = startItem; j < endItem; j++) {
+            for (int j = i; j < endItem; j++) {
                 str.append(queueTracks[j]).append("\n");
             }
             MessageEmbed embed = new EmbedBuilder().setDescription(str).setColor(16760143).setThumbnail(event.getGuild().getIconUrl()).setTitle("Queue").build();
             queueEmbeds.add(embed);
         }
-        event.getInteraction().getHook().sendMessageEmbeds(queueEmbeds.get(0)).queue(message -> {
-            PageManager.getINSTANCE().paginate(message, queueEmbeds, event.getUser().getIdLong(), (long) 50000);
-        });
+        event.getInteraction().getHook().sendMessageEmbeds(queueEmbeds.get(0)).queue(message -> PageManager.getINSTANCE().paginate(message, queueEmbeds, event.getUser().getIdLong(), (long) 50000));
     }
 
     @Override

@@ -7,12 +7,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+import java.util.Objects;
+
 public class LeaveCommand implements ICommand {
 
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) return;
+        if (!Objects.requireNonNull(Objects.requireNonNull(event.getGuild()).getSelfMember().getVoiceState()).inAudioChannel()) return;
         event.getGuild().getAudioManager().closeAudioConnection();
         MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Leaving Channel").build();
         PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.destroy();

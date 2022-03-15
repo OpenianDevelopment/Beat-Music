@@ -67,6 +67,7 @@ public class TrackManager extends AudioEventAdapter {
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         TextChannel nowPlayingChannel = textChannel.getJDA().getTextChannelById(textChannel.getIdLong());
+        assert nowPlayingChannel != null;
         if (nowPlayingChannel.canTalk()) {
             if (nowPlayingChannel.getGuild().getSelfMember().hasPermission(nowPlayingChannel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
                 MessageEmbed embed = new EmbedBuilder().setTitle("Now Playing").setColor(16760143).setTitle("Now Playing").addField("Title", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true).setThumbnail(track.getInfo().artworkUrl).build();

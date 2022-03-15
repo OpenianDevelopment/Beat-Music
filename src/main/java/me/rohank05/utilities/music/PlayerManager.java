@@ -8,9 +8,6 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup;
-import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner;
-import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block;
 import me.rohank05.Config;
 import me.rohank05.SpotifyConfig;
 import me.rohank05.SpotifySourceManager;
@@ -20,10 +17,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @SuppressWarnings("unchecked")
@@ -31,7 +28,7 @@ public class PlayerManager {
     private static PlayerManager INSTANCE;
     private final Map<Long, GuildMusicManager> guildMusicManagerMap = new HashMap();
     private final AudioPlayerManager audioPlayerManager;
-    private TextChannel textChannel;
+    private final TextChannel textChannel;
 
     public PlayerManager(TextChannel textChannel) {
         this.textChannel = textChannel;
@@ -59,7 +56,7 @@ public class PlayerManager {
     }
 
     public void loadAndPlay(SlashCommandInteractionEvent event, String trackUrl) {
-        final GuildMusicManager guildMusicManager = this.getGuildMusicManager(event.getGuild());
+        final GuildMusicManager guildMusicManager = this.getGuildMusicManager(Objects.requireNonNull(event.getGuild()));
         this.audioPlayerManager.loadItemOrdered(guildMusicManager, trackUrl, new AudioLoadResultHandler() {
 
             @Override
@@ -82,7 +79,7 @@ public class PlayerManager {
                     trackLoaded(audioTracks.get(0));
                 } else {
                     event.getInteraction().getHook().sendMessageEmbeds(new EmbedBuilder().setDescription("Enqueuing `"
-                                    + String.valueOf(audioTracks.size())
+                                    + audioTracks.size()
                                     + "` songs from `"
                                     + playlist.getName()
                                     + "` Added By `" + event.getUser().getAsTag() + "`").build())

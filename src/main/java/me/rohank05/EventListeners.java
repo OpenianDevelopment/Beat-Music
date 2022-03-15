@@ -2,10 +2,7 @@ package me.rohank05;
 
 import me.rohank05.utilities.command.CommandManager;
 import me.rohank05.utilities.music.PlayerManager;
-import net.dv8tion.jda.api.entities.AudioChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,6 +11,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 
 public class EventListeners extends ListenerAdapter {
@@ -43,18 +42,18 @@ public class EventListeners extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
-        /**
-         * Check if Bot has left the channel. If it had it will destroy the player
+        /*
+          Check if Bot has left the channel. If it had it will destroy the player
          */
-        if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel())
+        if (!Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).inAudioChannel())
             if (PlayerManager.getINSTANCE() != null)
                 if (PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null) {
                     PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.destroy();
                     PlayerManager.getINSTANCE().deleteGuildMusicManager(event.getGuild());
                 }
 
-        /**
-         * Check if is the only member left in the channel. If yes then it will pause the song until another member join
+        /*
+          Check if is the only member left in the channel. If yes then it will pause the song until another member join
          */
         if (event.getChannelLeft().getMembers().size() == 1)
             if (event.getChannelLeft().getMembers().get(0).equals(event.getGuild().getSelfMember()))

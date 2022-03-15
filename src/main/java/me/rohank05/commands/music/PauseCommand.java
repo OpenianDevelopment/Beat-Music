@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class PauseCommand implements ICommand {
     @Override
@@ -15,7 +16,7 @@ public class PauseCommand implements ICommand {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
         if (!CommandPermissionCheck.checkPermission(event)) return;
 
-        AudioPlayer audioPlayer = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer;
+        AudioPlayer audioPlayer = PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer;
         if (audioPlayer.isPaused())
             event.getInteraction().getHook()
                     .sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Player is already paused").build()).queue();

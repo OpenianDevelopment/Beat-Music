@@ -8,12 +8,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+import java.util.Objects;
+
 public class VibratoCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
         if (!CommandPermissionCheck.checkPermission(event)) return;
-        Filters filters = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters;
+        Filters filters = PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters;
         filters.setVibrato(!filters.isVibrato());
         filters.updateFilter();
         String isActivated = filters.isVibrato() ? "Enabled" : "Disabled";

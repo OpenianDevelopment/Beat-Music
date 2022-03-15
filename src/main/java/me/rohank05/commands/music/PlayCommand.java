@@ -9,19 +9,20 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.awt.*;
 import java.net.URL;
+import java.util.Objects;
 
 public class PlayCommand implements ICommand {
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
+        if (Objects.requireNonNull(Objects.requireNonNull(event.getGuild()).getSelfMember().getVoiceState()).inAudioChannel()) {
             if (!event.getGuild().getAudioManager().isConnected()) {
                 event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getSelfMember().getVoiceState().getChannel());
                 event.getGuild().getAudioManager().setSelfDeafened(true);
             }
         } else {
             try {
-                event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+                event.getGuild().getAudioManager().openAudioConnection(Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel());
                 event.getGuild().getAudioManager().setSelfDeafened(true);
             } catch (Exception e) {
                 MessageEmbed embed = new EmbedBuilder().setColor(Color.RED).setDescription(e.getMessage()).build();
@@ -29,7 +30,7 @@ public class PlayCommand implements ICommand {
                 return;
             }
         }
-        String track = event.getOption("song").getAsString();
+        String track = Objects.requireNonNull(event.getOption("song")).getAsString();
         if (!isURL(track))
             track = "ytmsearch:" + track;
         PlayerManager.getINSTANCE(event.getTextChannel()).loadAndPlay(event, track);
