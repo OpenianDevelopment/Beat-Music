@@ -166,6 +166,18 @@ const commands: ApplicationCommandData[] = [
             },
         ],
     },
+    {
+        name: "ping",
+        description: "shows the bot's ping and shard id",
+    },
+    {
+        name: "uptime",
+        description: "Return bot's start time",
+    },
+    {
+        name: "vote",
+        description: "sends the bot's vote!",
+    },
 ];
 
 client.on("ready", () => {
