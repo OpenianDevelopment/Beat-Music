@@ -185,10 +185,23 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
             label: "All",
             description: "Reload all commands",
         })
-        .setMinValues(1);
+        .setMinValues(0);
+    let commandMenu2: MessageSelectMenu | undefined;
     client.commands
         .map((a) => a)
         .forEach((cmd) => {
+            if (commandMenu.options.length == 24) {
+                commandMenu2 = new MessageSelectMenu()
+                    .setCustomId("select_file_tr2-" + date)
+                    .setPlaceholder("Nothing Selected")
+                    .addOptions({
+                        label: cmd.name,
+                        value: cmd.name,
+                        description: cmd.description,
+                    })
+                    .setMinValues(0);
+                return;
+            }
             commandMenu.addOptions({
                 label: cmd.name,
                 value: cmd.name,
@@ -197,12 +210,18 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
         });
 
     const commandsRow = new MessageActionRow().addComponents(commandMenu);
+    const secondRow = new MessageActionRow();
+    if (commandMenu2) {
+        secondRow.addComponents(commandMenu2);
+    }
     const embed = new MessageEmbed()
         .setColor("DARK_RED")
         .setDescription("Choose the File(s) you want to reload");
     botmsg = (await interaction.followUp({
         embeds: [embed],
-        components: [commandsRow],
+        components: secondRow.components.length
+            ? [commandsRow, secondRow]
+            : [commandsRow],
     })) as Message;
     const filter = (m: Interaction) => interaction.user.id === m.user.id;
     const collector = interaction.channel!.createMessageComponentCollector({
@@ -210,7 +229,12 @@ async function Reload(client: DiscordClient, interaction: CommandInteraction) {
         time: 60e3,
     });
     collector.on("collect", async (int) => {
-        if (int.isSelectMenu() && int.customId === "select_file_tr-" + date) {
+        if (
+            int.isSelectMenu() &&
+            (int.customId === "select_file_tr-" + date ||
+                int.customId === "select_file_tr2-" + date) &&
+            int.values.length >= 1
+        ) {
             var files = int.values.map((v) => MCFCD(v));
             if (int.values.includes("all")) {
                 files = await readdir("./dist/commands/");
