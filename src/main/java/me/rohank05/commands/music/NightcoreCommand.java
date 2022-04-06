@@ -10,14 +10,18 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class NightcoreCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public NightcoreCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
 
-        PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters.setNightcore(!PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore());
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
-        String isActivated = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore() ? "Enabled" : "Disabled";
+        this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters.setNightcore(!this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore());
+        this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
+        String isActivated = this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.isNightcore() ? "Enabled" : "Disabled";
         MessageEmbed embed = new EmbedBuilder().setTitle("Nightcore filter **" + isActivated + "**").setColor(16760143).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }

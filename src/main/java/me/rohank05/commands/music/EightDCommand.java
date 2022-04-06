@@ -10,14 +10,18 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class EightDCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public EightDCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
 
-        PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters.setEightD(!PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isEightD());
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
-        String isActivated = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isEightD() ? "Enabled" : "Disabled";
+        this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters.setEightD(!this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.isEightD());
+        this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
+        String isActivated = this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.isEightD() ? "Enabled" : "Disabled";
         MessageEmbed embed = new EmbedBuilder().setTitle("8D filter **" + isActivated + "**").setColor(16760143).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }

@@ -10,13 +10,17 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class StopCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public StopCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
         MessageEmbed embed = new EmbedBuilder().setTitle("Player stopped!").setColor(16760143).build();
-        PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.destroy();
-        PlayerManager.getINSTANCE().deleteGuildMusicManager(event.getGuild());
+        this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.destroy();
+        this.playerManager.deleteGuildMusicManager(event.getGuild());
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }
 

@@ -10,13 +10,17 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class SkipCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public SkipCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
         MessageEmbed embed = new EmbedBuilder().setTitle("Song Skipped").setColor(16760143).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
-        PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.playNextTrack();
+        this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.playNextTrack();
     }
 
     @Override

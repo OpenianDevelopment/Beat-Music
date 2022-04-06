@@ -11,18 +11,19 @@ import javax.security.auth.login.LoginException;
 import java.util.EnumSet;
 
 public class Bot {
-    public static void main(String[] args) throws LoginException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException, LoginException {
         JDA jda = JDABuilder.createDefault(Config.get("TOKEN"), GatewayIntent.GUILD_VOICE_STATES)
-                .addEventListeners(new EventListeners())
                 .disableCache(EnumSet.of(
                         CacheFlag.ACTIVITY,
                         CacheFlag.EMOTE,
                         CacheFlag.CLIENT_STATUS,
                         CacheFlag.ONLINE_STATUS
                 )).enableCache(EnumSet.of(CacheFlag.VOICE_STATE))
+                .addEventListeners(new EventListeners())
                 .setAudioSendFactory(new NativeAudioSendFactory())
                 .setActivity(Activity.listening("to The Score"))
-                .build();
-        jda.awaitReady();
+                .build()
+                .awaitReady();
+
     }
 }

@@ -10,14 +10,18 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class BassBoostCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public BassBoostCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
 
-        PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters.setBassBoost(!PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isBassBoost());
-        PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
-        String isActivated = PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).trackManager.filters.isBassBoost() ? "Enabled" : "Disabled";
+        playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters.setBassBoost(playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.isBassBoost());
+        playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.updateFilter();
+        String isActivated = playerManager.getGuildMusicManager(event.getGuild()).trackManager.filters.isBassBoost() ? "Enabled" : "Disabled";
         MessageEmbed embed = new EmbedBuilder().setTitle("BassBoost filter **" + isActivated + "**").setColor(16760143).build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }

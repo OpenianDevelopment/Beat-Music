@@ -12,6 +12,10 @@ import java.net.URL;
 import java.util.Objects;
 
 public class PlayCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public PlayCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
@@ -33,7 +37,10 @@ public class PlayCommand implements ICommand {
         String track = Objects.requireNonNull(event.getOption("song")).getAsString();
         if (!isURL(track))
             track = "ytmsearch:" + track;
-        PlayerManager.getINSTANCE(event.getTextChannel()).loadAndPlay(event, track);
+        playerManager.loadAndPlay(event, track);
+        if(!playerManager.getGuildMusicManager(event.getGuild()).trackManager.hasTextChannel()){
+            playerManager.getGuildMusicManager(event.getGuild()).trackManager.setTextChannel(event.getChannel().getId());
+        }
     }
 
     @Override

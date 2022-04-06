@@ -11,12 +11,16 @@ import java.awt.*;
 import java.util.Objects;
 
 public class PauseCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public PauseCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
 
-        AudioPlayer audioPlayer = PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer;
+        AudioPlayer audioPlayer = this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer;
         if (audioPlayer.isPaused())
             event.getInteraction().getHook()
                     .sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Player is already paused").build()).queue();

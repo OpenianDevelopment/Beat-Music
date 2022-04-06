@@ -15,11 +15,15 @@ import java.util.Objects;
 
 
 public class QueueCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public QueueCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
-        List<AudioTrack> queue = new ArrayList<>(PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.queue);
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
+        List<AudioTrack> queue = new ArrayList<>(this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.queue);
         if (queue.isEmpty()) {
             MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("There is no other song in queue").build();
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
@@ -35,11 +39,11 @@ public class QueueCommand implements ICommand {
             int endItem = Math.min(queueTracks.length, (i + 9));
             StringBuilder str = new StringBuilder();
             str.append("**Current Track**: [")
-                    .append(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title)
+                    .append(this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title)
                     .append("](")
-                    .append(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri)
+                    .append(this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri)
                     .append(") By ")
-                    .append(PlayerManager.getINSTANCE().getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().author)
+                    .append(this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().author)
                     .append("\n");
             for (int j = i; j < endItem; j++) {
                 str.append(queueTracks[j]).append("\n");
@@ -47,7 +51,7 @@ public class QueueCommand implements ICommand {
             MessageEmbed embed = new EmbedBuilder().setDescription(str).setColor(16760143).setThumbnail(event.getGuild().getIconUrl()).setTitle("Queue").build();
             queueEmbeds.add(embed);
         }
-        event.getInteraction().getHook().sendMessageEmbeds(queueEmbeds.get(0)).queue(message -> PageManager.getINSTANCE().paginate(message, queueEmbeds, event.getUser().getIdLong(), (long) 50000));
+        event.getInteraction().getHook().sendMessageEmbeds(queueEmbeds.get(0)).queue(message -> PageManager.getINSTANCE().paginate(message, queueEmbeds, event.getUser().getIdLong(), (long) 500000));
     }
 
     @Override

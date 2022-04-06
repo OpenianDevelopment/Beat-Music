@@ -9,12 +9,16 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class LoopCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public LoopCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
         String LoopSubcommand = Objects.requireNonNull(event.getSubcommandName()).toLowerCase();
-        PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.loop = LoopSubcommand;
+        playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.loop = LoopSubcommand;
         EmbedBuilder embedBuilder = new EmbedBuilder().setColor(16760143);
         switch (LoopSubcommand) {
             case "off" -> embedBuilder.setDescription("Loop Off!!");

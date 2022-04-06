@@ -12,9 +12,9 @@ import me.rohank05.Config;
 import me.rohank05.SpotifyConfig;
 import me.rohank05.SpotifySourceManager;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.HashMap;
@@ -25,27 +25,29 @@ import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public class PlayerManager {
-    private static PlayerManager INSTANCE;
     private final Map<Long, GuildMusicManager> guildMusicManagerMap = new HashMap();
-    private final AudioPlayerManager audioPlayerManager;
-    private final TextChannel textChannel;
+    public final AudioPlayerManager audioPlayerManager;
+    private final JDA jda;
+    public YoutubeAudioSourceManager youtubeAudioSourceManager;
 
-    public PlayerManager(TextChannel textChannel) {
-        this.textChannel = textChannel;
+
+    public PlayerManager(JDA jda) {
+        this.jda = jda;
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         this.audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
         SpotifyConfig spotifyConfig = new SpotifyConfig(Config.get("SPOTIFY_ID"), Config.get("SPOTIFY_SECRET"));
-        YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager(true, "rohan.shuvam@gmail.com", "$uPerNova123");
+        this.youtubeAudioSourceManager = new YoutubeAudioSourceManager(true, Config.get("GMAIL_ID"), Config.get("GMAIL_PASSWORD"));
         this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(spotifyConfig, this.audioPlayerManager));
         this.audioPlayerManager.registerSourceManager(youtubeAudioSourceManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
-//        new YoutubeIpRotatorSetup(new NanoIpRoutePlanner(Collections.singletonList(new Ipv6Block("2a02:c207:2061:129::/64")), true)).forSource(youtubeAudioSourceManager).setup();
+//        new YoutubeIpRotatorSetup(new NanoIpRoutePlanner(Collections.singletonList(new Ipv6Block(Config.get("IP_V6"))), true)).forSource(youtubeAudioSourceManager).setup();
+        
     }
 
     public GuildMusicManager getGuildMusicManager(Guild guild) {
         return this.guildMusicManagerMap.computeIfAbsent(guild.getIdLong(), (guildId) -> {
-            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager, textChannel);
+            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager, jda, this);
             guild.getAudioManager().setSendingHandler(guildMusicManager.getAudioPlayerSendHandler());
             return guildMusicManager;
         });
@@ -85,6 +87,7 @@ public class PlayerManager {
                                     + "` Added By `" + event.getUser().getAsTag() + "`").build())
                             .queue();
                     for (final AudioTrack track : audioTracks) {
+                        System.out.println(track.getInfo().title);
                         track.setUserData(event.getUser());
                         guildMusicManager.trackManager.addToQueue(track);
                     }
@@ -106,14 +109,4 @@ public class PlayerManager {
         });
     }
 
-    public static PlayerManager getINSTANCE(TextChannel channel) {
-        if (INSTANCE == null) {
-            INSTANCE = new PlayerManager(channel);
-        }
-        return INSTANCE;
-    }
-
-    public static PlayerManager getINSTANCE() {
-        return INSTANCE;
-    }
 }

@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     //Bot stuff
     implementation (group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.9'){
         exclude module: 'opus-java'
@@ -29,7 +29,7 @@ dependencies {
     implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '2.2.0'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.8'
     implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
-    implementation group: 'me.rohank05', name: 'Spotify-Source-Manager', version: '0.0.1'
+    implementation group: 'me.rohank05', name: 'Spotify-Source-Manager', version: '304fdb05d0'
     implementation group: 'me.rohank05', name: 'jda-paginator', version: '1.0.5'
 }
 

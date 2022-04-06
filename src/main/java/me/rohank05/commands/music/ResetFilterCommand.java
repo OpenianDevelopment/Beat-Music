@@ -10,11 +10,15 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import java.util.Objects;
 
 public class ResetFilterCommand implements ICommand {
+    private final PlayerManager playerManager;
+    public ResetFilterCommand(PlayerManager playerManager){
+        this.playerManager = playerManager;
+    }
     @Override
     public void run(SlashCommandInteractionEvent event) {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
-        if (!CommandPermissionCheck.checkPermission(event)) return;
-        Filters filters = PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters;
+        if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
+        Filters filters = this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.filters;
         filters.resetFilter();
         filters.updateFilter();
         event.getInteraction().getHook()

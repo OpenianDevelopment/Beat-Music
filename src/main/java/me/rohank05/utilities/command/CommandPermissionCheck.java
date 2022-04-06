@@ -25,13 +25,13 @@ public class CommandPermissionCheck {
         return true;
     }
 
-    public static boolean checkPermission(SlashCommandInteractionEvent event) {
-        if (PlayerManager.getINSTANCE() == null) {
+    public static boolean checkPermission(SlashCommandInteractionEvent event, PlayerManager playerManager) {
+        if (playerManager == null) {
             MessageEmbed embed = new EmbedBuilder().setDescription("No Music is being played").setColor(Color.RED).build();
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return false;
         }
-        if (PlayerManager.getINSTANCE().getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.getPlayingTrack() == null) {
+        if (playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.getPlayingTrack() == null) {
             MessageEmbed embed = new EmbedBuilder().setDescription("No Song is being played").setColor(Color.RED).build();
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return false;

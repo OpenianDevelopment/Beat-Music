@@ -1,40 +1,43 @@
 package me.rohank05.utilities.command;
 
 import me.rohank05.commands.music.*;
+import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandManager {
+public class CommandManager extends ListenerAdapter {
     private final List<ICommand> commandList = new ArrayList<>();
 
-    public CommandManager() {
+    public CommandManager(PlayerManager playerManager) {
         //Help
         addCommand(new HelpCommand(this));
         //Control commands
-        addCommand(new PlayCommand());
-        addCommand(new PauseCommand());
-        addCommand(new SkipCommand());
-        addCommand(new LeaveCommand());
-        addCommand(new LoopCommand());
-        addCommand(new StopCommand());
-        addCommand(new QueueCommand());
-        addCommand(new RemoveCommand());
-        addCommand(new ShuffleCommand());
-        addCommand(new NowPlayingCommand());
-        addCommand(new ResumeCommand());
-        addCommand(new VolumeCommand());
+        addCommand(new PlayCommand(playerManager));
+        addCommand(new PauseCommand(playerManager));
+        addCommand(new SkipCommand(playerManager));
+        addCommand(new LeaveCommand(playerManager));
+        addCommand(new LoopCommand(playerManager));
+        addCommand(new StopCommand(playerManager));
+        addCommand(new QueueCommand(playerManager));
+        addCommand(new RemoveCommand(playerManager));
+        addCommand(new ShuffleCommand(playerManager));
+        addCommand(new NowPlayingCommand(playerManager));
+        addCommand(new ResumeCommand(playerManager));
+        addCommand(new VolumeCommand(playerManager));
 
         //Filters
-        addCommand(new NightcoreCommand());
-        addCommand(new EightDCommand());
-        addCommand(new ResetFilterCommand());
-        addCommand(new VibratoCommand());
-        addCommand(new TremoloCommand());
-        addCommand(new BassBoostCommand());
-        addCommand(new EchoCommand());
+        addCommand(new NightcoreCommand(playerManager));
+        addCommand(new EightDCommand(playerManager));
+        addCommand(new ResetFilterCommand(playerManager));
+        addCommand(new VibratoCommand(playerManager));
+        addCommand(new TremoloCommand(playerManager));
+        addCommand(new BassBoostCommand(playerManager));
+        addCommand(new EchoCommand(playerManager));
     }
 
     private void addCommand(ICommand command) {
@@ -53,13 +56,16 @@ public class CommandManager {
         return null;
     }
 
-    public void run(SlashCommandInteractionEvent event) {
+
+    public void run(@NotNull SlashCommandInteractionEvent event) {
         ICommand command = getCommand(event.getName());
-        event.deferReply().queue();
         if (!event.isFromGuild()) {
             event.getInteraction().getHook().sendMessage("This command can only be used in a server").queue();
             return;
         }
-        if (command != null) command.run(event);
+        if (command != null){
+            event.deferReply().queue();
+            command.run(event);
+        }
     }
 }
