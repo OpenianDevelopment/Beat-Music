@@ -25,7 +25,7 @@ public class TrackManager extends AudioEventAdapter {
     private final JDA jda;
     public final Filters filters;
     public String loop;
-    private boolean autoPlay = true;
+    private boolean autoPlay = false;
     private final PlayerManager playerManager;
 
     //Constructor
@@ -51,7 +51,6 @@ public class TrackManager extends AudioEventAdapter {
         if (!this.audioPlayer.startTrack(track, true)) {
             this.queue.push(track);
         }
-
     }
 
     //Play next track from the queue
@@ -66,7 +65,6 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-
         if (endReason.mayStartNext) {
             if (this.loop.equals("queue")) {
                 AudioTrack newTrack = track.makeClone();
@@ -87,20 +85,37 @@ public class TrackManager extends AudioEventAdapter {
                         @Override
                         public void playlistLoaded(AudioPlaylist playlist) {
                             final List<AudioTrack> audioTracks = playlist.getTracks();
-                            TextChannel channel = jda.getTextChannelById(textChannel);
-
                             audioTracks.remove(0);
                             for (final AudioTrack track : audioTracks) {
                                 addToQueue(track);
                             }
+                            TextChannel channel = jda.getTextChannelById(textChannel);
+
+                            MessageEmbed embed = new EmbedBuilder()
+                                    .setDescription("*Autoplay:* Adding `" + audioTracks.size() + "` more songs to the queue").setColor(16760143).build();
+                            if (channel == null) return;
+                            if (channel.canTalk()) {
+                                if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
+                                    channel.sendMessageEmbeds(embed).queue();
+                                } else {
+                                    channel.sendMessage("*Autoplay:* Adding `" + audioTracks.size() + "` more songs to the queue").queue();
+                                }
+                            }
+
                         }
 
                         @Override
-                        public void noMatches() {}
+                        public void noMatches() {
+                        }
 
                         @Override
-                        public void loadFailed(FriendlyException exception) {}
+                        public void loadFailed(FriendlyException exception) {
+                        }
                     });
+                } else {
+                    TextChannel channel = this.jda.getTextChannelById(this.textChannel);
+                    if (channel == null) return;
+                    channel.getGuild().getAudioManager().closeAudioConnection();
                 }
             }
             playNextTrack();
@@ -109,10 +124,6 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-
-        System.out.println(track.getInfo().identifier);
-        System.out.println(track.getIdentifier());
-        System.out.println(track.getInfo().uri);
         TextChannel nowPlayingChannel = jda.getTextChannelById(textChannel);
 
         if (nowPlayingChannel == null) return;
@@ -124,5 +135,14 @@ public class TrackManager extends AudioEventAdapter {
                 nowPlayingChannel.sendMessage("**Now Playing**: `" + track.getInfo().title + "`").queue();
             }
         }
+    }
+
+
+    public boolean isAutoPlay() {
+        return autoPlay;
+    }
+
+    public void setAutoPlay(boolean autoPlay) {
+        this.autoPlay = autoPlay;
     }
 }

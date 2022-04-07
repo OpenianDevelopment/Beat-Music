@@ -10,8 +10,9 @@ version '1.0.0'
 mainClassName = "me.rohank05.Bot"
 
 repositories {
-    maven { url 'https://m2.dv8tion.net/releases' }
     mavenCentral()
+    maven { url 'https://m2.dv8tion.net/releases' }
+    maven { url "https://m2.chew.pro/snapshots" }
     jcenter()
     maven { url 'https://jitpack.io' }
 }
@@ -29,8 +30,8 @@ dependencies {
     implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '2.2.0'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.8'
     implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
-    implementation group: 'me.rohank05', name: 'Spotify-Source-Manager', version: '304fdb05d0'
-    implementation group: 'me.rohank05', name: 'jda-paginator', version: '1.0.5'
+    implementation group: 'me.rohank05', name: 'Spotify-Source-Manager', version: 'master-SNAPSHOT'
+    implementation group: 'pw.chew', name: 'jda-chewtils', version: '2.0-SNAPSHOT'
 }
 
 test {

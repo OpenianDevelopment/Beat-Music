@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.utils.data.DataArray;
@@ -73,16 +72,13 @@ public class EventListeners extends ListenerAdapter {
                     this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.setPaused(true);
     }
 
-    @Override
-    public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
-        PageManager.getINSTANCE().initListener(event);
-    }
+
 
     @Override
     public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
         if(!event.getName().equalsIgnoreCase("play")) return;
         String value = event.getInteraction().getFocusedOption().getValue();
-        Response httpResponse = null;
+        Response httpResponse;
         try {
              httpResponse = getSearchSuggestion(value);
         } catch (IOException e) {
@@ -91,13 +87,14 @@ public class EventListeners extends ListenerAdapter {
         }
         if(!httpResponse.isSuccessful()) return;
         if(httpResponse.body() == null) return;
-        DataObject responseBody = null;
+        DataObject responseBody;
         try {
             responseBody = DataObject.fromJson(httpResponse.body().string());
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
+
         Optional<DataArray> optContents = responseBody.optArray("contents");
         if(optContents.isEmpty()) return;
         DataObject renderer = optContents.get().getObject(0).getObject("searchSuggestionsSectionRenderer");

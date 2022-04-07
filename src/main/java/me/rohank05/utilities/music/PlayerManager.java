@@ -36,8 +36,9 @@ public class PlayerManager {
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         this.audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
         SpotifyConfig spotifyConfig = new SpotifyConfig(Config.get("SPOTIFY_ID"), Config.get("SPOTIFY_SECRET"));
+
         this.youtubeAudioSourceManager = new YoutubeAudioSourceManager(true, Config.get("GMAIL_ID"), Config.get("GMAIL_PASSWORD"));
-        this.audioPlayerManager.registerSourceManager(new SpotifySourceManager(spotifyConfig, this.audioPlayerManager));
+        this.audioPlayerManager.registerSourceManager(new SpotifySourceManager( spotifyConfig, audioPlayerManager));
         this.audioPlayerManager.registerSourceManager(youtubeAudioSourceManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);

@@ -3,14 +3,13 @@ package me.rohank05.utilities.command;
 import me.rohank05.commands.music.*;
 import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandManager extends ListenerAdapter {
+public class CommandManager {
     private final List<ICommand> commandList = new ArrayList<>();
 
     public CommandManager(PlayerManager playerManager) {
@@ -29,6 +28,7 @@ public class CommandManager extends ListenerAdapter {
         addCommand(new NowPlayingCommand(playerManager));
         addCommand(new ResumeCommand(playerManager));
         addCommand(new VolumeCommand(playerManager));
+        addCommand(new AutoPlayCommand(playerManager));
 
         //Filters
         addCommand(new NightcoreCommand(playerManager));
