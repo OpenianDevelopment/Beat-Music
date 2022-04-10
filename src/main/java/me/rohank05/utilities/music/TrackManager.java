@@ -58,16 +58,15 @@ public class TrackManager extends AudioEventAdapter {
     public void playNextTrack() {
         if (this.queue.isEmpty()) {
             TextChannel channel = this.jda.getTextChannelById(this.textChannel);
-            if(channel != null){
-                if(channel.canTalk()){
-                    if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))){
+            if (channel != null) {
+                if (channel.canTalk()) {
+                    if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
                         MessageEmbed embed = new EmbedBuilder()
                                 .setColor(16760143)
                                 .setDescription("Queue has ended")
                                 .build();
                         channel.sendMessageEmbeds(embed).queue();
-                    }
-                    else
+                    } else
                         channel.sendMessage("Queue has ended").queue();
                 }
             }
@@ -80,61 +79,62 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (endReason.mayStartNext) {
-            if (this.loop.equals("queue")) {
-                AudioTrack newTrack = track.makeClone();
-                this.queue.push(newTrack);
-            } else if (this.loop.equals("track")) {
-                AudioTrack newTrack = track.makeClone();
-                this.queue.add(0, newTrack);
-            }
-            if (this.queue.isEmpty()) {
-                if (this.autoPlay) {
-                    String trackID = track.getIdentifier();
-                    String mixUrl = "https://music.youtube.com/watch?v=" + trackID + "&list=RD" + trackID;
-                    this.playerManager.audioPlayerManager.loadItem(mixUrl, new AudioLoadResultHandler() {
-                        @Override
-                        public void trackLoaded(AudioTrack track) {
-                        }
 
-                        @Override
-                        public void playlistLoaded(AudioPlaylist playlist) {
-                            final List<AudioTrack> audioTracks = playlist.getTracks();
-                            audioTracks.remove(0);
-                            for (final AudioTrack track : audioTracks) {
-                                addToQueue(track);
-                            }
-                            TextChannel channel = jda.getTextChannelById(textChannel);
-
-                            MessageEmbed embed = new EmbedBuilder()
-                                    .setDescription("*Autoplay:* Adding `" + audioTracks.size() + "` more songs to the queue").setColor(16760143).build();
-                            if (channel == null) return;
-                            if (channel.canTalk()) {
-                                if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
-                                    channel.sendMessageEmbeds(embed).queue();
-                                } else {
-                                    channel.sendMessage("*Autoplay:* Adding `" + audioTracks.size() + "` more songs to the queue").queue();
-                                }
-                            }
-                        }
-                        @Override
-                        public void noMatches() {
-                        }
-
-                        @Override
-                        public void loadFailed(FriendlyException exception) {
-                        }
-                    });
-                }
-                else {
-                    if(this.tfs) return;
-                    TextChannel channel = this.jda.getTextChannelById(this.textChannel);
-                    if (channel == null) return;
-                    channel.getGuild().getAudioManager().closeAudioConnection();
-                }
-            }
-            playNextTrack();
+        if (this.loop.equals("queue")) {
+            AudioTrack newTrack = track.makeClone();
+            this.queue.push(newTrack);
+        } else if (this.loop.equals("track")) {
+            AudioTrack newTrack = track.makeClone();
+            this.queue.add(0, newTrack);
         }
+        if (this.queue.isEmpty()) {
+            if (this.autoPlay) {
+                String trackID = track.getIdentifier();
+                String mixUrl = "https://music.youtube.com/watch?v=" + trackID + "&list=RD" + trackID;
+                this.playerManager.audioPlayerManager.loadItem(mixUrl, new AudioLoadResultHandler() {
+                    @Override
+                    public void trackLoaded(AudioTrack track) {
+                    }
+
+                    @Override
+                    public void playlistLoaded(AudioPlaylist playlist) {
+                        final List<AudioTrack> audioTracks = playlist.getTracks();
+                        audioTracks.remove(0);
+                        for (final AudioTrack track : audioTracks) {
+                            addToQueue(track);
+                        }
+                        TextChannel channel = jda.getTextChannelById(textChannel);
+
+                        MessageEmbed embed = new EmbedBuilder()
+                                .setDescription("*Autoplay:* Adding `" + audioTracks.size() + "` more songs to the queue").setColor(16760143).build();
+                        if (channel == null) return;
+                        if (channel.canTalk()) {
+                            if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
+                                channel.sendMessageEmbeds(embed).queue();
+                            } else {
+                                channel.sendMessage("*Autoplay:* Adding `" + audioTracks.size() + "` more songs to the queue").queue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void noMatches() {
+                    }
+
+                    @Override
+                    public void loadFailed(FriendlyException exception) {
+                    }
+                });
+            } else {
+                if (this.tfs) return;
+                TextChannel channel = this.jda.getTextChannelById(this.textChannel);
+                if (channel == null) return;
+                channel.getGuild().getAudioManager().closeAudioConnection();
+            }
+        }
+        playNextTrack();
+
+
     }
 
     @Override

@@ -34,24 +34,23 @@ public class SkipCounter {
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 event -> {
                     if(interactionStopped) return false;
+                    if(Objects.requireNonNull(event.getUser()).isBot()) return false;
                     return messageId == event.getMessageIdLong();
                 },
                 event -> {
                     if(Objects.equals(Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel(), Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel())){
                         countReaction++;
                         if(countReaction>=amtUser){
-                            this.trackManager.playNextTrack();
+                            this.trackManager.audioPlayer.stopTrack();
                             interactionStopped = true;
+                            m.editMessage("Song Skipped").queue();
                         }
                         waitForEvent(m, amtUser);
                     }
                 },
                 120,
                 TimeUnit.SECONDS,
-                () ->
-                {
-                    interactionStopped = true;
-                }
+                () -> interactionStopped = true
                 );
     }
 }

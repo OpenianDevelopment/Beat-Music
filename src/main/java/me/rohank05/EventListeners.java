@@ -73,8 +73,10 @@ public class EventListeners extends ListenerAdapter {
          */
         if (event.getChannelLeft().getMembers().size() == 1)
             if (event.getChannelLeft().getMembers().get(0).equals(event.getGuild().getSelfMember()))
-                if (this.playerManager != null)
+                if (this.playerManager != null){
                     this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.setPaused(true);
+                    this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.checkCleanup(300000L);
+                }
     }
 
 
