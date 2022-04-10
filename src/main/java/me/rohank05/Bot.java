@@ -13,7 +13,7 @@ import java.util.EnumSet;
 public class Bot {
     public static EventWaiter eventWaiter = new EventWaiter();
     public static void main(String[] args) throws InterruptedException, LoginException {
-        JDABuilder.createDefault(Config.get("TOKEN"), GatewayIntent.GUILD_VOICE_STATES)
+        JDABuilder.createDefault(Config.get("TOKEN"), GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS)
                 .disableCache(EnumSet.of(
                         CacheFlag.ACTIVITY,
                         CacheFlag.EMOTE,

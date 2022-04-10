@@ -27,6 +27,7 @@ public class TrackManager extends AudioEventAdapter {
     public String loop;
     private boolean autoPlay = false;
     private final PlayerManager playerManager;
+    private boolean tfs = false;
 
     //Constructor
     public TrackManager(AudioPlayer audioPlayer, JDA jda, PlayerManager playerManager) {
@@ -56,6 +57,20 @@ public class TrackManager extends AudioEventAdapter {
     //Play next track from the queue
     public void playNextTrack() {
         if (this.queue.isEmpty()) {
+            TextChannel channel = this.jda.getTextChannelById(this.textChannel);
+            if(channel != null){
+                if(channel.canTalk()){
+                    if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))){
+                        MessageEmbed embed = new EmbedBuilder()
+                                .setColor(16760143)
+                                .setDescription("Queue has ended")
+                                .build();
+                        channel.sendMessageEmbeds(embed).queue();
+                    }
+                    else
+                        channel.sendMessage("Queue has ended").queue();
+                }
+            }
             this.audioPlayer.destroy();
             return;
         }
@@ -101,9 +116,7 @@ public class TrackManager extends AudioEventAdapter {
                                     channel.sendMessage("*Autoplay:* Adding `" + audioTracks.size() + "` more songs to the queue").queue();
                                 }
                             }
-
                         }
-
                         @Override
                         public void noMatches() {
                         }
@@ -112,7 +125,9 @@ public class TrackManager extends AudioEventAdapter {
                         public void loadFailed(FriendlyException exception) {
                         }
                     });
-                } else {
+                }
+                else {
+                    if(this.tfs) return;
                     TextChannel channel = this.jda.getTextChannelById(this.textChannel);
                     if (channel == null) return;
                     channel.getGuild().getAudioManager().closeAudioConnection();
@@ -144,5 +159,9 @@ public class TrackManager extends AudioEventAdapter {
 
     public void setAutoPlay(boolean autoPlay) {
         this.autoPlay = autoPlay;
+    }
+
+    public void setTfs(boolean tfs) {
+        this.tfs = tfs;
     }
 }

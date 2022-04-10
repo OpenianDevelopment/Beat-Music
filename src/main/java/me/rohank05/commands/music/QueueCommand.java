@@ -45,23 +45,6 @@ public class QueueCommand implements ICommand {
                 ") By " +
                 this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().author +
                 "\n";
-
-//        for (int i = 0; i <= queueTracks.length; i += 10) {
-//            int endItem = Math.min(queueTracks.length, (i + 9));
-//            StringBuilder str = new StringBuilder();
-//            str.append("**Current Track**: [")
-//                    .append(this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title)
-//                    .append("](")
-//                    .append(this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().uri)
-//                    .append(") By ")
-//                    .append(this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().author)
-//                    .append("\n");
-//            for (int j = i; j < endItem; j++) {
-//                str.append(queueTracks[j]).append("\n");
-//            }
-//            MessageEmbed embed = new EmbedBuilder().setDescription(str).setColor(16760143).setThumbnail(event.getGuild().getIconUrl()).setTitle("Queue").build();
-//            queueEmbeds.add(embed);
-//        }
         ButtonPaginator buttonPaginator = new ButtonPaginator(Bot.eventWaiter, 50000L, queueTracks, event.getJDA(), Set.of(event.getUser().getIdLong()), 10, true, str, new Color(16760132));
         event.getInteraction().getHook().sendMessage("Queue").queue(message -> buttonPaginator.paginate(message, 1));
     }

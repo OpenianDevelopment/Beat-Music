@@ -38,6 +38,9 @@ public class CommandManager {
         addCommand(new TremoloCommand(playerManager));
         addCommand(new BassBoostCommand(playerManager));
         addCommand(new EchoCommand(playerManager));
+
+        //Settings
+        addCommand(new TwentyFourSevenCommand(playerManager));
     }
 
     private void addCommand(ICommand command) {

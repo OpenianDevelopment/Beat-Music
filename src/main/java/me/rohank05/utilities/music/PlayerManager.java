@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.track.AudioItem;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import me.rohank05.Config;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 
 @SuppressWarnings("unchecked")
@@ -52,6 +55,10 @@ public class PlayerManager {
             guild.getAudioManager().setSendingHandler(guildMusicManager.getAudioPlayerSendHandler());
             return guildMusicManager;
         });
+    }
+
+    public boolean hasGuildMusicManager(Guild guild){
+        return guildMusicManagerMap.containsKey(guild.getIdLong());
     }
 
     public void deleteGuildMusicManager(Guild guild) {
@@ -88,7 +95,6 @@ public class PlayerManager {
                                     + "` Added By `" + event.getUser().getAsTag() + "`").build())
                             .queue();
                     for (final AudioTrack track : audioTracks) {
-                        System.out.println(track.getInfo().title);
                         track.setUserData(event.getUser());
                         guildMusicManager.trackManager.addToQueue(track);
                     }
@@ -108,6 +114,33 @@ public class PlayerManager {
                 guildMusicManager.trackManager.playNextTrack();
             }
         });
+    }
+
+    public AudioItem getTrack(String query) throws ExecutionException, InterruptedException {
+        CompletableFuture<AudioItem> audioTrackCompletableFuture = new CompletableFuture<>();
+        this.audioPlayerManager.loadItem(query, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                audioTrackCompletableFuture.complete(track);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                audioTrackCompletableFuture.complete(playlist);
+            }
+
+            @Override
+            public void noMatches() {
+                audioTrackCompletableFuture.complete(null);
+            }
+
+            @Override
+            public void loadFailed(FriendlyException exception) {
+                audioTrackCompletableFuture.completeExceptionally(exception);
+            }
+        });
+        audioTrackCompletableFuture.join();
+        return audioTrackCompletableFuture.get();
     }
 
 }

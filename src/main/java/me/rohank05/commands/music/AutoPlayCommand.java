@@ -33,6 +33,6 @@ public class AutoPlayCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Enable or Disable autoplaying songs after queue ends";
+        return "Toggle autoplaying songs after queue ends";
     }
 }

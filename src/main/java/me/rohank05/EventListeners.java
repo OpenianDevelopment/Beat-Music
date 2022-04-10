@@ -1,6 +1,7 @@
 package me.rohank05;
 
 import me.rohank05.utilities.command.CommandManager;
+import me.rohank05.utilities.database.MongoDBMethod;
 import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
@@ -35,6 +36,10 @@ public class EventListeners extends ListenerAdapter {
         logger.info("{} is online", event.getJDA().getSelfUser().getAsTag());
         this.playerManager = new PlayerManager(event.getJDA());
         this.commandManager = new CommandManager(playerManager);
+        event.getJDA().getGuilds().forEach(guild -> {
+            if (MongoDBMethod.getGuildSettings(guild.getIdLong()) == null)
+                MongoDBMethod.initGuildSettings(guild.getIdLong());
+        });
     }
 
     @Override
@@ -73,20 +78,19 @@ public class EventListeners extends ListenerAdapter {
     }
 
 
-
     @Override
     public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
-        if(!event.getName().equalsIgnoreCase("play")) return;
+        if (!event.getName().equalsIgnoreCase("play")) return;
         String value = event.getInteraction().getFocusedOption().getValue();
         Response httpResponse;
         try {
-             httpResponse = getSearchSuggestion(value);
+            httpResponse = getSearchSuggestion(value);
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
-        if(!httpResponse.isSuccessful()) return;
-        if(httpResponse.body() == null) return;
+        if (!httpResponse.isSuccessful()) return;
+        if (httpResponse.body() == null) return;
         DataObject responseBody;
         try {
             responseBody = DataObject.fromJson(httpResponse.body().string());
@@ -96,13 +100,13 @@ public class EventListeners extends ListenerAdapter {
         }
 
         Optional<DataArray> optContents = responseBody.optArray("contents");
-        if(optContents.isEmpty()) return;
+        if (optContents.isEmpty()) return;
         DataObject renderer = optContents.get().getObject(0).getObject("searchSuggestionsSectionRenderer");
         DataArray contents = renderer.optArray("contents").orElseGet(DataArray::empty);
         List<Command.Choice> results = new ArrayList<>();
-        contents.stream(DataArray::getObject).forEach(content->{
+        contents.stream(DataArray::getObject).forEach(content -> {
             String result = content.getObject("searchSuggestionRenderer").getObject("navigationEndpoint").getObject("searchEndpoint").getString("query");
-            if(result.length()<=100){
+            if (result.length() <= 100) {
                 results.add(new Command.Choice(result, result));
             }
         });
@@ -114,7 +118,7 @@ public class EventListeners extends ListenerAdapter {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\"input\":\""+query+"\",\"context\":{\"client\":{\"hl\":\"en-IN\",\"gl\":\"IN\",\"remoteHost\":\"103.226.226.124\",\"deviceMake\":\"\",\"deviceModel\":\"\",\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0,gzip(gfe)\",\"clientName\":\"WEB_REMIX\",\"clientVersion\":\"1.20220330.01.00\",\"osName\":\"Windows\",\"osVersion\":\"10.0\",\"originalUrl\":\"https://music.youtube.com/\"}}}");
+        RequestBody body = RequestBody.create(mediaType, "{\"input\":\"" + query + "\",\"context\":{\"client\":{\"hl\":\"en-IN\",\"gl\":\"IN\",\"remoteHost\":\"103.226.226.124\",\"deviceMake\":\"\",\"deviceModel\":\"\",\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0,gzip(gfe)\",\"clientName\":\"WEB_REMIX\",\"clientVersion\":\"1.20220330.01.00\",\"osName\":\"Windows\",\"osVersion\":\"10.0\",\"originalUrl\":\"https://music.youtube.com/\"}}}");
         Request request = new Request.Builder()
                 .url("https://music.youtube.com/youtubei/v1/music/get_search_suggestions?key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30")
                 .method("POST", body)
