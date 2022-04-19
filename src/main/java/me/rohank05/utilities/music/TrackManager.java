@@ -56,30 +56,16 @@ public class TrackManager extends AudioEventAdapter {
 
     //Play next track from the queue
     public void playNextTrack() {
-        if (this.queue.isEmpty()) {
-            TextChannel channel = this.jda.getTextChannelById(this.textChannel);
-            if (channel != null) {
-                if (channel.canTalk()) {
-                    if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
-                        MessageEmbed embed = new EmbedBuilder()
-                                .setColor(16760143)
-                                .setDescription("Queue has ended")
-                                .build();
-                        channel.sendMessageEmbeds(embed).queue();
-                    } else
-                        channel.sendMessage("Queue has ended").queue();
-                }
-            }
-            this.audioPlayer.destroy();
-            return;
+        if(!this.queue.isEmpty()){
+            this.audioPlayer.startTrack(this.queue.firstElement(), false);
+            this.queue.remove(0);
         }
-        this.audioPlayer.startTrack(this.queue.firstElement(), false);
-        this.queue.remove(0);
+
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-
+        System.out.println(endReason.mayStartNext);
         if (this.loop.equals("queue")) {
             AudioTrack newTrack = track.makeClone();
             this.queue.push(newTrack);
@@ -130,11 +116,20 @@ public class TrackManager extends AudioEventAdapter {
                 TextChannel channel = this.jda.getTextChannelById(this.textChannel);
                 if (channel == null) return;
                 channel.getGuild().getAudioManager().closeAudioConnection();
+                if (channel.canTalk()) {
+                    if (channel.getGuild().getSelfMember().hasPermission(channel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
+                        MessageEmbed embed = new EmbedBuilder()
+                                .setColor(16760143)
+                                .setDescription("Queue has ended")
+                                .build();
+                        channel.sendMessageEmbeds(embed).queue();
+                    } else
+                        channel.sendMessage("Queue has ended").queue();
+                }
+                return;
             }
         }
         playNextTrack();
-
-
     }
 
     @Override
@@ -163,5 +158,9 @@ public class TrackManager extends AudioEventAdapter {
 
     public void setTfs(boolean tfs) {
         this.tfs = tfs;
+    }
+
+    public boolean isTfs() {
+        return tfs;
     }
 }

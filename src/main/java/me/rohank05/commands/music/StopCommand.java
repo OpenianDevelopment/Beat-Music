@@ -19,7 +19,13 @@ public class StopCommand implements ICommand {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
         if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
         MessageEmbed embed = new EmbedBuilder().setTitle("Player stopped!").setColor(16760143).build();
+
+        this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.removeListener(this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager);
+        this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.stopTrack();
         this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.destroy();
+        if(!this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager.isTfs()){
+            event.getGuild().getAudioManager().closeAudioConnection();
+        }
         this.playerManager.deleteGuildMusicManager(event.getGuild());
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }

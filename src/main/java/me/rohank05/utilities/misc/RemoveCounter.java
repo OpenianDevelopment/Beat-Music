@@ -1,6 +1,7 @@
 package me.rohank05.utilities.misc;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import me.rohank05.utilities.music.TrackManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -12,7 +13,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class SkipCounter {
+public class RemoveCounter {
     private final EventWaiter waiter;
     private final AudioChannel voiceChannel;
     private final JDA jda;
@@ -20,18 +21,18 @@ public class SkipCounter {
     private boolean interactionStopped = false;
     private int countReaction = 0;
 
-    public SkipCounter(EventWaiter waiter, JDA jda, AudioChannel voiceChannel, TrackManager trackManager){
+    public RemoveCounter(EventWaiter waiter, JDA jda, AudioChannel voiceChannel, TrackManager trackManager){
         this.waiter = waiter;
         this.voiceChannel = voiceChannel;
         this.jda = jda;
         this.trackManager = trackManager;
     }
 
-    public void processSkip(Message m, int amtUser){
-        m.addReaction("✅").queue(e-> waitForEvent(m, amtUser));
+    public void processSkip(Message m, int amtUser, int song){
+        m.addReaction("✅").queue(e-> waitForEvent(m, amtUser, song));
     }
 
-    private void waitForEvent(Message m, int amtUser){
+    private void waitForEvent(Message m, int amtUser, int song){
         final long messageId = m.getIdLong();
         waiter.waitForEvent(MessageReactionAddEvent.class,
                 event -> {
@@ -43,20 +44,18 @@ public class SkipCounter {
                     if(Objects.equals(Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel(), Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).getChannel())){
                         countReaction++;
                         if(countReaction>=amtUser){
-                            this.trackManager.audioPlayer.stopTrack();
+                            AudioTrack track = trackManager.queue.get(song -1);
+                            trackManager.queue.remove(song - 1);
                             interactionStopped = true;
-                            MessageEmbed embed = new EmbedBuilder()
-                                    .setDescription("Song Skipped")
-                                            .setColor(16760143)
-                                                    .build();
+                            MessageEmbed embed = new EmbedBuilder().setDescription(track.getInfo().title+ " removed").setColor(16760143).build();
                             m.editMessageEmbeds(embed).queue();
                         }
-                        waitForEvent(m, amtUser);
+                        waitForEvent(m, amtUser, song);
                     }
                 },
                 120,
                 TimeUnit.SECONDS,
                 () -> interactionStopped = true
-                );
+        );
     }
 }

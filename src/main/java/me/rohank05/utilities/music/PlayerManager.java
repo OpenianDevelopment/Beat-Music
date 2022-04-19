@@ -45,7 +45,7 @@ public class PlayerManager {
         this.audioPlayerManager.registerSourceManager(youtubeAudioSourceManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
-//        new YoutubeIpRotatorSetup(new NanoIpRoutePlanner(Collections.singletonList(new Ipv6Block(Config.get("IP_V6"))), true)).forSource(youtubeAudioSourceManager).setup();
+ //       new YoutubeIpRotatorSetup(new NanoIpRoutePlanner(Collections.singletonList(new Ipv6Block(Config.get("IP_V6"))), true)).forSource(youtubeAudioSourceManager).setup();
         
     }
 
@@ -78,6 +78,7 @@ public class PlayerManager {
                         .addField("Track Name", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true)
                         .addField("Added By", event.getUser().getAsTag(), true)
                         .setThumbnail(track.getInfo().artworkUrl)
+                        .setColor(16760143)
                         .build();
                 event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             }
@@ -92,7 +93,8 @@ public class PlayerManager {
                                     + audioTracks.size()
                                     + "` songs from `"
                                     + playlist.getName()
-                                    + "` Added By `" + event.getUser().getAsTag() + "`").build())
+                                    + "` Added By `" + event.getUser().getAsTag() + "`")
+                            .setColor(16760143).build())
                             .queue();
                     for (final AudioTrack track : audioTracks) {
                         track.setUserData(event.getUser());

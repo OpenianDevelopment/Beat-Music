@@ -1,7 +1,9 @@
 package me.rohank05.commands.music;
 
+import com.mongodb.DBObject;
 import me.rohank05.utilities.command.CommandPermissionCheck;
 import me.rohank05.utilities.command.ICommand;
+import me.rohank05.utilities.database.MongoDBMethod;
 import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -40,6 +42,10 @@ public class PlayCommand implements ICommand {
         playerManager.loadAndPlay(event, track);
         if(!playerManager.getGuildMusicManager(event.getGuild()).trackManager.hasTextChannel()){
             playerManager.getGuildMusicManager(event.getGuild()).trackManager.setTextChannel(event.getChannel().getId());
+            DBObject guildSettings = MongoDBMethod.getGuildSettings(Objects.requireNonNull(event.getGuild()).getIdLong());
+            if (guildSettings == null) return;
+            Boolean tfs = (Boolean) guildSettings.get("24/7");
+            playerManager.getGuildMusicManager(event.getGuild()).trackManager.setTfs(tfs);
         }
     }
 

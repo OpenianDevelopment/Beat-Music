@@ -1,8 +1,10 @@
 package me.rohank05.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import me.rohank05.Bot;
 import me.rohank05.utilities.command.CommandPermissionCheck;
 import me.rohank05.utilities.command.ICommand;
+import me.rohank05.utilities.misc.RemoveCounter;
 import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -25,10 +27,10 @@ public class RemoveCommand implements ICommand {
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return;
         }
+        RemoveCounter removeCounter = new RemoveCounter(Bot.eventWaiter, event.getJDA(), event.getGuild().getSelfMember().getVoiceState().getChannel(), this.playerManager.getGuildMusicManager(event.getGuild()).trackManager);
         AudioTrack removedTrack = this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.queue.get(removeIndex - 1);
-        this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.queue.remove(removeIndex - 1);
-        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("[" + removedTrack.getInfo().title + "](" + removedTrack.getInfo().uri + ") removed from the queue").build();
-        event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
+        MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Vote to remove song: [" + removedTrack.getInfo().title + "](" + removedTrack.getInfo().uri + ")").build();
+        event.getInteraction().getHook().sendMessageEmbeds(embed).queue(message -> removeCounter.processSkip(message, event.getMember().getVoiceState().getChannel().getMembers().size()/2, removeIndex));
     }
 
     @Override

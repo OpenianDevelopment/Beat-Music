@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MongoDBMethod {
     private static final MongoConnection dbClient = new MongoConnection();
-    private static final DB db = dbClient.getDbClient().getDB("beat");
+    private static final DB db = dbClient.getDbClient().getDB("KAAMusic");
     private static final DBCollection guildSettings = db.getCollection("guildSettings");
 
     public static DBObject getGuildSettings(Long guildId) {

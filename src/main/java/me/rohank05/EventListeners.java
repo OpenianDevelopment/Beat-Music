@@ -65,7 +65,7 @@ public class EventListeners extends ListenerAdapter {
             if (this.playerManager != null)
                 if (this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null) {
                     this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.destroy();
-                    this.playerManager.deleteGuildMusicManager(event.getGuild());
+
                 }
 
         /*
@@ -120,9 +120,9 @@ public class EventListeners extends ListenerAdapter {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\"input\":\"" + query + "\",\"context\":{\"client\":{\"hl\":\"en-IN\",\"gl\":\"IN\",\"remoteHost\":\"103.226.226.124\",\"deviceMake\":\"\",\"deviceModel\":\"\",\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0,gzip(gfe)\",\"clientName\":\"WEB_REMIX\",\"clientVersion\":\"1.20220330.01.00\",\"osName\":\"Windows\",\"osVersion\":\"10.0\",\"originalUrl\":\"https://music.youtube.com/\"}}}");
+        RequestBody body = RequestBody.create(mediaType, "{\"input\":\"" + query + "\",\"context\":{\"client\":{\"deviceMake\":\"\",\"deviceModel\":\"\",\"userAgent\":\"Mozilla/5.0\",\"clientName\":\"WEB_REMIX\",\"clientVersion\":\"1.20220330.01.00\",\"osName\":\"Windows\",\"osVersion\":\"10.0\",\"originalUrl\":\"https://music.youtube.com/\"}}}");
         Request request = new Request.Builder()
-                .url("https://music.youtube.com/youtubei/v1/music/get_search_suggestions?key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30")
+                .url("https://music.youtube.com/youtubei/v1/music/get_search_suggestions")
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Host", "music.youtube.com")
