@@ -27,6 +27,7 @@ public class TwentyFourSevenCommand implements ICommand {
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return;
         }
+
         DBObject guildSettings = MongoDBMethod.getGuildSettings(Objects.requireNonNull(event.getGuild()).getIdLong());
         if (guildSettings == null) return;
         Boolean tfs = (Boolean) guildSettings.get("24/7");
@@ -35,7 +36,7 @@ public class TwentyFourSevenCommand implements ICommand {
         String enabled = tfs ? "disabled" : "enabled";
         MessageEmbed embed = new EmbedBuilder()
                 .setColor(16760143)
-                .setDescription("24/7 has been"+ enabled)
+                .setDescription("24/7 has been "+ enabled)
                 .build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
         if (!this.playerManager.hasGuildMusicManager(event.getGuild())) return;
