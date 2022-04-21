@@ -4,8 +4,6 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import me.rohank05.utilities.music.TrackManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -15,16 +13,12 @@ import java.util.concurrent.TimeUnit;
 
 public class RemoveCounter {
     private final EventWaiter waiter;
-    private final AudioChannel voiceChannel;
-    private final JDA jda;
     private final TrackManager trackManager;
     private boolean interactionStopped = false;
     private int countReaction = 0;
 
-    public RemoveCounter(EventWaiter waiter, JDA jda, AudioChannel voiceChannel, TrackManager trackManager){
+    public RemoveCounter(EventWaiter waiter, TrackManager trackManager){
         this.waiter = waiter;
-        this.voiceChannel = voiceChannel;
-        this.jda = jda;
         this.trackManager = trackManager;
     }
 
@@ -47,7 +41,7 @@ public class RemoveCounter {
                             AudioTrack track = trackManager.queue.get(song -1);
                             trackManager.queue.remove(song - 1);
                             interactionStopped = true;
-                            MessageEmbed embed = new EmbedBuilder().setDescription(track.getInfo().title+ " removed").setColor(16760143).build();
+                            MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Song Removed: [" + track.getInfo().title + "](" + track.getInfo().uri + ")").build();
                             m.editMessageEmbeds(embed).queue();
                         }
                         waitForEvent(m, amtUser, song);

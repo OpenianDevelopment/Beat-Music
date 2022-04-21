@@ -8,6 +8,7 @@ import me.rohank05.utilities.misc.RemoveCounter;
 import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.Objects;
@@ -27,10 +28,16 @@ public class RemoveCommand implements ICommand {
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return;
         }
-        RemoveCounter removeCounter = new RemoveCounter(Bot.eventWaiter, event.getJDA(), event.getGuild().getSelfMember().getVoiceState().getChannel(), this.playerManager.getGuildMusicManager(event.getGuild()).trackManager);
         AudioTrack removedTrack = this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.queue.get(removeIndex - 1);
+        if(removedTrack.getUserData(User.class).getIdLong() == event.getUser().getIdLong()){
+            this.playerManager.getGuildMusicManager(event.getGuild()).trackManager.queue.remove(removeIndex - 1);
+            MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Song Removed: [" + removedTrack.getInfo().title + "](" + removedTrack.getInfo().uri + ")").build();
+            event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
+            return;
+        }
+        RemoveCounter removeCounter = new RemoveCounter(Bot.eventWaiter, this.playerManager.getGuildMusicManager(event.getGuild()).trackManager);
         MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription("Vote to remove song: [" + removedTrack.getInfo().title + "](" + removedTrack.getInfo().uri + ")").build();
-        event.getInteraction().getHook().sendMessageEmbeds(embed).queue(message -> removeCounter.processSkip(message, event.getMember().getVoiceState().getChannel().getMembers().size()/2, removeIndex));
+        event.getInteraction().getHook().sendMessageEmbeds(embed).queue(message -> removeCounter.processSkip(message, Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel()).getMembers().size()/2, removeIndex));
     }
 
     @Override

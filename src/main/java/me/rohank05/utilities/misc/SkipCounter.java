@@ -3,8 +3,6 @@ package me.rohank05.utilities.misc;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.rohank05.utilities.music.TrackManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -14,16 +12,13 @@ import java.util.concurrent.TimeUnit;
 
 public class SkipCounter {
     private final EventWaiter waiter;
-    private final AudioChannel voiceChannel;
-    private final JDA jda;
+
     private final TrackManager trackManager;
     private boolean interactionStopped = false;
     private int countReaction = 0;
 
-    public SkipCounter(EventWaiter waiter, JDA jda, AudioChannel voiceChannel, TrackManager trackManager){
+    public SkipCounter(EventWaiter waiter, TrackManager trackManager){
         this.waiter = waiter;
-        this.voiceChannel = voiceChannel;
-        this.jda = jda;
         this.trackManager = trackManager;
     }
 

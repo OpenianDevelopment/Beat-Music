@@ -3,8 +3,12 @@ package me.rohank05.commands.music;
 import me.rohank05.utilities.command.CommandManager;
 import me.rohank05.utilities.command.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.List;
 
@@ -22,8 +26,12 @@ public class HelpCommand implements ICommand {
         for (ICommand command : commandList) {
             commandString.append("`").append(command.getName()).append("` - ").append(command.getDescription()).append("\n");
         }
+        Button support = Button.link("https://discord.com/invite/a4zkCjg", "Support Server");
+        Button vote = Button.link("https://top.gg/bot/881050313870684180/vote", "Vote");
+        Button invite = Button.link("https://discord.com/oauth2/authorize?client_id=881050313870684180&scope=bot%20applications.commands", "Invite");
         MessageEmbed embed = new EmbedBuilder().setColor(16760143).setDescription(commandString).setTitle("Help").build();
-        event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
+        Message helpMessage = new MessageBuilder().setActionRows(ActionRow.of(support, invite, vote)).setEmbeds(embed).build();
+        event.getInteraction().getHook().sendMessage(helpMessage).queue();
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MongoDBMethod {
     private static final MongoConnection dbClient = new MongoConnection();
-    private static final DB db = dbClient.getDbClient().getDB("KAAMusic");
+    private static final DB db = dbClient.getDbClient().getDB("Beat");
     private static final DBCollection guildSettings = db.getCollection("guildSettings");
 
     public static DBObject getGuildSettings(Long guildId) {
@@ -27,6 +27,9 @@ public class MongoDBMethod {
     public static void set247(Long guildId, Boolean tfs){
         DBObject query = new BasicDBObject("guildId", String.valueOf(guildId));
         DBObject update = new BasicDBObject("24/7", tfs);
-        guildSettings.update(query, update);
+
+        guildSettings.update(query, new BasicDBObject("$set", update));
+
+
     }
 }

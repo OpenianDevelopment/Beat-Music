@@ -17,7 +17,7 @@ public class MongoConnection {
 
     }
     private MongoClient setUpConnection() throws UnknownHostException{
-         return new MongoClient(new MongoClientURI("mongodb://localhost:27017/Beat"));
+         return new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
     }
 
     public MongoClient getDbClient() {

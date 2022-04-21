@@ -4,6 +4,7 @@ import me.rohank05.utilities.command.CommandManager;
 import me.rohank05.utilities.database.MongoDBMethod;
 import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -73,7 +74,7 @@ public class EventListeners extends ListenerAdapter {
          */
         if (event.getChannelLeft().getMembers().size() == 1)
             if (event.getChannelLeft().getMembers().get(0).equals(event.getGuild().getSelfMember()))
-                if (this.playerManager != null){
+                if (this.playerManager != null) {
                     this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.setPaused(true);
                     this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.checkCleanup(300000L);
                 }
@@ -95,7 +96,7 @@ public class EventListeners extends ListenerAdapter {
         if (httpResponse.body() == null) return;
         DataObject responseBody;
         try {
-            responseBody = DataObject.fromJson(httpResponse.body().string());
+            responseBody = DataObject.fromJson(Objects.requireNonNull(httpResponse.body()).string());
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -130,5 +131,11 @@ public class EventListeners extends ListenerAdapter {
                 .build();
         return client.newCall(request).execute();
 
+    }
+
+    @Override
+    public void onGuildJoin(@NotNull GuildJoinEvent event) {
+        if (MongoDBMethod.getGuildSettings(event.getGuild().getIdLong()) == null)
+            MongoDBMethod.initGuildSettings(event.getGuild().getIdLong());
     }
 }

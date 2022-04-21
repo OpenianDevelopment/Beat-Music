@@ -21,7 +21,7 @@ public class SkipCommand implements ICommand {
         if (!CommandPermissionCheck.checkBasePermission(event)) return;
         if (!CommandPermissionCheck.checkPermission(event, this.playerManager)) return;
         MessageEmbed embed = new EmbedBuilder().setTitle("Vote to skip").setColor(16760143).build();
-        SkipCounter skipCounter = new SkipCounter(Bot.eventWaiter, event.getJDA(), Objects.requireNonNull(Objects.requireNonNull(event.getGuild()).getSelfMember().getVoiceState()).getChannel(), this.playerManager.getGuildMusicManager(event.getGuild()).trackManager);
+        SkipCounter skipCounter = new SkipCounter(Bot.eventWaiter, this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).trackManager);
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue(m->skipCounter.processSkip(m, Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).getChannel()).getMembers().size()/2));
     }
 

@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -65,7 +66,6 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        System.out.println(endReason.mayStartNext);
         if (this.loop.equals("queue")) {
             AudioTrack newTrack = track.makeClone();
             this.queue.push(newTrack);
@@ -135,14 +135,21 @@ public class TrackManager extends AudioEventAdapter {
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         TextChannel nowPlayingChannel = jda.getTextChannelById(textChannel);
-
         if (nowPlayingChannel == null) return;
         if (nowPlayingChannel.canTalk()) {
+            User trackAdder = track.getUserData(User.class);
             if (nowPlayingChannel.getGuild().getSelfMember().hasPermission(nowPlayingChannel, EnumSet.of(Permission.MESSAGE_EMBED_LINKS))) {
-                MessageEmbed embed = new EmbedBuilder().setTitle("Now Playing").setColor(16760143).setTitle("Now Playing").addField("Title", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true).setThumbnail(track.getInfo().artworkUrl).build();
+                MessageEmbed embed = new EmbedBuilder()
+                        .setTitle("Now Playing")
+                        .setColor(16760143)
+                        .setTitle("Now Playing")
+                        .addField("Title", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true)
+                        .addField("Added By", trackAdder.getAsTag(), true)
+                        .setThumbnail(track.getInfo().artworkUrl)
+                        .build();
                 nowPlayingChannel.sendMessageEmbeds(embed).queue();
             } else {
-                nowPlayingChannel.sendMessage("**Now Playing**: `" + track.getInfo().title + "`").queue();
+                nowPlayingChannel.sendMessage("**Now Playing**: `" + track.getInfo().title + "` Added By: `" + trackAdder.getAsTag() + "`").queue();
             }
         }
     }

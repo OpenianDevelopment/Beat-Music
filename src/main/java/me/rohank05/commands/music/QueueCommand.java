@@ -8,6 +8,7 @@ import me.rohank05.utilities.misc.ButtonPaginator;
 import me.rohank05.utilities.music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.awt.*;
@@ -32,11 +33,10 @@ public class QueueCommand implements ICommand {
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
             return;
         }
-//        ArrayList<MessageEmbed> queueEmbeds = new ArrayList<>();
         String[] queueTracks = new String[queue.size()];
         for (int i = 0; i < queue.size(); i++) {
             AudioTrack track = queue.get(i);
-            queueTracks[i] = "[" + track.getInfo().title + "](" + track.getInfo().uri + ")" + " By [" + track.getInfo().author + "]";
+            queueTracks[i] = "[" + track.getInfo().title + "](" + track.getInfo().uri + ")" + " By [" + track.getInfo().author + "]\n Added By: `"+ track.getUserData(User.class).getAsTag() +"`";
         }
         String str = "**Current Track**: [" +
                 this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title +
