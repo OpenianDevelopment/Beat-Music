@@ -22,7 +22,7 @@ public class VolumeCommand implements ICommand {
         int volume = Objects.requireNonNull(event.getOption("number")).getAsInt();
         this.playerManager.getGuildMusicManager(Objects.requireNonNull(event.getGuild())).audioPlayer.setVolume(volume);
         event.getInteraction().getHook()
-                .sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Volume set to" + volume).build()).queue();
+                .sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Volume set to " + volume).build()).queue();
     }
 
     @Override

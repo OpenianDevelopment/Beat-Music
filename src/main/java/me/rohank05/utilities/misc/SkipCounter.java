@@ -5,6 +5,7 @@ import me.rohank05.utilities.music.TrackManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class SkipCounter {
     }
 
     public void processSkip(Message m, int amtUser){
-        m.addReaction("✅").queue(e-> waitForEvent(m, amtUser));
+        m.addReaction(Emoji.fromUnicode("U+2705")).queue(e-> waitForEvent(m, amtUser));
     }
 
     private void waitForEvent(Message m, int amtUser){

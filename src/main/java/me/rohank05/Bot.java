@@ -14,12 +14,14 @@ public class Bot {
     public static EventWaiter eventWaiter = new EventWaiter();
     public static void main(String[] args) throws InterruptedException, LoginException {
         JDABuilder.createDefault(Config.get("TOKEN"), GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS)
-                .disableCache(EnumSet.of(
+                .disableCache(
                         CacheFlag.ACTIVITY,
-                        CacheFlag.EMOTE,
+                        CacheFlag.EMOJI,
+                        CacheFlag.SCHEDULED_EVENTS,
+                        CacheFlag.STICKER,
                         CacheFlag.CLIENT_STATUS,
                         CacheFlag.ONLINE_STATUS
-                )).enableCache(EnumSet.of(CacheFlag.VOICE_STATE))
+                ).enableCache(CacheFlag.VOICE_STATE)
                 .addEventListeners(new EventListeners(), eventWaiter)
                 .setAudioSendFactory(new NativeAudioSendFactory())
                 .setActivity(Activity.listening("to The Score"))

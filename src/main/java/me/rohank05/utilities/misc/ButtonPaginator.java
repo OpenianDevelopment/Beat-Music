@@ -3,20 +3,18 @@ package me.rohank05.utilities.misc;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.internal.utils.Checks;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -58,9 +56,10 @@ public class ButtonPaginator
     public void paginate(Message m, int page)
     {
         if (title == null)
-            m.editMessageEmbeds(Collections.singleton(getEmbed(page))).setActionRows(Collections.singleton(getButtonLayout(page))).queue(this::waitForEvent, e -> waitForEvent(m));
+            m.editMessageEmbeds(Collections.singleton(getEmbed(page))).setActionRow((ItemComponent) Collections.singleton(getButtonLayout(page))).queue(this::waitForEvent, e -> waitForEvent(m));
+            //m.editMessageEmbeds(Collections.singleton(getEmbed(page))).setActionRow(Collections.singleton(getButtonLayout(page))).queue(this::waitForEvent, e -> waitForEvent(m));
         else
-            m.editMessage(title).setEmbeds(Collections.singleton(getEmbed(page))).setActionRows(Collections.singleton(getButtonLayout(page))).queue(this::waitForEvent, e -> waitForEvent(m));
+            m.editMessage(title).setEmbeds(Collections.singleton(getEmbed(page))).setActionRow((ItemComponent) Collections.singleton(getButtonLayout(page))).queue(this::waitForEvent, e -> waitForEvent(m));
     }
 
     private ActionRow getButtonLayout(int page)
@@ -89,20 +88,20 @@ public class ButtonPaginator
                         case "previous" -> {
                             page--;
                             if (page < 1) page = 1;
-                            event.editMessageEmbeds(Collections.singleton(getEmbed(this.page))).setActionRows(getButtonLayout(page)).queue();
+                            event.editMessageEmbeds(Collections.singleton(getEmbed(this.page))).setActionRow((Collection<? extends ItemComponent>) getButtonLayout(page)).queue();
                             waitForEvent(event.getMessage());
                         }
                         case "next" -> {
                             page++;
                             if (page > pages) page = pages;
-                            event.editMessageEmbeds(Collections.singleton(getEmbed(this.page))).setActionRows(getButtonLayout(page)).queue();
+                            event.editMessageEmbeds(Collections.singleton(getEmbed(this.page))).setActionRow((Collection<? extends ItemComponent>) getButtonLayout(page)).queue();
                             waitForEvent(event.getMessage());
                         }
                         case "stop" -> {
                             interactionStopped = true;
                             Objects.requireNonNull(jda.getTextChannelById(channelId)).retrieveMessageById(messageId).queue(
                                     (message) ->
-                                            message.editMessageEmbeds(message.getEmbeds()).setActionRows(Collections.emptyList()).queue(s -> {}, e -> {})
+                                            message.editMessageEmbeds(message.getEmbeds()).setActionRow(Collections.emptyList()).queue(s -> {}, e -> {})
                                     ,
                                     (error) ->
                                     {
@@ -118,7 +117,7 @@ public class ButtonPaginator
                     interactionStopped = true;
                     jda.getTextChannelById(channelId).retrieveMessageById(messageId).queue(
                             message ->
-                                    message.editMessageEmbeds(message.getEmbeds()).setActionRows(Collections.emptyList()).queue(s -> {}, e -> {}),
+                                      message.editMessageEmbeds(message.getEmbeds()).setActionRow(Collections.emptyList()).queue(s -> {}, e -> {}),
                             error -> {}
                     );
                 }
@@ -159,7 +158,7 @@ public class ButtonPaginator
             this.jda = jda;
         }
 
-        public Builder setEventWaiter(@Nonnull EventWaiter waiter)
+        public Builder setEventWaiter(@NotNull EventWaiter waiter)
         {
             this.waiter = waiter;
             return this;

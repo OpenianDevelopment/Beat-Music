@@ -18,21 +18,21 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     //Bot stuff
-    implementation (group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.10'){
+    implementation (group: 'net.dv8tion', name: 'JDA', version: '5.0.0-beta.2'){
         exclude module: 'opus-java'
     }
     implementation group: 'com.github.walkyst', name: 'lavaplayer-fork', version: 'fc6b9de7e7'
     implementation group: 'com.github.natanbc', name: 'lavadsp', version: '0.7.7'
     implementation group: 'me.rohank05', name: 'lavadsp-extended', version: '0.0.2'
-    implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '2.2.0'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.8'
+    implementation group: 'io.github.cdimascio', name: 'dotenv-java', version: '2.3.1'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.5'
     implementation group: 'com.sedmelluq', name: 'jda-nas', version: '1.1.0'
     implementation group: 'me.rohank05', name: 'Spotify-Source-Manager', version: 'master-SNAPSHOT'
     implementation group: 'pw.chew', name: 'jda-chewtils', version: '2.0-SNAPSHOT'
-    implementation group: 'org.mongodb', name: 'mongo-java-driver', version: '2.12.3'
+    implementation group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.11'
 }
 
 test {

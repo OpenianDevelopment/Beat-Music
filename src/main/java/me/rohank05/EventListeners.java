@@ -3,12 +3,11 @@ package me.rohank05;
 import me.rohank05.utilities.command.CommandManager;
 import me.rohank05.utilities.database.MongoDBMethod;
 import me.rohank05.utilities.music.PlayerManager;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.utils.data.DataArray;
@@ -49,37 +48,41 @@ public class EventListeners extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceJoin(@NotNull GuildVoiceJoinEvent event) {
-        if (event.getChannelJoined().getMembers().contains(event.getGuild().getSelfMember()))
-            if (event.getChannelJoined().getMembers().size() > 1)
+    public void onGenericGuildVoice(@NotNull GenericGuildVoiceEvent event) {
+        /*
+            Guild voice join
+        */
+        if(event.getVoiceState().getChannel() != null) {
+            if (event.getVoiceState().getChannel().asVoiceChannel().getMembers().contains(event.getGuild().getSelfMember()))
+                if (event.getVoiceState().getChannel().asVoiceChannel().getMembers().size() > 1)
+                    if (this.playerManager != null)
+                        if (this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.isPaused())
+                            this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.setPaused(false);
+
+            /*
+                Guild voice leave
+            */
+            /*
+              Check if Bot has left the channel. If it had it will destroy the player
+             */
+            if (!Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).inAudioChannel())
                 if (this.playerManager != null)
-                    if (this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.isPaused())
-                        this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.setPaused(false);
+                    if (this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null) {
+                        this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.destroy();
+
+                    }
+
+            /*
+              Check if is the only member left in the channel. If yes then it will pause the song until another member join
+             */
+            if (event.getVoiceState().getChannel().asVoiceChannel().getMembers().size() == 1)
+                if (event.getVoiceState().getChannel().asVoiceChannel().getMembers().get(0).equals(event.getGuild().getSelfMember()))
+                    if (this.playerManager != null) {
+                        this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.setPaused(true);
+                        this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.checkCleanup(300000L);
+                    }
+        }
     }
-
-    @Override
-    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
-        /*
-          Check if Bot has left the channel. If it had it will destroy the player
-         */
-        if (!Objects.requireNonNull(event.getGuild().getSelfMember().getVoiceState()).inAudioChannel())
-            if (this.playerManager != null)
-                if (this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() != null) {
-                    this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.destroy();
-
-                }
-
-        /*
-          Check if is the only member left in the channel. If yes then it will pause the song until another member join
-         */
-        if (event.getChannelLeft().getMembers().size() == 1)
-            if (event.getChannelLeft().getMembers().get(0).equals(event.getGuild().getSelfMember()))
-                if (this.playerManager != null) {
-                    this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.setPaused(true);
-                    this.playerManager.getGuildMusicManager(event.getGuild()).audioPlayer.checkCleanup(300000L);
-                }
-    }
-
 
     @Override
     public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {
