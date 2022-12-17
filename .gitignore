@@ -2,3 +2,4 @@
 /.idea/
 /.gradle/
 /src/main/resources/.env
+/out/
