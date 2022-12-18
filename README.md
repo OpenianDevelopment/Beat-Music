@@ -52,7 +52,7 @@ Feature:
 3. Invite the bot to your server with these scopes and permissions listed below. Add the bot with the link generated below.
    ![image](https://user-images.githubusercontent.com/52258148/208251361-c549ea5c-808f-4287-8a07-8ac60e3a6a56.png)
 
-### Stating the Bot
+### Starting the Bot
 
 1. In the release files open example.env and put your token after `TOKEN=` and rename the file to .env 
 2. Run `Register.bat`(it might take some time to register slash commands).
