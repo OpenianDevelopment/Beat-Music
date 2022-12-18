@@ -41,13 +41,29 @@ Feature:
 ## Getting Started
 
 
+### Prerequisite
+1. Download [java 19 or greater](https://www.java.com/en/download/)
+2. Download the [Release](https://github.com/OpenianDevelopment/Beat-Music/releases/tag/Release)
 
+### Setup
 
+1. Unzip the zip file downloaded from the release.
+2. Obtain a bot [token](https://docs.discordbotstudio.org/setting-up-dbs/finding-your-bot-token).
+3. Invite the bot to your server with these scopes and permissions listed below. Add the bot with the link generated below.
+   ![image](https://user-images.githubusercontent.com/52258148/208251361-c549ea5c-808f-4287-8a07-8ac60e3a6a56.png)
+
+### Stating the Bot
+
+1. In the release files open example.env and put your token after `TOKEN=` and rename the file to .env 
+2. Run `Register.bat`(it might take some time to register slash commands).
+3. Once commands have registered run `Start_Bot.bat` and that's it.
+
+The next time you start the bot just run `Start_Bot.bat`
 
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
