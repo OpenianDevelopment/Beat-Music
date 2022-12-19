@@ -46,6 +46,14 @@ shadowJar {
     archiveClassifier.set("")
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'me.rohank05.Bot'
+        )
+    }
+}
+
 
 
 compileJava.options.encoding = 'UTF-8'

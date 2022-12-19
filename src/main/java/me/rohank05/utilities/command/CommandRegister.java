@@ -91,7 +91,7 @@ public class CommandRegister extends ListenerAdapter {
                                     "volume",
                                     "change the volume of the player"
                             ).addOption(
-                                    OptionType.NUMBER,
+                                    OptionType.INTEGER,
                                     "number",
                                     "how much volume you want",
                                     true
