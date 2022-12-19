@@ -43,7 +43,7 @@ Feature:
 
 ### Prerequisite
 1. Download [java 19 or greater](https://www.java.com/en/download/)
-2. Download the [Release](https://github.com/OpenianDevelopment/Beat-Music/releases/tag/Release)
+2. Download the [Release](https://github.com/OpenianDevelopment/Beat-Music/releases)
 
 ### Setup
 
