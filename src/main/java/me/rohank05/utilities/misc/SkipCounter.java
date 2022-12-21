@@ -24,7 +24,17 @@ public class SkipCounter {
     }
 
     public void processSkip(Message m, int amtUser){
-        m.addReaction(Emoji.fromUnicode("U+2705")).queue(e-> waitForEvent(m, amtUser));
+        if(amtUser <= 1){
+            this.trackManager.audioPlayer.stopTrack();
+            interactionStopped = true;
+            MessageEmbed embed = new EmbedBuilder()
+                    .setDescription("Song Skipped")
+                    .setColor(16760143)
+                    .build();
+            m.editMessageEmbeds(embed).queue();
+        }else {
+            m.addReaction(Emoji.fromUnicode("U+2705")).queue(e -> waitForEvent(m, amtUser));
+        }
     }
 
     private void waitForEvent(Message m, int amtUser){

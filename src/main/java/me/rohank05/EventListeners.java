@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static me.rohank05.Config.getDB;
+import static me.rohank05.Config.updateDB;
+
 
 public class EventListeners extends ListenerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(EventListeners.class);
@@ -36,10 +39,17 @@ public class EventListeners extends ListenerAdapter {
         logger.info("{} is online", event.getJDA().getSelfUser().getAsTag());
         this.playerManager = new PlayerManager(event.getJDA());
         this.commandManager = new CommandManager(playerManager);
-        event.getJDA().getGuilds().forEach(guild -> {
-            if (MongoDBMethod.getGuildSettings(guild.getIdLong()) == null)
-                MongoDBMethod.initGuildSettings(guild.getIdLong());
-        });
+        if (getDB()) {
+            try {
+                event.getJDA().getGuilds().forEach(guild -> {
+                    if (MongoDBMethod.getGuildSettings(guild.getIdLong()) == null)
+                        MongoDBMethod.initGuildSettings(guild.getIdLong());
+                });
+            } catch (Exception err) {
+                err.printStackTrace();
+                updateDB(false);
+            }
+        }
     }
 
     @Override
