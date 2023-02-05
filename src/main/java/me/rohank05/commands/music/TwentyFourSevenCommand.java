@@ -44,10 +44,10 @@ public class TwentyFourSevenCommand implements ICommand {
             if (!this.playerManager.hasGuildMusicManager(event.getGuild())) return;
             TrackManager trackManager = this.playerManager.getGuildMusicManager(event.getGuild()).trackManager;
             trackManager.setTfs(!tfs);
-        }else {
+        } else {
             MessageEmbed embed = new EmbedBuilder()
                     .setColor(16760143)
-                    .setDescription("24/7 has been cannot be enable without mongodb installed")
+                    .setDescription("24/7 cannot be enabled without mongodb installed")
                     .build();
             event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
         }
