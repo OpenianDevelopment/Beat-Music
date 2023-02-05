@@ -74,7 +74,6 @@ public class PlayerManager {
                         .setTitle("Added to Queue")
                         .addField("Track Name", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true)
                         .addField("Added By", event.getUser().getAsTag(), true)
-                        .setThumbnail(track.getInfo().artworkUrl)
                         .setColor(16760143)
                         .build();
                 event.getInteraction().getHook().sendMessageEmbeds(embed).queue();

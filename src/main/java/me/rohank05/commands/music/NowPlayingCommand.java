@@ -34,7 +34,6 @@ public class NowPlayingCommand implements ICommand {
                         + ":"
                         + (currentTrack.getDuration() /1000) % 60
                 , false)
-                .setThumbnail(currentTrack.getInfo().artworkUrl)
                 .build();
         event.getInteraction().getHook().sendMessageEmbeds(embed).queue();
     }

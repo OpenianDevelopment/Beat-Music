@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-
 public class Bot{
     public static EventWaiter eventWaiter = new EventWaiter();
     public static void main(String[] args) throws InterruptedException, LoginException {

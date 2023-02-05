@@ -145,7 +145,6 @@ public class TrackManager extends AudioEventAdapter {
                         .setTitle("Now Playing")
                         .addField("Title", "[" + track.getInfo().title + "](" + track.getInfo().uri + ")", true)
                         .addField("Added By", trackAdder.getAsTag(), true)
-                        .setThumbnail(track.getInfo().artworkUrl)
                         .build();
                 nowPlayingChannel.sendMessageEmbeds(embed).queue();
             } else {
