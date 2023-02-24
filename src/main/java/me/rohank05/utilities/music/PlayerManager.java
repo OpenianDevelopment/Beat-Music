@@ -9,8 +9,8 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import me.rohank05.Config;
-import me.rohank05.SpotifyConfig;
-import me.rohank05.SpotifySourceManager;
+import me.rohank05.utilities.music.Spotify.SpotifyConfig;
+import me.rohank05.utilities.music.Spotify.SpotifySourceManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -23,9 +23,8 @@ import java.util.Map;
 import java.util.Objects;
 
 
-@SuppressWarnings("unchecked")
 public class PlayerManager {
-    private final Map<Long, GuildMusicManager> guildMusicManagerMap = new HashMap();
+    private final Map<Long, GuildMusicManager> guildMusicManagerMap = new HashMap<>();
     public final AudioPlayerManager audioPlayerManager;
     private final JDA jda;
     public YoutubeAudioSourceManager youtubeAudioSourceManager;
@@ -37,7 +36,7 @@ public class PlayerManager {
         this.audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
         SpotifyConfig spotifyConfig = new SpotifyConfig(Config.get("SPOTIFY_ID"), Config.get("SPOTIFY_SECRET"));
 
-        this.youtubeAudioSourceManager = new YoutubeAudioSourceManager(true, Config.get("GMAIL_ID"), Config.get("GMAIL_PASSWORD"));
+        this.youtubeAudioSourceManager = new YoutubeAudioSourceManager();
         this.audioPlayerManager.registerSourceManager(new SpotifySourceManager( spotifyConfig, audioPlayerManager));
         this.audioPlayerManager.registerSourceManager(youtubeAudioSourceManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);

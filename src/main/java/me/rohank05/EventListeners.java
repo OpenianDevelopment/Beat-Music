@@ -134,7 +134,7 @@ public class EventListeners extends ListenerAdapter {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\"input\":\"" + query + "\",\"context\":{\"client\":{\"deviceMake\":\"\",\"deviceModel\":\"\",\"userAgent\":\"Mozilla/5.0\",\"clientName\":\"WEB_REMIX\",\"clientVersion\":\"1.20220330.01.00\",\"osName\":\"Windows\",\"osVersion\":\"10.0\",\"originalUrl\":\"https://music.youtube.com/\"}}}");
+        RequestBody body = RequestBody.create("{\"input\":\"" + query + "\",\"context\":{\"client\":{\"deviceMake\":\"\",\"deviceModel\":\"\",\"userAgent\":\"Mozilla/5.0\",\"clientName\":\"WEB_REMIX\",\"clientVersion\":\"1.20220330.01.00\",\"osName\":\"Windows\",\"osVersion\":\"10.0\",\"originalUrl\":\"https://music.youtube.com/\"}}}",mediaType);
         Request request = new Request.Builder()
                 .url("https://music.youtube.com/youtubei/v1/music/get_search_suggestions")
                 .method("POST", body)

@@ -6,11 +6,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-import javax.security.auth.login.LoginException;
-
 public class RegisterCommands {
     public static EventWaiter eventWaiter = new EventWaiter();
-    public static void main(String[] args) throws InterruptedException, LoginException {
+    public static void main(String[] args) throws InterruptedException {
         JDABuilder.createDefault(Config.get("TOKEN"), GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS)
                 .disableCache(
                         CacheFlag.ACTIVITY,
