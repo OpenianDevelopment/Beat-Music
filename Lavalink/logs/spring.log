@@ -1,0 +1,96 @@
+2024-01-06T00:07:46.159+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : Starting Launcher v4.0.0 using Java 20.0.1 with PID 27144 (C:\Users\rohan\Documents\Project\Personal\Beat-Music\Lavalink\Lavalink.jar started by rohan in C:\Users\rohan\Documents\Project\Personal\Beat-Music\Lavalink)
+2024-01-06T00:07:46.167+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : No active profile set, falling back to 1 default profile: "default"
+2024-01-06T00:07:47.135+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : Started Launcher in 1.507 seconds (process running for 2.142)
+2024-01-06T00:07:47.138+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : You can safely ignore the big red warning about illegal reflection. See https://github.com/lavalink-devs/Lavalink/issues/295
+2024-01-06T00:07:47.209+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : 
+
+[32m       .  [31m _                  _ _       _    [32m__ _ _
+[32m      /\\ [31m| | __ ___   ____ _| (_)_ __ | | __[32m\ \ \ \
+[32m     ( ( )[31m| |/ _` \ \ / / _` | | | '_ \| |/ /[32m \ \ \ \
+[32m      \\/ [31m| | (_| |\ V / (_| | | | | | |   < [32m  ) ) ) )
+[32m       '  [31m|_|\__,_| \_/ \__,_|_|_|_| |_|_|\_\[32m / / / /
+[0m    =========================================[32m/_/_/_/[0m
+
+	Version:        4.0.0
+	Build time:     03.12.2023 14:46:34 UTC
+	Branch          HEAD
+	Commit:         acc6069
+	Commit time:    03.12.2023 14:45:17 UTC
+	JVM:            20.0.1
+	Lavaplayer      2.0.4
+
+2024-01-06T00:07:47.223+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : No active profile set, falling back to 1 default profile: "default"
+2024-01-06T00:07:47.888+05:30  WARN 27144 --- [main] io.undertow.websockets.jsr               : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2024-01-06T00:07:47.907+05:30  INFO 27144 --- [main] io.undertow.servlet                      : Initializing Spring embedded WebApplicationContext
+2024-01-06T00:07:47.909+05:30  INFO 27144 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 677 ms
+2024-01-06T00:07:48.043+05:30  INFO 27144 --- [main] c.s.d.l.tools.GarbageCollectionMonitor   : GC monitoring enabled, reporting results every 2 minutes.
+2024-01-06T00:07:48.838+05:30  INFO 27144 --- [main] l.server.config.KoeConfiguration         : OS: WINDOWS, Arch: X86_64
+2024-01-06T00:07:48.838+05:30  INFO 27144 --- [main] l.server.config.KoeConfiguration         : Enabling JDA-NAS
+2024-01-06T00:07:48.841+05:30  INFO 27144 --- [main] c.s.l.c.natives.NativeLibraryLoader      : Native library udpqueue: loading with filter null
+2024-01-06T00:07:48.847+05:30  INFO 27144 --- [main] c.s.l.c.natives.NativeLibraryLoader      : Native library udpqueue: successfully loaded.
+2024-01-06T00:07:48.878+05:30  WARN 27144 --- [main] l.server.config.SentryConfiguration      : Turning off sentry
+2024-01-06T00:07:49.154+05:30  INFO 27144 --- [main] io.undertow                              : starting server: Undertow - 2.3.6.Final
+2024-01-06T00:07:49.165+05:30  INFO 27144 --- [main] org.xnio                                 : XNIO version 3.8.8.Final
+2024-01-06T00:07:49.175+05:30  INFO 27144 --- [main] org.xnio.nio                             : XNIO NIO Implementation Version 3.8.8.Final
+2024-01-06T00:07:49.281+05:30  INFO 27144 --- [main] org.jboss.threads                        : JBoss Threads version 3.5.0.Final
+2024-01-06T00:07:49.332+05:30  INFO 27144 --- [main] o.s.b.w.e.undertow.UndertowWebServer     : Undertow started on port(s) 2333 (http)
+2024-01-06T00:07:49.336+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : Started Launcher in 2.193 seconds (process running for 4.343)
+2024-01-06T00:07:49.337+05:30  INFO 27144 --- [main] lavalink.server.Launcher                 : Lavalink is ready to accept connections.
+2024-01-06T00:24:29.134+05:30  INFO 27144 --- [XNIO-1 task-2] io.undertow.servlet                      : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-01-06T00:24:29.135+05:30  INFO 27144 --- [XNIO-1 task-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-01-06T00:24:29.136+05:30  INFO 27144 --- [XNIO-1 task-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-01-06T00:24:29.169+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /[0:0:0:0:0:0:0:1]:53915
+2024-01-06T00:24:29.191+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : GET /v4/websocket, client=0:0:0:0:0:0:0:1
+2024-01-06T00:24:29.256+05:30  INFO 27144 --- [XNIO-1 task-2] lavalink.server.io.SocketServer          : Connection successfully established from @Moonlink/3.0.5 (https://github.com/Ecliptia/moonlink.js)
+2024-01-06T00:24:43.576+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytsearch:aapki kasish"
+2024-01-06T00:24:44.104+05:30  INFO 27144 --- [XNIO-1 task-2] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: aapki kasish
+2024-01-06T00:24:44.193+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : GET /v4/loadtracks?identifier=ytsearch%3Aaapki+kasish, client=0:0:0:0:0:0:0:1
+2024-01-06T00:24:44.263+05:30  WARN 27144 --- [lava-daemon-pool-playback-1-thread-1] c.s.d.l.s.y.YoutubeAccessTokenTracker    : YouTube auth tokens can't be retrieved because email and password is not set in YoutubeAudioSourceManager, age restricted videos will throw exceptions.
+2024-01-06T00:24:44.288+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/1uf34v4hqhf8boxp/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"track":{"encoded":"QAABXgMAxOCkhuCkqiDgpJXgpYAg4KSV4KS24KS/4KS2IOCkquClguCksOCkviDgpJfgpL7gpKjgpL4g4KSs4KWL4KSyIOCkleClhyDgpLjgpL7gpKUgfCDgpIbgpLbgpL/gpJUg4KSs4KSo4KS+4KSv4KS+IOCkhuCkquCkqOClhyB8IOCkh+CkruCksOCkvuCkqCDgpLngpL7gpLbgpK7gpYAsIOCkpOCkqOClgeCktuCljeCksOClgCDgpKbgpKTgpY3gpKTgpL4ACFQtU2VyaWVzAAAAAAAE6dAAC2p4MHFiV19ZVENzAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9angwcWJXX1lUQ3MBADRodHRwczovL2kueXRpbWcuY29tL3ZpL2p4MHFiV19ZVENzL21heHJlc2RlZmF1bHQuanBnAAAHeW91dHViZQAAAAAAAAAA"},"volume":80}
+2024-01-06T00:24:44.648+05:30  INFO 27144 --- [lava-daemon-pool-playback-1-thread-1] c.s.d.l.s.y.YoutubeAccessTokenTracker    : Updating YouTube visitor id (current is null).
+2024-01-06T00:24:44.832+05:30  INFO 27144 --- [lava-daemon-pool-playback-1-thread-1] c.s.d.l.s.y.YoutubeAccessTokenTracker    : Updating YouTube visitor id succeeded, new one is CgtqbTBfNDRZMThEcyj0oOGsBjIKCgJJThIEGgAgGzoKIOmpz_TBjpTMZQ%3D%3D, next update will be after 600 seconds.
+2024-01-06T00:24:45.034+05:30  INFO 27144 --- [lava-daemon-pool-playback-1-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library libmpg123-0: loading with filter com.sedmelluq.discord.lavaplayer.natives.ConnectorNativeLibLoader$$Lambda$819/0x000000080170e658@306e63ee
+2024-01-06T00:24:45.046+05:30  INFO 27144 --- [lava-daemon-pool-playback-1-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library libmpg123-0: successfully loaded.
+2024-01-06T00:24:45.047+05:30  INFO 27144 --- [lava-daemon-pool-playback-1-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library connector: loading with filter null
+2024-01-06T00:24:45.074+05:30  INFO 27144 --- [lava-daemon-pool-playback-1-thread-1] c.s.l.c.natives.NativeLibraryLoader      : Native library connector: successfully loaded.
+2024-01-06T00:25:25.403+05:30  INFO 27144 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : Connection closed from /[0:0:0:0:0:0:0:1]:53915 with id 1uf34v4hqhf8boxp -- CloseStatus[code=1006, reason=]
+2024-01-06T00:25:25.404+05:30  INFO 27144 --- [XNIO-1 I/O-3] lavalink.server.io.SocketContext         : Shutting down 1 playing players.
+2024-01-06T00:25:51.546+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /[0:0:0:0:0:0:0:1]:53940
+2024-01-06T00:25:51.547+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : GET /v4/websocket, client=0:0:0:0:0:0:0:1
+2024-01-06T00:25:51.549+05:30  INFO 27144 --- [XNIO-1 task-2] lavalink.server.io.SocketServer          : Connection successfully established from @Moonlink/3.0.5 (https://github.com/Ecliptia/moonlink.js)
+2024-01-06T00:26:01.352+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytsearch:aap ki kashish"
+2024-01-06T00:26:01.702+05:30  INFO 27144 --- [XNIO-1 task-2] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: aap ki kashish
+2024-01-06T00:26:01.706+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : GET /v4/loadtracks?identifier=ytsearch%3Aaap+ki+kashish, client=0:0:0:0:0:0:0:1
+2024-01-06T00:26:01.716+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/5lwv03g0y2mj3u5v/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"track":{"encoded":"QAABAwMAVkFhcCBLaSBLYXNoaXNoIEx5cmljYWwgVmlkZW8gfCBBYXNoaXEgQmFuYXlhIEFhcG5lIHwgSGltZXNoIFJlc2hhbW1peWEgfCBFbXJhYW4gSGFzaG1pABtULVNlcmllcyBCb2xseXdvb2QgQ2xhc3NpY3MAAAAAAAUM+AALcnVxY01OdDJjUXcAAQAraHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1ydXFjTU50MmNRdwEANGh0dHBzOi8vaS55dGltZy5jb20vdmkvcnVxY01OdDJjUXcvbWF4cmVzZGVmYXVsdC5qcGcAAAd5b3V0dWJlAAAAAAAAAAA="},"volume":80}
+2024-01-06T00:26:02.243+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/5lwv03g0y2mj3u5v/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"voice":{"sessionId":"8cbb22a1a6c5deaa068841cf039b7c3d","endpoint":"india9766.discord.media:443","token":"045e91976cdc867b"}}
+2024-01-06T00:28:41.456+05:30  INFO 27144 --- [XNIO-1 I/O-2] lavalink.server.io.SocketServer          : Connection closed from /[0:0:0:0:0:0:0:1]:53940 with id 5lwv03g0y2mj3u5v -- CloseStatus[code=1006, reason=]
+2024-01-06T00:28:41.457+05:30  INFO 27144 --- [XNIO-1 I/O-2] lavalink.server.io.SocketContext         : Shutting down 1 playing players.
+2024-01-06T00:28:47.414+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /[0:0:0:0:0:0:0:1]:53988
+2024-01-06T00:28:47.416+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : GET /v4/websocket, client=0:0:0:0:0:0:0:1
+2024-01-06T00:28:47.417+05:30  INFO 27144 --- [XNIO-1 task-2] lavalink.server.io.SocketServer          : Connection successfully established from @Moonlink/3.0.5 (https://github.com/Ecliptia/moonlink.js)
+2024-01-06T00:28:55.572+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytmsearch:aap ki kashish"
+2024-01-06T00:28:56.153+05:30  INFO 27144 --- [XNIO-1 task-2] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: aap ki kashish
+2024-01-06T00:28:56.198+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : GET /v4/loadtracks?identifier=ytmsearch%3Aaap+ki+kashish, client=0:0:0:0:0:0:0:1
+2024-01-06T00:28:56.216+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/b2s3044diaukg6xw/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"track":{"encoded":"QAAA/QMADkFhcCBLaSBLYXNoaXNoABFIaW1lc2ggUmVzaGFtbWl5YQAAAAAABQz4AAtZNkZXRktYdTFGWQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PVk2RldGS1h1MUZZAQCAaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL1dkSWlvV0luS2dDYkJLb0dMckhJS01abnJaUF85ZHJIUjdERWljejAzejJidjNhcTk5ZUZ4VFYyTGVBSldINVVPQVFESDJzc3lsQ2xOLWV2dFE9dzEwMDAtaDEwMDAAAAd5b3V0dWJlAAAAAAAAAAA="},"volume":80}
+2024-01-06T00:28:56.321+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/b2s3044diaukg6xw/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"voice":{"sessionId":"40966f71b66a5cf2d4663ac68be2bd74","endpoint":"india9766.discord.media:443","token":"045e91976cdc867b"}}
+2024-01-06T00:32:42.114+05:30  INFO 27144 --- [XNIO-1 I/O-3] lavalink.server.io.SocketServer          : Connection closed from /[0:0:0:0:0:0:0:1]:53988 with id b2s3044diaukg6xw -- CloseStatus[code=1006, reason=]
+2024-01-06T00:32:42.114+05:30  INFO 27144 --- [XNIO-1 I/O-3] lavalink.server.io.SocketContext         : Shutting down 1 playing players.
+2024-01-06T00:32:46.386+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /[0:0:0:0:0:0:0:1]:54049
+2024-01-06T00:32:46.389+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.RequestLoggingFilter         : GET /v4/websocket, client=0:0:0:0:0:0:0:1
+2024-01-06T00:32:46.391+05:30  INFO 27144 --- [XNIO-1 task-3] lavalink.server.io.SocketServer          : Connection successfully established from @Moonlink/3.0.5 (https://github.com/Ecliptia/moonlink.js)
+2024-01-06T00:32:58.606+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytmsearch:jiya hiya"
+2024-01-06T00:32:59.097+05:30  INFO 27144 --- [XNIO-1 task-3] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: jiya hiya
+2024-01-06T00:32:59.100+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.RequestLoggingFilter         : GET /v4/loadtracks?identifier=ytmsearch%3Ajiya+hiya, client=0:0:0:0:0:0:0:1
+2024-01-06T00:32:59.244+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/bdnvkwid8syptr2d/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"voice":{"sessionId":"0671a1331c525c2fe73af81d19c50600","endpoint":"india9766.discord.media:443","token":"045e91976cdc867b"}}
+2024-01-06T00:32:59.494+05:30  INFO 27144 --- [XNIO-1 I/O-7] lavalink.server.io.SocketServer          : Connection closed from /[0:0:0:0:0:0:0:1]:54049 with id bdnvkwid8syptr2d -- CloseStatus[code=1006, reason=]
+2024-01-06T00:32:59.494+05:30  INFO 27144 --- [XNIO-1 I/O-7] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2024-01-06T00:33:25.763+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /[0:0:0:0:0:0:0:1]:54064
+2024-01-06T00:33:25.764+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.RequestLoggingFilter         : GET /v4/websocket, client=0:0:0:0:0:0:0:1
+2024-01-06T00:33:25.765+05:30  INFO 27144 --- [XNIO-1 task-3] lavalink.server.io.SocketServer          : Connection successfully established from @Moonlink/3.0.5 (https://github.com/Ecliptia/moonlink.js)
+2024-01-06T00:33:36.342+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytmsearch:jiya jiya"
+2024-01-06T00:33:36.976+05:30  INFO 27144 --- [XNIO-1 task-2] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/frj45scuyxzqe4je/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"voice":{"sessionId":"872ee0e6d0382e4330b085420c01850d","endpoint":"india9766.discord.media:443","token":"045e91976cdc867b"}}
+2024-01-06T00:33:37.037+05:30  INFO 27144 --- [XNIO-1 task-3] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: jiya jiya
+2024-01-06T00:33:37.039+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.RequestLoggingFilter         : GET /v4/loadtracks?identifier=ytmsearch%3Ajiya+jiya, client=0:0:0:0:0:0:0:1
+2024-01-06T00:33:37.052+05:30  INFO 27144 --- [XNIO-1 task-3] l.server.io.RequestLoggingFilter         : PATCH /v4/sessions/frj45scuyxzqe4je/players/735899211677041099, client=0:0:0:0:0:0:0:1, payload={"track":{"encoded":"QAAA7AMABEppeWEADEFyaWppdCBTaW5naAAAAAAABFVgAAtvbGFielZPeXp0MAABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PW9sYWJ6Vk95enQwAQB+aHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL0VPR0ZSSmo2VURKNTAxR2t2SUtIU3NGcHREbE5OSVJ0cWVrbWZaUWZCc19sanQ1QTZETC13TkVWSEY2UklIMVJpTmVmU3lxd05pTXBabGlJPXcxMDAwLWgxMDAwAAAHeW91dHViZQAAAAAAAAAA"},"volume":80}
+2024-01-06T00:34:07.923+05:30  INFO 27144 --- [XNIO-1 I/O-6] lavalink.server.io.SocketServer          : Connection closed from /[0:0:0:0:0:0:0:1]:54064 with id frj45scuyxzqe4je -- CloseStatus[code=1006, reason=]
+2024-01-06T00:34:07.924+05:30  INFO 27144 --- [XNIO-1 I/O-6] lavalink.server.io.SocketContext         : Shutting down 1 playing players.
