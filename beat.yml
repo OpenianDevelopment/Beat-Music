@@ -1,0 +1,4 @@
+config:
+  token: ""              # Your discord bot token
+  shards: 1              # Number of shards to create. 1 works for most bots
+  artist: "Guitar"               # Status message shown when your bot is online
