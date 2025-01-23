@@ -97,12 +97,18 @@ class Filters(private val audioPlayer: AudioPlayer) {
             }
         }
 
-        // Apply Bass Boost filter
         if (settings.isBassBoost) {
-            val bands = FloatArray(15).apply {
-                this[0] = 0.75f
-                this[1] = 0.5f
+            val bands = FloatArray(15) { index ->
+                when (index) {
+                    0 -> 0.25f
+                    1 -> 0.15f
+                    2 -> 0.10f
+                    3 -> 0.05f
+                    4 -> 0.02f
+                    else -> 0.0f
+                }
             }
+
             Equalizer(format.channelCount, currentFilter, bands).apply {
                 currentFilter = this
                 add(this)
