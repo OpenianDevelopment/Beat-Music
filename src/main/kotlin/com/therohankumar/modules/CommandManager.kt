@@ -17,7 +17,8 @@ object CommandManager {
         Pause(),
         Resume(),
         Clear(),
-        Shuffle()
+        Shuffle(),
+        Shift()
     )
 
 
