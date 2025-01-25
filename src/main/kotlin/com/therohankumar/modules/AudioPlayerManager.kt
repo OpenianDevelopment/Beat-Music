@@ -26,7 +26,6 @@ object AudioPlayerManager {
                 println(ex)
             }
         }
-        ytSourceManager.useOauth2(null, false)
         this.registerSourceManagers(ytSourceManager)
         AudioSourceManagers.registerRemoteSources(this)
         AudioSourceManagers.registerLocalSource(this)
@@ -47,5 +46,9 @@ object AudioPlayerManager {
 
     fun musicManagerExist(guildId: Long) : Boolean {
         return musicManagers.containsKey(guildId)
+    }
+
+    fun init() {
+        return
     }
 }

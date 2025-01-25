@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.therohankumar.modules.AudioPlayerManager
 import com.therohankumar.modules.CommandManager
-import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.session.ReadyEvent
@@ -29,34 +28,9 @@ class EventListeners: ListenerAdapter() {
         }
     }
 
-    override fun onGenericGuildVoice(event: GenericGuildVoiceEvent) {
-        // Get bot's voice state
-        val botVoiceState = event.guild.selfMember.voiceState ?: return
-
-        // Get bot's voice channel
-        val botChannel = botVoiceState.channel ?: run {
-            AudioPlayerManager.destroyMusicManager(event.guild.idLong)
-            return
-        }
-
-        // If this is a voice update event, check both old and new channels
-        if (event is GuildVoiceUpdateEvent) {
-            // If someone left the bot's channel
-            if (event.channelLeft == botChannel) {
-                // Check if bot is alone now
-                if (botChannel.members.size <= 1) {
-                    event.guild.audioManager.closeAudioConnection()
-                    AudioPlayerManager.destroyMusicManager(event.guild.idLong)
-                }
-            }
-            return
-        }
-
-        // For other voice events, check if it's related to bot's channel
-        if (event.voiceState.channel != botChannel) return
-
-        // Check if bot is alone
-        if (botChannel.members.size <= 1) {
+    override fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
+        if(event.guild.selfMember.voiceState === null || event.guild.selfMember.voiceState?.channel === null) return
+        if(event.guild.selfMember.voiceState?.channel === event.channelLeft && event.guild.selfMember.voiceState!!.channel!!.members.size === 1) {
             event.guild.audioManager.closeAudioConnection()
             AudioPlayerManager.destroyMusicManager(event.guild.idLong)
         }
