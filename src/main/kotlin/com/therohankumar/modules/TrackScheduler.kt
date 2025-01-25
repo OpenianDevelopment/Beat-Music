@@ -22,6 +22,12 @@ class TrackScheduler(private val audioPlayer: AudioPlayer): AudioEventAdapter() 
         }
     }
 
+    fun shuffleTrack(){
+        val suffle = queue.shuffled()
+        queue.clear()
+        queue.addAll(suffle)
+    }
+
     fun nextTrack() {
         if(queue.isNotEmpty()) audioPlayer.startTrack(queue.poll(), false)
     }
@@ -39,7 +45,7 @@ class TrackScheduler(private val audioPlayer: AudioPlayer): AudioEventAdapter() 
             author = track.info.author,
             durationMillis = track.duration,
             thumbnail = track.info.artworkUrl,
-            requestedBy = track.userData as User?
+            requestedBy = track.userData as User
         )
         textChannel?.sendMessageEmbeds(embed)?.queue()
     }

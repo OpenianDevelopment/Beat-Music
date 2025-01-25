@@ -7,7 +7,18 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 object CommandManager {
     private val commands = mutableMapOf<String, ICommand>()
     private var slashCommands = listOf<SlashCommandData>()
-    private val commandList = listOf(Play(), Filter(), Skip(), Stop(), Queue(), NowPlaying(), Pause(), Resume(), Clear(), Shuffle())
+    private val commandList = listOf(
+        Play(),
+        Filter(),
+        Skip(),
+        Stop(),
+        Queue(),
+        NowPlaying(),
+        Pause(),
+        Resume(),
+        Clear(),
+        Shuffle()
+    )
 
 
     fun registerAllCommand() {

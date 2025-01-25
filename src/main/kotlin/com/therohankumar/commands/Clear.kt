@@ -18,7 +18,7 @@ class Clear: ICommand {
         val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
         val queue: BlockingQueue<AudioTrack> = musicManager.taskScheduler.queue
         if (queue.isEmpty()) {
-            val embed = EmbedUtils.createErrorEmbed(
+            val embed = EmbedUtils.createGenericEmbed(
                 title = "Queue Empty",
                 description = "There are no tracks to clear in the queue.",
                 requestedBy = event.user

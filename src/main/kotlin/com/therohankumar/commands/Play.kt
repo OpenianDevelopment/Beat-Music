@@ -25,17 +25,14 @@ class Play: ICommand {
             return
         }
         val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
-        val query = event.interaction.getOption("query")!!.asString
+        var query = event.interaction.getOption("query")!!.asString
         if(musicManager.taskScheduler.textChannel === null) {
             musicManager.taskScheduler.textChannel = event.guildChannel.asTextChannel()
         }
         if(ensureVoiceChannel(event)) {
             event.guild!!.audioManager.sendingHandler = musicManager.sendHandler
-            if(isURL(query)) {
-                AudioPlayerManager.audioPlayerManager.loadItem(query, Loader(event, musicManager))
-            }else{
-                AudioPlayerManager.audioPlayerManager.loadItem("ytmsearch:${query}", Loader(event, musicManager))
-            }
+            query = if (isURL(query)) query else "ytmsearch:${query}"
+            AudioPlayerManager.audioPlayerManager.loadItem(query, Loader(event, musicManager))
         }
     }
 
@@ -55,12 +52,8 @@ class Play: ICommand {
     }
 
     private fun isURL(url: String): Boolean {
-        try {
-            URL(url).toURI()
-            return true
-        } catch (e: Exception) {
-            return false
-        }
+        val check = url.lowercase()
+        return check.startsWith("https://")||check.startsWith("http://")
     }
 
     inner class Loader(private val event: SlashCommandInteractionEvent, private val musicManager: GuildMusicManager) : AudioLoadResultHandler {

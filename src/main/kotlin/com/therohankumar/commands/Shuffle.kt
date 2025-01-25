@@ -15,8 +15,9 @@ class Shuffle: ICommand {
 
     override suspend fun execute(event: SlashCommandInteractionEvent) {
         if(!Utilities.commandCheck(event)) return
-        var musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
+        val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
         val queue: BlockingQueue<AudioTrack> = musicManager.taskScheduler.queue
+        val taskScheduler = musicManager.taskScheduler
         if (queue.isEmpty()) {
             val embed = EmbedUtils.createErrorEmbed(
                 title = "Queue Empty",
@@ -26,10 +27,8 @@ class Shuffle: ICommand {
             event.hook.sendMessageEmbeds(embed).queue()
             return
         }
-        val shuffled = queue.shuffled()
-        queue.clear()
-        queue.addAll(shuffled)
-        val embed = EmbedUtils.createErrorEmbed(
+        taskScheduler.shuffleTrack()
+        val embed = EmbedUtils.createGenericEmbed(
             title = "Queue shuffled",
             description = "All the tracks in queue were shuffled.",
             requestedBy = event.user
