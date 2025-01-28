@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 import java.util.concurrent.BlockingQueue
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.therohankumar.modules.Utilities
+import net.dv8tion.jda.api.entities.User
 
 class Queue : ICommand {
     override val name = "queue"
@@ -55,7 +56,7 @@ class Queue : ICommand {
                 append("**Now Playing:**\n")
                 append("[${currentTrack.info.title}](${currentTrack.info.uri}) | ")
                 append("`${formatDuration(currentTrack.duration)}` | ")
-                append("Requested by ${currentTrack.userData}\n\n")
+                append("Requested by ${(currentTrack.userData as User).asMention}\n\n")
             }
 
             append("**Queue:**\n")
@@ -63,7 +64,7 @@ class Queue : ICommand {
                 val track = queueList[i]
                 append("`${i + 1}.` [${track.info.title}](${track.info.uri}) | ")
                 append("`${formatDuration(track.duration)}` | ")
-                append("Requested by ${track.userData}\n")
+                append("Requested by ${(track.userData as User).asMention}\n")
             }
 
             // Add page navigation help
