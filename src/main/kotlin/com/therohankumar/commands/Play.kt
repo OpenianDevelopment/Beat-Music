@@ -58,8 +58,8 @@ class Play: ICommand {
 
     inner class Loader(private val event: SlashCommandInteractionEvent, private val musicManager: GuildMusicManager) : AudioLoadResultHandler {
         override fun trackLoaded(track: AudioTrack) {
-            musicManager.taskScheduler.queue(track)
             track.userData = event.user
+            musicManager.taskScheduler.queue(track)
             val embed = EmbedUtils.createAddedToQueueEmbed(
                 trackTitle = track.info.title,
                 trackUrl = track.info.uri,
