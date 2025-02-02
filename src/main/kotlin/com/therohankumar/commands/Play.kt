@@ -8,6 +8,7 @@ import com.therohankumar.interfaces.ICommand
 import com.therohankumar.modules.AudioPlayerManager
 import com.therohankumar.modules.EmbedUtils
 import com.therohankumar.modules.GuildMusicManager
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.Commands
@@ -38,14 +39,38 @@ class Play: ICommand {
     private fun ensureVoiceChannel(event: SlashCommandInteractionEvent): Boolean {
         val ourVC = event.guild!!.selfMember.voiceState?.channel
         val theirVC = event.member!!.voiceState?.channel
+
+        // Check if user is in a voice channel
         if (ourVC === null && theirVC === null) {
             event.hook.sendMessageEmbeds(EmbedUtils.createErrorEmbed("Error", "You need to be in Voice Channel to use this command")).queue()
             return false
         }
+
+        // Check if bot and user are in different voice channels
         if(ourVC !== null && ourVC !== theirVC) {
-            event.hook.sendMessageEmbeds(EmbedUtils.createErrorEmbed("Error", "You need to be in same Voice Channel as me")).queue()
+            event.hook.sendMessageEmbeds(
+                EmbedUtils.createErrorEmbed(
+                    "Error",
+                    "You need to be in same Voice Channel as me"
+                )
+            ).queue()
             return false
         }
+
+        // Check for required permissions
+        val selfMember = event.guild!!.selfMember
+        val permissions = theirVC!!.getPermissionOverride(selfMember)?.allowed ?: selfMember.permissions
+
+        if (!permissions.contains(Permission.VOICE_CONNECT) || !permissions.contains(Permission.VOICE_SPEAK)) {
+            event.hook.sendMessageEmbeds(
+                EmbedUtils.createErrorEmbed(
+                    "Error",
+                    "I need permissions to connect and speak in the voice channel"
+                )
+            ).queue()
+            return false
+        }
+
         event.guild!!.audioManager.openAudioConnection(theirVC)
         return true
     }
