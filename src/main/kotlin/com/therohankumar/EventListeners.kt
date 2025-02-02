@@ -30,7 +30,7 @@ class EventListeners: ListenerAdapter() {
 
     override fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         if(event.guild.selfMember.voiceState === null || event.guild.selfMember.voiceState?.channel === null) return
-        if(event.guild.selfMember.voiceState?.channel === event.channelLeft && event.guild.selfMember.voiceState!!.channel!!.members.size === 1) {
+        if(event.guild.selfMember.voiceState?.channel === event.channelLeft && event.guild.selfMember.voiceState!!.channel!!.members.size == 1) {
             event.guild.audioManager.closeAudioConnection()
             AudioPlayerManager.destroyMusicManager(event.guild.idLong)
         }

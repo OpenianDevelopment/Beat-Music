@@ -98,7 +98,7 @@ class ReverbPcmAudioFilter(
     }
 
     override fun close() {
-        TODO("Not yet implemented")
+        flush()
     }
 
     override fun seekPerformed(requestedTime: Long, providedTime: Long) {
