@@ -16,18 +16,17 @@ class Shuffle: ICommand {
     override suspend fun execute(event: SlashCommandInteractionEvent) {
         if(!Utilities.commandCheck(event)) return
         val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
-        val queue: BlockingQueue<AudioTrack> = musicManager.taskScheduler.queue
-        val taskScheduler = musicManager.taskScheduler
-        if (queue.isEmpty()) {
+
+        if (musicManager.trackScheduler.queue.isEmpty() || musicManager.trackScheduler.queue.size == 1) {
             val embed = EmbedUtils.createErrorEmbed(
                 title = "Queue Empty",
-                description = "There are no tracks to shuffle in queue.",
+                description = "There are not enough tracks to shuffle in queue.",
                 requestedBy = event.user
             )
             event.hook.sendMessageEmbeds(embed).queue()
             return
         }
-        taskScheduler.shuffleTrack()
+        musicManager.trackScheduler.shuffleTrack()
         val embed = EmbedUtils.createGenericEmbed(
             title = "Queue shuffled",
             description = "All the tracks in queue were shuffled.",

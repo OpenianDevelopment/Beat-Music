@@ -21,6 +21,7 @@ class AudioFilterSelectListeners: ListenerAdapter() {
             isVibrato = selectedValues.contains("vibrato")
             isTremolo = selectedValues.contains("tremolo")
             isBassBoost = selectedValues.contains("bassboost")
+            isReverb = selectedValues.contains("reverb")
         }
 
         val activeFilters = getActiveFiltersText(selectedValues)
@@ -50,7 +51,8 @@ class AudioFilterSelectListeners: ListenerAdapter() {
             "vibrato" to "Vibrato",
             "tremolo" to "Tremolo",
             "bassboost" to "Bass Boost",
-            "echo" to "Echo"
+            "echo" to "Echo",
+            "reverb" to "Reverb"
         )
 
         val activeFilters = selectedValues.mapNotNull { filterNameMap[it] }

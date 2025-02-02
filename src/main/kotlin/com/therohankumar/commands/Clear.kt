@@ -16,7 +16,7 @@ class Clear: ICommand {
     override suspend fun execute(event: SlashCommandInteractionEvent) {
         if(!Utilities.commandCheck(event)) return
         val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
-        val queue: BlockingQueue<AudioTrack> = musicManager.taskScheduler.queue
+        val queue: BlockingQueue<AudioTrack> = musicManager.trackScheduler.queue
         if (queue.isEmpty()) {
             val embed = EmbedUtils.createGenericEmbed(
                 title = "Queue Empty",

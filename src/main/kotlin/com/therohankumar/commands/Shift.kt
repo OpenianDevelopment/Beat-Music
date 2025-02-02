@@ -17,8 +17,8 @@ class Shift: ICommand {
     override suspend fun execute(event: SlashCommandInteractionEvent) {
         if(!Utilities.commandCheck(event)) return
         val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
-        val taskScheduler = musicManager.taskScheduler
-        val queue: BlockingQueue<AudioTrack> = musicManager.taskScheduler.queue
+
+        val queue: BlockingQueue<AudioTrack> = musicManager.trackScheduler.queue
         if (queue.isEmpty()) {
             val embed = EmbedUtils.createErrorEmbed(
                 title = "Queue Empty",
@@ -28,7 +28,7 @@ class Shift: ICommand {
             event.hook.sendMessageEmbeds(embed).queue()
             return
         }
-        if (queue.count()<=1){
+        else if (queue.size == 1){
             val embed = EmbedUtils.createErrorEmbed(
                 title = "Not Enough Tracks",
                 description = "There are not enough tracks to shift in the queue.",
@@ -37,59 +37,42 @@ class Shift: ICommand {
             event.hook.sendMessageEmbeds(embed).queue()
             return
         }
-        val songpos = event.interaction.getOption("track")!!.asInt -1
-        val newsongpos = event.interaction.getOption("new_pos")!!.asInt-1
-        when{
-            songpos == newsongpos -> {
-                val embed = EmbedUtils.createErrorEmbed(
-                    title = "Invaild Input",
-                    description = "new songpos cannot be equal to newsongpos",
-                    requestedBy = event.user
-                )
-                event.hook.sendMessageEmbeds(embed).queue()
-                return
-            }
-            songpos < 0 -> {
-                val embed = EmbedUtils.createErrorEmbed(
-                    title = "Invaild Input",
-                    description = "songpos cannot be lower than 1.",
-                    requestedBy = event.user
-                )
-                event.hook.sendMessageEmbeds(embed).queue()
-                return
-            }
-            newsongpos <= 0 -> {
-                val embed = EmbedUtils.createErrorEmbed(
-                    title = "Invaild Input",
-                    description = "newsongpos cannot be lower than 1.",
-                    requestedBy = event.user
-                )
-                event.hook.sendMessageEmbeds(embed).queue()
-                return
-            }
-            songpos >= queue.count() ->{
-                val embed = EmbedUtils.createErrorEmbed(
-                    title = "Invaild Input",
-                    description = "songpos cannot be greater than the songs in queue.",
-                    requestedBy = event.user
-                )
-                event.hook.sendMessageEmbeds(embed).queue()
-                return
-            }
+
+        val trackNumber = event.getOption("track")!!.asInt.minus(-1)
+        val newPosition = event.getOption("position")!!.asInt.minus(-1)
+
+        if(trackNumber == newPosition) {
+            val embed = EmbedUtils.createErrorEmbed(
+                title = "Same Position",
+                description = "New Position of track should not same as current one",
+                requestedBy = event.user
+            )
+            event.hook.sendMessageEmbeds(embed).queue()
+            return
         }
-        taskScheduler.shiftTrack(songpos,newsongpos)
+        if(trackNumber >= queue.size || newPosition >= queue.size) {
+            val embed = EmbedUtils.createErrorEmbed(
+                title = "Invalid Input",
+                description = "Current Track Position and New Track Position should be between 1 and ${queue.size}",
+                requestedBy = event.user
+            )
+            event.hook.sendMessageEmbeds(embed).queue()
+            return
+        }
+
+        musicManager.trackScheduler.shiftTrack(trackNumber, newPosition)
         val embed = EmbedUtils.createGenericEmbed(
             title = "Track Shifted",
-            description = "Track was shifted.",
+            description = "Moved track ${trackNumber + 1} to position ${newPosition + 1}",
             requestedBy = event.user
         )
+
         event.hook.sendMessageEmbeds(embed).queue()
-        return
     }
 
     override fun createSlashCommand(): SlashCommandData {
-        return Commands.slash(name, "Shifts tracks in queue.")
-            .addOption(OptionType.INTEGER,"track","Current Track Position",true)
-            .addOption(OptionType.INTEGER, "new_pos", "New Track position Number",true)
+        return Commands.slash(name, "Shift tracks higher or lower in queue")
+            .addOption(OptionType.INTEGER,"track","Current track number in queue",true)
+            .addOption(OptionType.INTEGER, "position", "Which position to push the track to",true)
     }
 }

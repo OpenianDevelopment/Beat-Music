@@ -21,7 +21,7 @@ class Skip: ICommand {
         }
         val embed = EmbedUtils.createSkipEmbed(track.info.title, null, event.user)
         event.hook.sendMessageEmbeds(embed).queue()
-        musicManager.taskScheduler.nextTrack()
+        musicManager.trackScheduler.nextTrack()
     }
     override fun createSlashCommand(): SlashCommandData {
         return Commands.slash("skip", "Skip the current playing song")

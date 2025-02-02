@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
+import com.therohankumar.modules.filters.reverb.ReverbPcmAudioFilter
 import me.rohank05.echo.EchoPcmAudioFilter
 
 data class FilterSettings(
@@ -19,7 +20,8 @@ data class FilterSettings(
     var isVibrato: Boolean = false,
     var isTremolo: Boolean = false,
     var isBassBoost: Boolean = false,
-    var isEcho: Boolean = false
+    var isEcho: Boolean = false,
+    var isReverb: Boolean = false
 )
 
 class Filters(private val audioPlayer: AudioPlayer) {
@@ -28,7 +30,7 @@ class Filters(private val audioPlayer: AudioPlayer) {
     // Extension property to check if any filter is enabled
     private val isAnyFilterEnabled: Boolean
         get() = with(settings) {
-            isNightcore || isEightD || isVibrato || isTremolo || isBassBoost || isEcho
+            isNightcore || isEightD || isVibrato || isTremolo || isBassBoost || isEcho || isReverb
         }
 
     // Function to update individual filter settings
@@ -120,6 +122,14 @@ class Filters(private val audioPlayer: AudioPlayer) {
             EchoPcmAudioFilter(currentFilter, format.channelCount, format.sampleRate).apply {
                 setDelay(1.0)
                 setDecay(0.5f)
+                add(this)
+            }
+        }
+
+        if (settings.isReverb) {
+            ReverbPcmAudioFilter(currentFilter, format).apply {
+                setPreset(ReverbPcmAudioFilter.RoomPreset.AUDITORIUM)
+                currentFilter = this
                 add(this)
             }
         }

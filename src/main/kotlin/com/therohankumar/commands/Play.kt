@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
-import java.net.URL
 
 class Play: ICommand {
     override val name = "play"
@@ -26,8 +25,8 @@ class Play: ICommand {
         }
         val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
         var query = event.interaction.getOption("query")!!.asString
-        if(musicManager.taskScheduler.textChannel === null) {
-            musicManager.taskScheduler.textChannel = event.guildChannel.asTextChannel()
+        if(musicManager.trackScheduler.textChannel === null) {
+            musicManager.trackScheduler.textChannel = event.guildChannel.asTextChannel()
         }
         if(ensureVoiceChannel(event)) {
             event.guild!!.audioManager.sendingHandler = musicManager.sendHandler
@@ -59,7 +58,7 @@ class Play: ICommand {
     inner class Loader(private val event: SlashCommandInteractionEvent, private val musicManager: GuildMusicManager) : AudioLoadResultHandler {
         override fun trackLoaded(track: AudioTrack) {
             track.userData = event.user
-            musicManager.taskScheduler.queue(track)
+            musicManager.trackScheduler.queue(track)
             val embed = EmbedUtils.createAddedToQueueEmbed(
                 trackTitle = track.info.title,
                 trackUrl = track.info.uri,
@@ -77,7 +76,7 @@ class Play: ICommand {
                     // Handle single track from search
                     val track = playlist.tracks.first()
                     track.userData = event.user
-                    musicManager.taskScheduler.queue(track)
+                    musicManager.trackScheduler.queue(track)
                     val embed = EmbedUtils.createAddedToQueueEmbed(
                         trackTitle = track.info.title,
                         trackUrl = track.info.uri,
@@ -93,7 +92,7 @@ class Play: ICommand {
                     val tracksToAdd = playlist.tracks.take(100)  // Limit to 100 tracks
                     tracksToAdd.forEach { track ->
                         track.userData = event.user
-                        musicManager.taskScheduler.queue(track)
+                        musicManager.trackScheduler.queue(track)
                     }
                     val tracksInfo = tracksToAdd.map { track ->
                         Triple(track.info.title, track.info.uri, track.info.author)

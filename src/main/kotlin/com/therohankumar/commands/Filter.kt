@@ -24,7 +24,7 @@ class Filter : ICommand {
 
         val menuBuilder = StringSelectMenu.create("filter_select")
             .setMinValues(0)
-            .setMaxValues(6) // Total number of filters
+            .setMaxValues(7) // Updated total number of filters
             .setPlaceholder("Select filters to apply")
             .addOption("Nightcore", "nightcore", "Toggle Nightcore filter", Emoji.fromUnicode("🎵"))
             .addOption("8D", "eightd", "Toggle 8D filter", Emoji.fromUnicode("🔊"))
@@ -32,6 +32,7 @@ class Filter : ICommand {
             .addOption("Tremolo", "tremolo", "Toggle Tremolo filter", Emoji.fromUnicode("📊"))
             .addOption("Bass Boost", "bassboost", "Toggle Bass Boost filter", Emoji.fromUnicode("📊"))
             .addOption("Echo", "echo", "Toggle Echo filter", Emoji.fromUnicode("🔁"))
+            .addOption("Reverb", "reverb", "Toggle Cathedral-like Reverb filter", Emoji.fromUnicode("🏛️"))
 
         // Set default values based on current filters
         val defaultValues = mutableListOf<String>().apply {
@@ -41,6 +42,7 @@ class Filter : ICommand {
             if (currentFilters.isTremolo) add("tremolo")
             if (currentFilters.isBassBoost) add("bassboost")
             if (currentFilters.isEcho) add("echo")
+            if (currentFilters.isReverb) add("reverb")
         }
 
         val selectMenu = menuBuilder.setDefaultValues(defaultValues).build()
@@ -73,6 +75,7 @@ class Filter : ICommand {
             if (isTremolo) activeFilters.add("Tremolo")
             if (isBassBoost) activeFilters.add("Bass Boost")
             if (isEcho) activeFilters.add("Echo")
+            if (isReverb) activeFilters.add("Reverb")
         }
         return if (activeFilters.isEmpty()) "No filters active" else activeFilters.joinToString(", ")
     }

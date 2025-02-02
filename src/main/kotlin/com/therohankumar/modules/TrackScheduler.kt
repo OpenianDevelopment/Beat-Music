@@ -23,24 +23,22 @@ class TrackScheduler(private val audioPlayer: AudioPlayer): AudioEventAdapter() 
     }
 
     fun shuffleTrack(){
-        val suffle = queue.shuffled()
+        val shuffle = queue.shuffled()
         queue.clear()
-        queue.addAll(suffle)
+        queue.addAll(shuffle)
     }
-    fun shiftTrack(songPos:Int,newSongPos:Int){
-        //index starts at 0 for both songpos and new songpos
-        //make sure the input are not lower than the less than 0 or greater than queue for songpos
+
+    fun shiftTrack(currentPosittion: Int, newPosition: Int) {
         val queueList = queue.toList()
-        val newList = ArrayList<AudioTrack>(queueList);
-        val song = queueList[songPos]
-        newList.remove(song)
-        if (newSongPos > (queueList.count()-1)){
-            newList.add(queueList.count()-1,song)
-        }else{
-            newList.add(newSongPos,song)
+        val songToMove = queueList[currentPosittion]
+        val newQueueList = ArrayList(queueList).apply {
+            remove(songToMove)
+            val boundedPos = newPosition.coerceIn(0, size)
+            add(boundedPos, songToMove)
         }
+
         queue.clear()
-        queue.addAll(newList)
+        queue.addAll(newQueueList)
     }
 
     fun nextTrack() {
