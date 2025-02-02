@@ -24,16 +24,16 @@ class Play: ICommand {
             event.hook.sendMessageEmbeds(embed).queue()
             return
         }
+        if(!ensureVoiceChannel(event)) return;
         val musicManager = AudioPlayerManager.getMusicManager(event.guild!!.idLong)
         var query = event.interaction.getOption("query")!!.asString
         if(musicManager.trackScheduler.textChannel === null) {
             musicManager.trackScheduler.textChannel = event.guildChannel.asTextChannel()
         }
-        if(ensureVoiceChannel(event)) {
-            event.guild!!.audioManager.sendingHandler = musicManager.sendHandler
-            query = if (isURL(query)) query else "ytmsearch:${query}"
-            AudioPlayerManager.audioPlayerManager.loadItem(query, Loader(event, musicManager))
-        }
+        event.guild!!.audioManager.sendingHandler = musicManager.sendHandler
+        query = if (isURL(query)) query else "ytmsearch:${query}"
+        AudioPlayerManager.audioPlayerManager.loadItem(query, Loader(event, musicManager))
+
     }
 
     private fun ensureVoiceChannel(event: SlashCommandInteractionEvent): Boolean {
@@ -70,8 +70,18 @@ class Play: ICommand {
             ).queue()
             return false
         }
+        try {
+            event.guild!!.audioManager.openAudioConnection(theirVC)
+        } catch (err: Exception) {
+            event.hook.sendMessageEmbeds(
+                EmbedUtils.createErrorEmbed(
+                    "Error",
+                    "Unable to connect to the channel make sure i have connect and speak permission"
+                )
+            ).queue()
+            return false
+        }
 
-        event.guild!!.audioManager.openAudioConnection(theirVC)
         return true
     }
 
