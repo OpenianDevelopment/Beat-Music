@@ -182,6 +182,18 @@ object EmbedUtils {
             setFooter("Requested by ${requestedBy.name}", requestedBy.effectiveAvatarUrl)
         }.build()
     }
+    fun createGenericEmbed(
+        title: String,
+        description: String,
+        requestedBy: User
+    ): MessageEmbed{
+        return EmbedBuilder().apply {
+            setColor(YELLOW_COLOR)
+            setTitle(title)
+            setDescription(description)
+            setFooter("Requested by ${requestedBy.name}", requestedBy.effectiveAvatarUrl)
+        }.build()
+    }
 
     private fun formatDuration(milliseconds: Long): String {
         val seconds = milliseconds / 1000
