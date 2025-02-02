@@ -6,6 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.therohankumar.modules.AudioPlayerManager
 import com.therohankumar.modules.CommandManager
+import net.dv8tion.jda.api.OnlineStatus
+import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.session.ReadyEvent
@@ -17,6 +19,7 @@ class EventListeners: ListenerAdapter() {
     private val scope = CoroutineScope(Dispatchers.Default)
     override fun onReady(event: ReadyEvent) {
         logger.info("Bot is online")
+        event.jda.presence.setPresence(OnlineStatus.ONLINE,Activity.listening("Your Mom"))
     }
 
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
