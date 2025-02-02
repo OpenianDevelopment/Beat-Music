@@ -43,6 +43,7 @@ class TrackScheduler(private val audioPlayer: AudioPlayer): AudioEventAdapter() 
 
     fun nextTrack() {
         if(queue.isNotEmpty()) audioPlayer.startTrack(queue.poll(), false)
+        else audioPlayer.stopTrack()
     }
 
     override fun onTrackEnd(player: AudioPlayer, track: AudioTrack, endReason: AudioTrackEndReason) {
