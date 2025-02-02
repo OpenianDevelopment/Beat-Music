@@ -20,7 +20,7 @@ class Pause: ICommand {
         }
         musicManager.player.isPaused = true
         val embed = EmbedUtils.createPauseEmbed(true, event.user)
-        event.hook.sendMessageEmbeds(embed)
+        event.hook.sendMessageEmbeds(embed).queue()
     }
     override fun createSlashCommand(): SlashCommandData {
         return Commands.slash("pause", "Pause Audio")
