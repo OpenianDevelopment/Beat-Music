@@ -14,6 +14,9 @@ object Utilities {
             event.hook.sendMessageEmbeds(embed).queue()
             return false
         }
+        if(event.member?.voiceState?.channel != event.guild?.selfMember?.voiceState?.channel) {
+            return false
+        }
         return true
     }
     // ENV check to make sure its exist and not blank
