@@ -23,7 +23,7 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     implementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("dev.lavalink.youtube:v2:1.11.4")
+    implementation("dev.lavalink.youtube:v2:1.11.5")
     implementation("dev.arbjerg:lavaplayer-ext-youtube-rotator:2.2.2")
     testImplementation(kotlin("test"))
 
