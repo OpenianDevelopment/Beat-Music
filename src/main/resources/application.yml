@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: beat-bot
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:beatbot}
+    username: ${DB_USER:beatbot}
+    password: ${DB_PASSWORD:beatbot}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+discord:
+  token: ${DISCORD_TOKEN}
+  # Set to a guild ID for instant dev-mode command registration; blank = global commands
+  guild-id: ${DISCORD_GUILD_ID:}
+
+youtube:
+  oauth2:
+    refresh-token: ${YT_REFRESH_TOKEN:}
+    po-token: ${YT_PO_TOKEN:}
