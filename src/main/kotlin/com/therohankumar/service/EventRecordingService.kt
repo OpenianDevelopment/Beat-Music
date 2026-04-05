@@ -8,14 +8,15 @@ import com.therohankumar.repository.PlayEventRepository
 import com.therohankumar.repository.TrackRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import org.springframework.transaction.support.TransactionTemplate
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class EventRecordingService(
     private val playEventRepository: PlayEventRepository,
     private val trackRepository: TrackRepository,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val transactionTemplate: TransactionTemplate
 ) {
     private val log = LoggerFactory.getLogger(EventRecordingService::class.java)
 
@@ -54,21 +55,22 @@ class EventRecordingService(
         }
     }
 
-    @Transactional
     fun upsertTrack(track: AudioTrack) {
-        val existing = trackRepository.findById(track.info.identifier)
-        if (existing.isPresent) {
-            trackRepository.incrementPlayCount(track.info.identifier)
-        } else {
-            trackRepository.save(Track(
-                trackId   = track.info.identifier,
-                title     = track.info.title,
-                author    = track.info.author,
-                durationMs = track.duration.toInt().takeIf { it > 0 },
-                thumbnail = track.info.artworkUrl,
-                source    = track.sourceManager?.sourceName,
-                playCount = 1
-            ))
+        transactionTemplate.execute {
+            val existing = trackRepository.findById(track.info.identifier)
+            if (existing.isPresent) {
+                trackRepository.incrementPlayCount(track.info.identifier)
+            } else {
+                trackRepository.save(Track(
+                    trackId   = track.info.identifier,
+                    title     = track.info.title,
+                    author    = track.info.author,
+                    durationMs = track.duration.toInt().takeIf { it > 0 },
+                    thumbnail = track.info.artworkUrl,
+                    source    = track.sourceManager?.sourceName,
+                    playCount = 1
+                ))
+            }
         }
     }
 }

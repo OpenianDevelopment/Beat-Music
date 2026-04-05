@@ -3,16 +3,13 @@ package com.therohankumar.config
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
-import com.sedmelluq.discord.lavaplayer.tools.http.HttpContextFilter
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
-import org.apache.http.HttpResponse
-import org.apache.http.client.methods.HttpUriRequest
-import org.apache.http.client.protocol.HttpClientContext
 import dev.lavalink.youtube.YoutubeAudioSourceManager
 import dev.lavalink.youtube.clients.AndroidVrWithThumbnail
 import dev.lavalink.youtube.clients.MusicWithThumbnail
+import dev.lavalink.youtube.clients.Tv
 import dev.lavalink.youtube.clients.TvHtml5SimplyWithThumbnail
 import dev.lavalink.youtube.clients.WebWithThumbnail
 import org.slf4j.LoggerFactory
@@ -37,28 +34,20 @@ class LavaPlayerConfig {
 
         val ytSource = YoutubeAudioSourceManager(
             /* allowSearch = */ true,
-            TvHtml5SimplyWithThumbnail(), // OAuth-compatible
-            MusicWithThumbnail(),
-            AndroidVrWithThumbnail(),
-            WebWithThumbnail()
+            MusicWithThumbnail(),         // YouTube Music search (ytmsearch:)
+            Tv(),                          // OAuth-compatible playback — the only client that supports OAuth
+            WebWithThumbnail(),            // Fallback: playback + full metadata
+            TvHtml5SimplyWithThumbnail(), // Fallback: playback + metadata (no OAuth)
+            AndroidVrWithThumbnail()      // Fallback: playback
         )
 
-        // IPv6 rotation must be configured BEFORE useOauth2 — rotation reconfigures the
-        // HTTP client, which would shut down the connection pool that OAuth2 polling already started.
+        // IPv6 rotation must be configured BEFORE useOauth2.
+        // Use ytSource.contextFilter as the delegate so OAuth tokens are injected into rotated requests.
         if (ipv6Block.isNotBlank()) {
             val planner = RotatingNanoIpRoutePlanner(listOf(Ipv6Block(ipv6Block)))
-            // Use a no-op delegate — the old sedmelluq YoutubeHttpContextFilter (default)
-            // crashes with v2 source manager because it expects a tokenTracker that is never set.
-            val noop = object : HttpContextFilter {
-                override fun onContextOpen(context: HttpClientContext) {}
-                override fun onContextClose(context: HttpClientContext) {}
-                override fun onRequest(context: HttpClientContext, request: HttpUriRequest, isRetry: Boolean) {}
-                override fun onRequestResponse(context: HttpClientContext, request: HttpUriRequest, response: HttpResponse) = false
-                override fun onRequestException(context: HttpClientContext, request: HttpUriRequest, error: Throwable) = false
-            }
             YoutubeIpRotatorSetup(planner)
                 .forConfiguration(ytSource.httpInterfaceManager, false)
-                .withMainDelegateFilter(noop)
+                .withMainDelegateFilter(ytSource.contextFilter)
                 .setup()
             log.info("IPv6 rotation enabled with block {}", ipv6Block)
         }
@@ -83,7 +72,6 @@ class LavaPlayerConfig {
                     log.warn("Enter code: {}", code)
                     log.warn("You have {} seconds to authorize.", expiresSecs)
 
-                    // Poll until the user authorizes or the code expires
                     val deadline = System.currentTimeMillis() + expiresSecs * 1000
                     var token: String? = null
                     while (System.currentTimeMillis() < deadline && token == null) {
