@@ -38,3 +38,4 @@ youtube:
   oauth2:
     refresh-token: ${YT_REFRESH_TOKEN:}
     po-token: ${YT_PO_TOKEN:}
+  ipv6-block: ${YT_IPV6_BLOCK:}

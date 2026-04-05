@@ -3,6 +3,9 @@ package com.therohankumar.config
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
+import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
+import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
+import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
 import dev.lavalink.youtube.YoutubeAudioSourceManager
 import dev.lavalink.youtube.clients.AndroidVrWithThumbnail
 import dev.lavalink.youtube.clients.MusicWithThumbnail
@@ -20,6 +23,9 @@ class LavaPlayerConfig {
     @Value("\${youtube.oauth2.refresh-token:}")
     private lateinit var ytRefreshToken: String
 
+    @Value("\${youtube.ipv6-block:}")
+    private lateinit var ipv6Block: String
+
     @Bean
     fun audioPlayerManager(): AudioPlayerManager {
         val manager = DefaultAudioPlayerManager()
@@ -32,11 +38,18 @@ class LavaPlayerConfig {
         )
 
         if (ytRefreshToken.isNotBlank()) {
-            // skipInitialization=false → performs account linking on startup
             ytSource.useOauth2(ytRefreshToken, false)
             log.info("YouTube OAuth2 configured")
         } else {
             log.warn("YouTube OAuth2 not configured — anonymous access only; may hit rate limits")
+        }
+
+        if (ipv6Block.isNotBlank()) {
+            val planner = RotatingNanoIpRoutePlanner(listOf(Ipv6Block(ipv6Block)))
+            YoutubeIpRotatorSetup(planner)
+                .forConfiguration(ytSource.httpInterfaceManager, false)
+                .setup()
+            log.info("IPv6 rotation enabled with block {}", ipv6Block)
         }
 
         manager.registerSourceManager(ytSource)

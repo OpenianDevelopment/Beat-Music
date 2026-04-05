@@ -39,6 +39,9 @@ dependencies {
     // youtube-source v2 (replaces deprecated built-in YT source, includes thumbnail support)
     implementation("dev.lavalink.youtube:v2:1.18.0")
 
+    // IPv6 rotation — reduces YouTube rate limiting
+    implementation("dev.arbjerg:lavaplayer-ext-youtube-rotator:2.2.6")
+
     // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
