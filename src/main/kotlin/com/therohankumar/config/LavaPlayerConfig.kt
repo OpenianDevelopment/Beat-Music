@@ -3,9 +3,13 @@ package com.therohankumar.config
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
+import com.sedmelluq.discord.lavaplayer.tools.http.HttpContextFilter
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
+import org.apache.http.HttpResponse
+import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.client.protocol.HttpClientContext
 import dev.lavalink.youtube.YoutubeAudioSourceManager
 import dev.lavalink.youtube.clients.AndroidVrWithThumbnail
 import dev.lavalink.youtube.clients.MusicWithThumbnail
@@ -46,8 +50,18 @@ class LavaPlayerConfig {
 
         if (ipv6Block.isNotBlank()) {
             val planner = RotatingNanoIpRoutePlanner(listOf(Ipv6Block(ipv6Block)))
+            // Use a no-op delegate — the old sedmelluq YoutubeHttpContextFilter (default)
+            // crashes with v2 source manager because it expects a tokenTracker that is never set.
+            val noop = object : HttpContextFilter {
+                override fun onContextOpen(context: HttpClientContext) {}
+                override fun onContextClose(context: HttpClientContext) {}
+                override fun onRequest(context: HttpClientContext, request: HttpUriRequest, isRetry: Boolean) {}
+                override fun onRequestResponse(context: HttpClientContext, request: HttpUriRequest, response: HttpResponse) = false
+                override fun onRequestException(context: HttpClientContext, request: HttpUriRequest, error: Throwable) = false
+            }
             YoutubeIpRotatorSetup(planner)
                 .forConfiguration(ytSource.httpInterfaceManager, false)
+                .withMainDelegateFilter(noop)
                 .setup()
             log.info("IPv6 rotation enabled with block {}", ipv6Block)
         }
